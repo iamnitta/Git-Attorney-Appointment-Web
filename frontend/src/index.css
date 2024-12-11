@@ -8,6 +8,52 @@
 @tailwind utilities;
 
 
+*{
+  font-family: Prompt;
+}
 .active hr {
   @apply block
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker {
+  font-family: 'Prompt', sans-serif !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+}
+
+.react-datepicker__header {
+  background-color: #f9fafb !important;
+  border-bottom: 2px solid #e5e7eb !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--brown-lawyerpic) !important;
+  color: white !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.react-datepicker__day--disabled {
+  color: #d1d5db !important;
+}
+
+.react-datepicker__navigation {
+  top: 1rem !important;
+}
+
+.react-datepicker__day-name {
+  color: #4b5563 !important;
+  font-weight: 500 !important;
+}
+
+@media (max-width: 740px) {
+  .active p {
+    @apply text-white bg-primary
+  }
 }

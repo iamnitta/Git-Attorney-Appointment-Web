@@ -9,14 +9,21 @@ export default {
       colors: {
         'light-brown': '#F2EDE9',
         'dark-brown': '#4E342E',
-        'gray': '#e6e6e6',
-        'primary': '#A3806C'
+        'gray': '#F9F9F9',
+        'light-gray': '#F7F7F7',
+        'brown-available': '#F2EDE9',
+        'primary': '#A3806C',
+        'brown-lawyerpic': '#D3C7BD',
+        'brown-lawyerpic-border': '#BDA592'
       },
       fontFamily: {
         kanit: ['Kanit', 'sans-serif'],
         sarabun: ['Sarabun', 'sans-serif'],
         prompt: ['Prompt', 'sans-serif'],
         mitr: ['Mitr', 'sans-serif']
+      },
+      gridTemplateColumns: {
+        'auto' : 'repeat(auto-fill, minmax(250px,1fr))'
       }
     },
   },

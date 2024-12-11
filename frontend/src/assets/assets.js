@@ -38,13 +38,21 @@ import Neurologist from './Neurologist.svg'
 import Pediatricians from './Pediatricians.svg'
 import HomePage from './HomePage.png'
 import law from './law.png'
+import Criminal from './Criminal.png'
+import Administrative from './Administrative.png'
+import Civil from './Civil.png'
+import Family from './Family.png'
+import Consumer from './Consumer.png'
+import Drug from './Drug.png'
+import IP from './IP.png'
+import Labor from './Labor.png'
+import Logo from './Logo.png'
 
 
 export const assets = {
     appointment_img,
     header_img,
     group_profiles,
-    logo,
     chats_icon,
     verified_icon,
     info_icon,
@@ -59,42 +67,59 @@ export const assets = {
     stripe_logo,
     razorpay_logo,
     HomePage,
-    law
+    law,
+    Criminal,
+    Administrative,
+    Civil,
+    Family,
+    Consumer,
+    Drug,
+    IP,
+    Labor,
+    Logo
 }
 
 export const specialityData = [
     {
-        speciality: 'General physician',
-        image: General_physician
+        speciality: 'กฎหมายอาญา',
+        image: Criminal
     },
     {
-        speciality: 'Gynecologist',
-        image: Gynecologist
+        speciality: 'กฎหมายแรงงาน',
+        image: Labor
     },
     {
-        speciality: 'Dermatologist',
-        image: Dermatologist
+        speciality: 'กฎหมายยาเสพติด',
+        image: Drug
     },
     {
-        speciality: 'Pediatricians',
-        image: Pediatricians
+        speciality: 'กฎหมายการแพ่ง',
+        image: Civil
     },
     {
-        speciality: 'Neurologist',
-        image: Neurologist
+        speciality: 'กฎหมายทรัพย์สินทางปัญญา',
+        image: IP
     },
     {
-        speciality: 'Gastroenterologist',
-        image: Gastroenterologist
+        speciality: 'กฎหมายปกครอง',
+        image: Administrative
     },
+    {
+        speciality: 'กฎหมายผู้บริโภค',
+        image: Consumer
+    },
+    {
+        speciality: 'กฎหมายครอบครัวและมรดก',
+        image: Family
+    }
 ]
 
-export const doctors = [
+export const lawyers = [
     {
         _id: 'doc1',
         name: 'Dr. Richard James',
         image: doc1,
-        speciality: 'General physician',
+        speciality: 'กฎหมายอาญา',
         degree: 'MBBS',
         experience: '4 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -108,7 +133,7 @@ export const doctors = [
         _id: 'doc2',
         name: 'Dr. Emily Larson',
         image: doc2,
-        speciality: 'Gynecologist',
+        speciality: 'กฎหมายอาญา',
         degree: 'MBBS',
         experience: '3 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -122,7 +147,7 @@ export const doctors = [
         _id: 'doc3',
         name: 'Dr. Sarah Patel',
         image: doc3,
-        speciality: 'Dermatologist',
+        speciality: 'กฎหมายแรงงาน',
         degree: 'MBBS',
         experience: '1 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -136,7 +161,7 @@ export const doctors = [
         _id: 'doc4',
         name: 'Dr. Christopher Lee',
         image: doc4,
-        speciality: 'Pediatricians',
+        speciality: 'กฎหมายแรงงาน',
         degree: 'MBBS',
         experience: '2 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -150,7 +175,7 @@ export const doctors = [
         _id: 'doc5',
         name: 'Dr. Jennifer Garcia',
         image: doc5,
-        speciality: 'Neurologist',
+        speciality: 'กฎหมายยาเสพติด',
         degree: 'MBBS',
         experience: '4 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -164,7 +189,7 @@ export const doctors = [
         _id: 'doc6',
         name: 'Dr. Andrew Williams',
         image: doc6,
-        speciality: 'Neurologist',
+        speciality: 'กฎหมายการแพ่ง',
         degree: 'MBBS',
         experience: '4 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -178,7 +203,7 @@ export const doctors = [
         _id: 'doc7',
         name: 'Dr. Christopher Davis',
         image: doc7,
-        speciality: 'General physician',
+        speciality: 'กฎหมายทรัพย์สินทางปัญญา',
         degree: 'MBBS',
         experience: '4 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -192,7 +217,7 @@ export const doctors = [
         _id: 'doc8',
         name: 'Dr. Timothy White',
         image: doc8,
-        speciality: 'Gynecologist',
+        speciality: 'กฎหมายปกครอง',
         degree: 'MBBS',
         experience: '3 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -206,7 +231,7 @@ export const doctors = [
         _id: 'doc9',
         name: 'Dr. Ava Mitchell',
         image: doc9,
-        speciality: 'Dermatologist',
+        speciality: 'กฎหมายผู้บริโภค',
         degree: 'MBBS',
         experience: '1 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
@@ -220,7 +245,7 @@ export const doctors = [
         _id: 'doc10',
         name: 'Dr. Jeffrey King',
         image: doc10,
-        speciality: 'Pediatricians',
+        speciality: 'กฎหมายครอบครัวและมรดก',
         degree: 'MBBS',
         experience: '2 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
