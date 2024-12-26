@@ -15,7 +15,7 @@ const MyProfile = () => {
 
   const [isEdit,setIsEdit] = useState(false)
 
-  //ใช้ prev เพื่อนำค่าเก่าที่อยู่ใน state ทั้งหมดมาใช้ในการอัพเดื
+  //ใช้ prev เพื่อนำค่าเก่าที่อยู่ใน state ทั้งหมดมาใช้ในการอัพเดท
 
   //ตัวอย่าง
   // {

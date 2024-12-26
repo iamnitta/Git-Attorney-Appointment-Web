@@ -47,6 +47,22 @@ import Drug from './Drug.png'
 import IP from './IP.png'
 import Labor from './Labor.png'
 import Logo from './Logo.png'
+import Office from './Office.png'
+import Location from './Location.png'
+import Phone from './Phone.png'
+import Line from './Line.png'
+import Logo_2 from './Logo_2.png'
+import About_1 from './About_1.png'
+import About_2 from './About_2.jpg'
+import Booking_Users from './Booking_Users.png'
+import Profile_Users from './Profile_Users.png'
+import Logout_Users from './Logout_Users.png'
+import Profile from './Profile.png'
+import Dropdown_button from './Dropdown_button.png'
+import Menu_button from './Menu_button.png'
+import Cross_button from './Cross_button.png'
+import Calendar from './Calendar.png'
+import Time from './Time.png'
 
 
 export const assets = {
@@ -76,7 +92,23 @@ export const assets = {
     Drug,
     IP,
     Labor,
-    Logo
+    Logo,
+    Office,
+    Location,
+    Phone,
+    Line,
+    Logo_2,
+    About_1,
+    About_2,
+    Profile_Users,
+    Booking_Users,
+    Logout_Users,
+    Profile,
+    Dropdown_button,
+    Menu_button,
+    Cross_button,
+    Calendar,
+    Time
 }
 
 export const specialityData = [
@@ -326,3 +358,38 @@ export const lawyers = [
         }
     },
 ]
+
+export const reviews = [
+    {
+        _id: 'review1',
+        reviewer: 'คุณสมชาย',
+        image: Profile,
+        rating: 5, 
+        comment: 'บริการดีมากครับ ทนายให้คำแนะนำอย่างละเอียดและเป็นประโยชน์',
+        date: '2024-12-23',
+    },
+    {
+        _id: 'review2',
+        reviewer: 'คุณสมหญิง',
+        image: Profile, 
+        rating: 4,
+        comment: 'ทนายมีความเชี่ยวชาญ แต่เวลานัดบางครั้งล่าช้า',
+        date: '2024-12-22',
+    },
+    {
+        _id: 'review3',
+        reviewer: 'คุณสมศรี',
+        image: Profile,
+        rating: 5,
+        comment: 'ประทับใจในความเป็นมืออาชีพของทีมทนายค่ะ',
+        date: '2024-12-20',
+    },
+    {
+        _id: 'review4',
+        reviewer: 'คุณเนม',
+        image: Profile,
+        rating: 5,
+        comment: 'ประทับใจในความเป็นมืออาชีพของทีมทนายครับ',
+        date: '2024-12-20',
+    },
+];

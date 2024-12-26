@@ -9,7 +9,7 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
 
   const onSubmitHandler = async (event) => {
-    //ไม่โหลดหนเาเว็บเพจซ้ำ
+    //ไม่โหลดหน้าเว็บเพจซ้ำ
     event.preventDefault();
   };
 

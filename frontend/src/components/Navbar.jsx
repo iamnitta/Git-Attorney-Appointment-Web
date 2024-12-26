@@ -14,13 +14,13 @@ const Navbar = () => {
 
       <ul className=" md:flex items-start gap-5 font-medium">
         <NavLink to="/">
-          <li className="py-1 text-gray-700 hover:text-gray-900 text-lg ml-5">
+          <li className="py-1 text-gray-700 hover:text-gray-900 md:text-lg text-sm ml-5">
             สำนักงานกฎหมายทนายนอร์ท
           </li>
         </NavLink>
       </ul>
 
-      <ul className="hidden md:flex items-start gap-10 font-medium">
+      <ul className="hidden md:flex items-start gap-10 font-regular text-dark-brown">
         <NavLink to="/">
           <li className="py-1 text-gray-700 hover:text-gray-900 text-lg ">
             หน้าหลัก
@@ -47,16 +47,45 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center gap-4 mr-2 ">
-        
         {token ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
-            <img className="w-8 rounded-full" src={assets.profile_pic} alt="" />
-            <img className="w-2.5" src={assets.dropdown_icon} alt="" />
+            <img className="w-8 rounded-full" src={assets.Profile} alt="" />
+            <img className="w-4" src={assets.Dropdown_button} alt="" />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-700 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
-                <p onClick={()=>navigate("/my-profile")} className="hover:text-black cursor-pointer">โปรไฟล์</p>
-                <p onClick={()=>navigate("/my-appointments")} className="hover:text-black cursor-pointer">สถานะการจอง</p>
-                <p onClick={()=>setToken(false)} className="hover:text-black cursor-pointer">ออกจากระบบ</p>
+                <p
+                  onClick={() => navigate("/my-profile")}
+                  className="hover:text-primary cursor-pointer flex items-center"
+                >
+                  <img
+                    src={assets.Profile_Users}
+                    alt="Profile"
+                    className="w-6 h-6 mr-4"
+                  />
+                  โปรไฟล์
+                </p>
+                <p
+                  onClick={() => navigate("/my-appointments")}
+                  className="hover:text-primary cursor-pointer flex items-center"
+                >
+                  <img
+                    src={assets.Booking_Users}
+                    alt="Appointments"
+                    className="w-6 h-6 mr-4"
+                  />
+                  สถานะการจอง
+                </p>
+                <p
+                  onClick={() => setToken(false)}
+                  className="hover:text-primary cursor-pointer flex items-center"
+                >
+                  <img
+                    src={assets.Logout_Users}
+                    alt="Logout"
+                    className="w-6 h-6 mr-4"
+                  />
+                  ออกจากระบบ
+                </p>
               </div>
             </div>
           </div>
@@ -68,22 +97,45 @@ const Navbar = () => {
             เข้าสู่ระบบ
           </button>
         )}
-         <img onClick={()=>setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
-         {/* mobile */}
-         <div className={` ${showMenu ? 'fixed w-full' : 'h-0 w-0'} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
+        <img
+          onClick={() => setShowMenu(true)}
+          className="w-6 md:hidden"
+          src={assets.Menu_button}
+          alt=""
+        />
+        {/* mobile */}
+        <div
+          className={` ${
+            showMenu ? "fixed w-full" : "h-0 w-0"
+          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
+        >
           <div className="flex items-center justify-between px-5 py-6">
-            <p className="py-1 text-gray-700 hover:text-gray-900 text-lg ml-5">สำนักงานกฎหมายทนายนอร์ท</p>
-            <img className='w-7'onClick={()=>setShowMenu(false)} src={assets.cross_icon} alt="" />
+            <p className="py-1 text-gray-700 hover:text-gray-900 text-lg font-regular ml-5">
+              สำนักงานกฎหมายทนายนอร์ท
+            </p>
+            <img
+              className="w-6"
+              onClick={() => setShowMenu(false)}
+              src={assets.Cross_button}
+              alt=""
+            />
           </div>
 
-          <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium">
-            <NavLink onClick={()=>setShowMenu(false)} to='/'><p className='px-4 py-2 rounded inline-block'>หน้าหลัก</p></NavLink>
-            <NavLink onClick={()=>setShowMenu(false)} to='/lawyers'><p className='px-4 py-2 rounded inline-block'>ทนายความทั้งหมด</p></NavLink>
-            <NavLink onClick={()=>setShowMenu(false)} to='/about'><p className='px-4 py-2 rounded inline-block'>เกี่ยวกับเรา</p></NavLink>
-            <NavLink onClick={()=>setShowMenu(false)} to='/contact'><p className='px-4 py-2 rounded inline-block'>ติดต่อเรา</p></NavLink>
+          <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-regular">
+            <NavLink onClick={() => setShowMenu(false)} to="/">
+              <p className="px-4 py-2 rounded inline-block">หน้าหลัก</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/lawyers">
+              <p className="px-4 py-2 rounded inline-block">ทนายความทั้งหมด</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/about">
+              <p className="px-4 py-2 rounded inline-block">เกี่ยวกับเรา</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/contact">
+              <p className="px-4 py-2 rounded inline-block">ติดต่อเรา</p>
+            </NavLink>
           </ul>
-
-         </div>
+        </div>
       </div>
     </div>
   );
