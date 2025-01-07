@@ -63,7 +63,10 @@ import Menu_button from './Menu_button.png'
 import Cross_button from './Cross_button.png'
 import Calendar from './Calendar.png'
 import Time from './Time.png'
-
+import Is_Thaibar from './Is_Thaibar.png'
+import Case from './Case.png'
+import Consult from './Consult.png'
+import Win from './Win.png'
 
 export const assets = {
     appointment_img,
@@ -108,7 +111,11 @@ export const assets = {
     Menu_button,
     Cross_button,
     Calendar,
-    Time
+    Time,
+    Is_Thaibar,
+    Case,
+    Consult,
+    Win
 }
 
 export const specialityData = [
@@ -149,22 +156,53 @@ export const specialityData = [
 export const lawyers = [
     {
         _id: 'doc1',
-        name: 'Dr. Richard James',
-        image: doc1,
+        name: 'กานต์ ทวีทรัพย์ ',
+        image: Profile,
         speciality: 'กฎหมายอาญา',
         degree: 'MBBS',
         experience: '4 Years',
-        about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
+        about: 'สวัสดีครับ ผมทนาย กานต์ ทวีทรัพย์ ยินดีให้คำปรึกษาอย่างตรงไปตรงมาครับ',
         fees: 50,
         address: {
             line1: '17th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [
+            {
+              degree: 'นิติศาสตร์บัณฑิต',
+              institution: 'มหาวิทยาลัยเกษตรศาสตร์',
+              enrollmentYear: 2012,
+              graduationYear: 2016
+            },
+            {
+              degree: 'นิติศาสตร์มหาบัณฑิต',
+              institution: 'มหาวิทยาลัยรามคำแหง',
+              enrollmentYear: 2016,
+              graduationYear: 2018
+            }
+        ],
+        work_experience: [
+            {
+              position: 'ทนายความ',
+              company: 'บริษัท กรุงไทยกฎหมาย',
+              startDate: '2018',
+              endDate: '2022'
+            },
+            {
+              position: 'ทนายความ',
+              company: 'สำนักงานกฎหมาย A',
+              startDate: '2022',
+              endDate: '2024'
+            }
+          ]
+
     },
     {
         _id: 'doc2',
         name: 'Dr. Emily Larson',
-        image: doc2,
+        image: Profile,
         speciality: 'กฎหมายอาญา',
         degree: 'MBBS',
         experience: '3 Years',
@@ -173,12 +211,16 @@ export const lawyers = [
         address: {
             line1: '27th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: false,
+        license_number: '12345/66',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc3',
         name: 'Dr. Sarah Patel',
-        image: doc3,
+        image: Profile,
         speciality: 'กฎหมายแรงงาน',
         degree: 'MBBS',
         experience: '1 Years',
@@ -187,12 +229,16 @@ export const lawyers = [
         address: {
             line1: '37th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc4',
         name: 'Dr. Christopher Lee',
-        image: doc4,
+        image: Profile,
         speciality: 'กฎหมายแรงงาน',
         degree: 'MBBS',
         experience: '2 Years',
@@ -201,12 +247,16 @@ export const lawyers = [
         address: {
             line1: '47th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc5',
         name: 'Dr. Jennifer Garcia',
-        image: doc5,
+        image: Profile,
         speciality: 'กฎหมายยาเสพติด',
         degree: 'MBBS',
         experience: '4 Years',
@@ -215,12 +265,16 @@ export const lawyers = [
         address: {
             line1: '57th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc6',
         name: 'Dr. Andrew Williams',
-        image: doc6,
+        image: Profile,
         speciality: 'กฎหมายการแพ่ง',
         degree: 'MBBS',
         experience: '4 Years',
@@ -229,12 +283,16 @@ export const lawyers = [
         address: {
             line1: '57th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc7',
         name: 'Dr. Christopher Davis',
-        image: doc7,
+        image: Profile,
         speciality: 'กฎหมายทรัพย์สินทางปัญญา',
         degree: 'MBBS',
         experience: '4 Years',
@@ -243,12 +301,16 @@ export const lawyers = [
         address: {
             line1: '17th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc8',
         name: 'Dr. Timothy White',
-        image: doc8,
+        image: Profile,
         speciality: 'กฎหมายปกครอง',
         degree: 'MBBS',
         experience: '3 Years',
@@ -257,12 +319,16 @@ export const lawyers = [
         address: {
             line1: '27th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc9',
         name: 'Dr. Ava Mitchell',
-        image: doc9,
+        image: Profile,
         speciality: 'กฎหมายผู้บริโภค',
         degree: 'MBBS',
         experience: '1 Years',
@@ -271,12 +337,16 @@ export const lawyers = [
         address: {
             line1: '37th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc10',
         name: 'Dr. Jeffrey King',
-        image: doc10,
+        image: Profile,
         speciality: 'กฎหมายครอบครัวและมรดก',
         degree: 'MBBS',
         experience: '2 Years',
@@ -285,12 +355,16 @@ export const lawyers = [
         address: {
             line1: '47th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc11',
         name: 'Dr. Zoe Kelly',
-        image: doc11,
+        image: Profile,
         speciality: 'Neurologist',
         degree: 'MBBS',
         experience: '4 Years',
@@ -299,12 +373,16 @@ export const lawyers = [
         address: {
             line1: '57th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc12',
         name: 'Dr. Patrick Harris',
-        image: doc12,
+        image: Profile,
         speciality: 'Neurologist',
         degree: 'MBBS',
         experience: '4 Years',
@@ -313,12 +391,16 @@ export const lawyers = [
         address: {
             line1: '57th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc13',
         name: 'Dr. Chloe Evans',
-        image: doc13,
+        image: Profile,
         speciality: 'General physician',
         degree: 'MBBS',
         experience: '4 Years',
@@ -327,12 +409,16 @@ export const lawyers = [
         address: {
             line1: '17th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc14',
         name: 'Dr. Ryan Martinez',
-        image: doc14,
+        image: Profile,
         speciality: 'Gynecologist',
         degree: 'MBBS',
         experience: '3 Years',
@@ -341,12 +427,16 @@ export const lawyers = [
         address: {
             line1: '27th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
     {
         _id: 'doc15',
         name: 'Dr. Amelia Hill',
-        image: doc15,
+        image: Profile,
         speciality: 'Dermatologist',
         degree: 'MBBS',
         experience: '1 Years',
@@ -355,39 +445,43 @@ export const lawyers = [
         address: {
             line1: '37th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
-        }
+        },
+        is_thaibar: true,
+        license_number: '789012',
+        education: [],
+        work_experience: []
     },
 ]
 
 export const reviews = [
     {
         _id: 'review1',
-        reviewer: 'คุณสมชาย',
-        image: Profile,
+        reviewer: 'พิมพ์ใจ รัตนจันทร์',
+        image: Profile_Users,
         rating: 5, 
-        comment: 'บริการดีมากครับ ทนายให้คำแนะนำอย่างละเอียดและเป็นประโยชน์',
+        comment: 'ทนายให้บริการดีมาก ๆ ค่ะ',
         date: '2024-12-23',
     },
     {
         _id: 'review2',
-        reviewer: 'คุณสมหญิง',
-        image: Profile, 
+        reviewer: 'อภิชาติ ทองสุข',
+        image: Profile_Users, 
         rating: 4,
-        comment: 'ทนายมีความเชี่ยวชาญ แต่เวลานัดบางครั้งล่าช้า',
+        comment: 'ให้คำปรึกษาได้ดีเลยครับ',
         date: '2024-12-22',
     },
     {
         _id: 'review3',
-        reviewer: 'คุณสมศรี',
-        image: Profile,
+        reviewer: 'วราภรณ์ พิทักษ์ไทย',
+        image: Profile_Users,
         rating: 5,
-        comment: 'ประทับใจในความเป็นมืออาชีพของทีมทนายค่ะ',
+        comment: 'ใช้บริการมา 2 ครั้งแล้วค่ะ ดีมาก ๆ เลยค่ะ',
         date: '2024-12-20',
     },
     {
         _id: 'review4',
-        reviewer: 'คุณเนม',
-        image: Profile,
+        reviewer: 'สุรชัย สุขสวัสดิ์',
+        image: Profile_Users,
         rating: 5,
         comment: 'ประทับใจในความเป็นมืออาชีพของทีมทนายครับ',
         date: '2024-12-20',
