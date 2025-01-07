@@ -8,20 +8,15 @@
 //API for adding lawyer
 
 const addLawyer = async (req,res) => {
-
     try {
-        const {email, firstName, lastName, password, phone, dob, gender, is_thaibar, bio, fees_detail, license_number } = req.body
-        const work_experience = JSON.parse(req.body.work_experience);
-        const education = JSON.parse(req.body.education);
-        const speciality = JSON.parse(req.body.speciality);
+        const {email, firstName, lastName, password, phone, dob, gender} = req.body
         const imageFile = req.file
         console.log('--------------------------')
-
-        console.log({email, firstName, lastName, password, phone, dob, gender, speciality, education, is_thaibar, work_experience, bio, fees_detail, license_number },imageFile);
+        console.log({email, firstName, lastName, password, phone, dob, gender}, imageFile);
 
         //checking for all data to add lawyer
-        if(!email || !firstName || !lastName || !password || !phone || !dob || !gender || !speciality || !education || !is_thaibar || !work_experience || !bio || !fees_detail || !license_number){
-            return res.json({success:false,messege: 'ข้อมูลไม่ครบ'})
+        if(!email || !firstName || !lastName || !password || !phone || !dob || !gender){
+            return res.json({success:false,message: 'กรุณากรอกข้อมูลให้ครบถ้วน'})
         }
 
         //validating email format
@@ -46,34 +41,21 @@ const addLawyer = async (req,res) => {
             email,
             firstName,
             lastName,
-            password:hashedPassword,
+            password: hashedPassword,
+            phone,
             dob,
             gender,
-            speciality,
-            education,
-            is_thaibar,
-            work_experience,
-            bio,
-            fees_detail,
-            license_number,
             image: imageUrl
-
         }
 
         const newLawyer = new lawyerModel(lawyerData)
         await newLawyer.save()
 
         res.json({success:true,message:'เพิ่มทนายสำเร็จ'})
-
-
-
-        
         
     } catch (error) {
         console.log(error)
         res.json({success:false,message:error.message})
-
-        
     }
 }
 
@@ -98,4 +80,18 @@ const loginAdmin = async (req,res) => {
     }
 }
 
-export {addLawyer,loginAdmin}
+// API to get all lawyers list for admin panel
+
+const allLawyers = async (req,res) => {
+    try {
+        const lawyers = await lawyerModel.find({}).select('-password')
+        res.json({success:true, lawyers})
+        
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
+
+export {addLawyer,loginAdmin,allLawyers}
+

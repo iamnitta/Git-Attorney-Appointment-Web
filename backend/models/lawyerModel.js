@@ -1,13 +1,17 @@
 import mongoose from "mongoose";
 
 const lawyerSchema = new mongoose.Schema({
-    email: {type: String, require: true, unique: true},
-    firstName: {type: String, require: true},
-    lastName: {type: String, require: true},
-    password: {type: String, require: true},
-    phone: {type: String, require: true},
-    dob: {type: Date, require: true},
-    gender: {type: String, require: true},
+    // ส่วนที่แอดมินต้องกรอกตอนสร้างบัญชี
+    email: {type: String, required: true, unique: true},
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
+    password: {type: String, required: true},
+    phone: {type: String, required: true},
+    dob: {type: Date, required: true},
+    gender: {type: String, required: true},
+    image: {type: String, require: true, default:""},
+
+    // ส่วนที่ทนายจะมากรอกเพิ่มเติมภายหลัง
     speciality: [{type: String}],
     education: [{
         degree: {type: String},
@@ -15,17 +19,16 @@ const lawyerSchema = new mongoose.Schema({
         enrollmentYear: {type: String},
         graduationYear: {type: String}
     }],
-    is_thaibar: {type: Boolean},
+    is_thaibar: {type: Boolean, default: false},
     work_experience: [{
         position: {type: String},
         company: {type: String},
         startDate: {type: String},
         endDate: {type: String},
     }],
-    bio: {type: String},
-    fees_detail: {type: String},
-    license_number: {type: String},
-    image: {type: String, require: true, default:""},
+    bio: {type: String, default: ""},
+    fees_detail: {type: String, default: ""},
+    license_number: {type: String, default: ""},
     avaliable_slots: {type:Object, default:{}}
 },{minimize:false})
 

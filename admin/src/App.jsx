@@ -5,7 +5,7 @@ import { AdminContext } from './context/AdminContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import { Route, Routes } from 'react-router-dom';
-import AllApointments from './pages/Admin/AllApointments';
+import AllAppointments from './pages/Admin/AllAppointments';
 import AddLawyer from './pages/Admin/AddLawyer';
 import LawyersList from './pages/Admin/LawyersList';
 import Finance from './pages/Admin/Finance';
@@ -22,7 +22,7 @@ const App = () => {
         <Sidebar />
         <Routes>
           <Route path='/' element={<></>} />
-          <Route path='/all-appointments' element={<AllApointments/>} />
+          <Route path='/all-appointments' element={<AllAppointments/>} />
           <Route path='/lawyer-list' element={<LawyersList/>} />
           <Route path='/add-lawyer' element={<AddLawyer/>} />
           <Route path='/finance-lawyer' element={<Finance/>} />
