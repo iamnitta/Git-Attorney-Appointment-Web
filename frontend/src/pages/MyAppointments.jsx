@@ -49,7 +49,7 @@ const MyAppointments = () => {
               {status === "scheduled" ? "นัดหมายแล้ว" : "เสร็จสิ้นแล้ว"}
             </div>
 
-            <div className="bg-brown-lawyerpic rounded-full w-24 md:w-32 h-24 md:h-32 mx-auto md:mx-0">
+            <div className="bg-brown-lawyerpic rounded-full w-20 lg:w-32 h-20 lg:h-32 mx-0 lg:mx-0">
               <img
                 src={item.image}
                 alt=""
@@ -58,7 +58,7 @@ const MyAppointments = () => {
             </div>
 
             <div className="flex-1 w-full md:w-auto">
-              <div className="flex flex-col md:flex-row gap-2 items-start md:items-center mb-2">
+              <div className="flex flex-row gap-2 lg:flex-row lg:gap-2 items-start lg:items-center mb-2">
                 <p className="text-lg font-medium">{item.name}</p>
                 <span className="bg-brown-lawyerpic px-3 py-1 rounded-md text-sm">
                   {item.speciality}
@@ -107,11 +107,11 @@ const MyAppointments = () => {
               </div>
             </div>
 
-            <div className="flex gap-4 mt-auto justify-end">
-              <button className="h-10 px-4 py-2 bg-[#A17F6B] text-white rounded hover:bg-[#8B6B59] transition w-full md:w-auto">
+            <div className="flex gap-2 mt-auto justify-end">
+              <button className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40">
                 ยกเลิกการนัดหมาย
               </button>
-              <button className="h-10 px-4 py-2 bg-[#DADADA] text-white rounded hover:bg-gray-400 transition w-full md:w-auto">
+              <button className="h-10 px-4 py-2 bg-[#DADADA] text-white text-sm rounded hover:bg-gray-400 transition w-40">
                 รีวิวการนัดหมาย
               </button>
             </div>
