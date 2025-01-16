@@ -119,7 +119,7 @@ const Appointment = () => {
                   <div className="mt-4 sm:mt-0 sm:ml-4">
                     <div className="flex flex-col lg:flex-row lg:items-center">
                       <p className="font-medium text-2xl">
-                        ทนาย {lawInfo.name}
+                        ทนาย {lawInfo.firstName} {lawInfo.lastName}
                       </p>
                       {lawInfo.is_thaibar && (
                         <div className="flex flex-row lg:flex-row items-center">
@@ -141,9 +141,16 @@ const Appointment = () => {
                     </p>{" "}
                     <div className="flex items-center gap-2 mt-5">
                       <p>ความเชี่ยวชาญ</p>
-                      <p className="font-prompt text-xs bg-brown-lawyerpic text-black rounded-full px-2 py-1">
-                        {lawInfo.speciality}
-                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {lawInfo.speciality.map((spec, idx) => (
+                          <p
+                            key={idx}
+                            className="font-prompt text-xs bg-brown-lawyerpic text-black rounded-full px-2 py-1"
+                          >
+                            {spec}
+                          </p>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -41,9 +41,7 @@ const MyAppointments = () => {
           >
             <div
               className={`absolute top-6 right-6 px-3 py-1 text-base rounded-full font-medium ${
-                status === "scheduled"
-                  ? " text-primary"
-                  : " text-green-800"
+                status === "scheduled" ? " text-primary" : " text-green-800"
               }`}
             >
               {status === "scheduled" ? "นัดหมายแล้ว" : "เสร็จสิ้นแล้ว"}
@@ -59,10 +57,19 @@ const MyAppointments = () => {
 
             <div className="flex-1 w-full md:w-auto">
               <div className="flex flex-row gap-2 lg:flex-row lg:gap-2 items-start lg:items-center mb-2">
-                <p className="text-lg font-medium">{item.name}</p>
-                <span className="bg-brown-lawyerpic px-3 py-1 rounded-md text-sm">
-                  {item.speciality}
-                </span>
+                <p className="text-lg font-medium">
+                  {item.firstName} {item.lastName}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {item.speciality.map((spec, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-brown-lawyerpic px-3 py-1 rounded-md text-sm"
+                    >
+                      {spec}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div className="space-y-2 text-gray-600">
                 <div className="flex items-center gap-4">

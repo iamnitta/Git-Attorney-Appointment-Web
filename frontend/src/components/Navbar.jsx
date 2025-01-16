@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
   //javascript
   const navigate = useNavigate();
+
+  const {token,setToken} = useContext(AppContext)
+
   const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
+
+  const logout = () => {
+    setToken(false)
+    localStorage.removeItem('token')
+  }
 
   return (
     <div className="flex items-center justify-between text-sm py-4  bg-light-brown font-prompt">
@@ -76,7 +84,7 @@ const Navbar = () => {
                   สถานะการจอง
                 </p>
                 <p
-                  onClick={() => setToken(false)}
+                  onClick={logout}
                   className="hover:text-primary cursor-pointer flex items-center"
                 >
                   <img

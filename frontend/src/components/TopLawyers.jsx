@@ -4,7 +4,7 @@ import { AppContext } from "../context/AppContext";
 
 const TopLawyers = () => {
   const navigate = useNavigate();
-  const {lawyers} = useContext(AppContext)
+  const { lawyers } = useContext(AppContext);
 
   return (
     <div className="w-full bg-light-brown">
@@ -32,12 +32,21 @@ const TopLawyers = () => {
 
               {/* ข้อมูลทนาย */}
               <div className="flex flex-col justify-center p-4 md:pl-8 space-y-2 items-center md:items-start mt-2 md:mt-0">
-                <p className="font-prompt text-lg font-medium text-dark-brown">ทนาย {item.name}</p>
+                <p className="font-prompt text-lg font-medium text-dark-brown">
+                  ทนาย {item.firstName} {item.lastName}
+                </p>
                 <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2">
                   <p className="font-prompt text-sm">ความเชี่ยวชาญ</p>
-                  <p className="font-prompt text-xs bg-brown-lawyerpic rounded-full px-2 py-1">
-                    {item.speciality}
-                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {item.speciality.map((spec, index) => (
+                      <p
+                        key={index}
+                        className="font-prompt text-xs bg-brown-lawyerpic rounded-full px-2 py-1"
+                      >
+                        {spec}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
