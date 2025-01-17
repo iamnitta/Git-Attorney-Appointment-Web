@@ -141,14 +141,14 @@ const getProfile = async (req,res) => {
 const updateProfile = async (req,res) => {
     try {
 
-        const {userId, firstName, lastName, dob, phone, gender,nationalId } = req.body
+        const {userId, firstName, lastName, dob, phone, gender } = req.body
         const imageFile = req.file
 
-        if(!firstName || !lastName || !dob || !phone || !gender ||!nationalId) {
+        if(!firstName || !lastName || !dob || !phone || !gender ) {
             return res.json({success:false, message:'ข้อมูลไม่ครบถ้วน'})
         }
 
-        await userModel.findByIdAndUpdate(userId, {firstName,lastName,dob,phone,gender,nationalId })
+        await userModel.findByIdAndUpdate(userId, {firstName,lastName,dob,phone,gender })
 
 
         if (imageFile) {
@@ -159,6 +159,27 @@ const updateProfile = async (req,res) => {
 
             await userModel.findByIdAndUpdate(userId,{image:imageURL})
         }
+
+
+        // validating phone number format 
+            if (!validator.isMobilePhone(phone, 'th-TH')) {
+            return res.json({success:false, message:'กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง'})
+        }  
+    
+         // ตรวจสอบอายุ
+         const birthDate = new Date(dob);
+         const today = new Date();
+         let age = today.getFullYear() - birthDate.getFullYear();
+         const monthDiff = today.getMonth() - birthDate.getMonth();
+         
+         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+             age--;
+         }
+ 
+         if (age < 18) {
+             return res.json({success:false, message:'ต้องมีอายุอย่างน้อย 18 ปี เพื่อใช้งานบริการนี้'})
+         }    
+
 
         res.json({success:true,message:'อัพเดทโปรเสร็จสิ้น'})
 

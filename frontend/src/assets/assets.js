@@ -67,6 +67,8 @@ import Is_Thaibar from './Is_Thaibar.png'
 import Case from './Case.png'
 import Consult from './Consult.png'
 import Win from './Win.png'
+import Upload from './Upload.png'
+import Upload_Icon1 from './Upload_Icon1.png'
 
 export const assets = {
     appointment_img,
@@ -115,7 +117,9 @@ export const assets = {
     Is_Thaibar,
     Case,
     Consult,
-    Win
+    Win,
+    Upload,
+    Upload_Icon1
 }
 
 export const specialityData = [

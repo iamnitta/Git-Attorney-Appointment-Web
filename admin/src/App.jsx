@@ -16,11 +16,10 @@ const App = () => {
 
   
   return aToken ? (
-    <div className='bg-light-brown'>
+    <div className='bg-light-brown min-h-screen flex'>
       <ToastContainer/>
-      <div className='flex items-start'>
         <Sidebar />
-
+        <div className='ml-64 flex-grow'>
         <Routes>
           <Route path='/' element={<></>} />
           <Route path='/all-appointments' element={<AllAppointments/>} />
@@ -28,8 +27,8 @@ const App = () => {
           <Route path='/add-lawyer' element={<AddLawyer/>} />
           <Route path='/finance-lawyer' element={<Finance/>} />
         </Routes>
+        </div>
       </div>
-    </div>
   ) : (
     <>
     <Login />
