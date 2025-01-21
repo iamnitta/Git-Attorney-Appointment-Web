@@ -17,6 +17,11 @@ const Appointment = () => {
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTimes] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
+
+  //ฟังก์ชันเปิดปิด Pop Up
+  const openPopup = () => setShowPopup(true);
+  const closePopup = () => setShowPopup(false);
 
   const fetchLawInfo = async () => {
     const lawInfo = lawyers.find((law) => law._id === lawId);
@@ -181,36 +186,23 @@ const Appointment = () => {
               <p className="text-left font-medium ml-4 mt-8 text-dark-brown">
                 เวลาให้บริการ
               </p>
-              {/* วันที่ 1 */}
-              <ul className="mt-3 ml-4">
-                <li className="flex items-center justify-between mb-2">
-                  <p className="text-sm leading-6">วันจันทร์</p>
-                  <p className="text-sm leading-6">8.00-18.00 น.</p>
-                </li>
-              </ul>
-              {/* วันที่ 2 */}
-              <ul className="mt-3 ml-4">
-                <li className="flex items-center justify-between mb-2">
-                  <p className="text-sm leading-6">วันอังคาร</p>
-                  <p className="text-sm leading-6">8.00-18.00 น.</p>
-                </li>
-              </ul>
-              {/* วันที่ 3 */}
-              <ul className="mt-3 ml-4">
-                <li className="flex items-center justify-between mb-2">
-                  <p className="text-sm leading-6">วันศุกร์</p>
-                  <p className="text-sm leading-6">8.00-18.00 น.</p>
-                </li>
-              </ul>
-              {/* วันที่ 4 */}
-              <ul className="mt-3 ml-4">
-                <li className="flex items-center justify-between mb-2">
-                  <p className="text-sm leading-6">วันเสาร์</p>
-                  <p className="text-sm leading-6">8.00-12.00 น.</p>
-                </li>
-              </ul>
+              {lawInfo.available_slots && lawInfo.available_slots.length > 0
+                ? lawInfo.available_slots.map((slot, index) => (
+                    <ul key={index} className="mt-3 ml-4">
+                      <li className="flex items-center justify-between mb-2">
+                        <p className="text-sm leading-6">{slot.day}</p>
+                        <p className="text-sm leading-6">
+                          {slot.startTime} - {slot.endTime} น.
+                        </p>
+                      </li>
+                    </ul>
+                  ))
+                : null}
               {/* ปุ่มจองเวลานัดหมาย */}
-              <button className="mt-4 mx-auto bg-primary text-white w-full rounded h-10">
+              <button
+                onClick={openPopup}
+                className="mt-4 mx-auto bg-primary text-white w-full rounded h-10"
+              >
                 จองเวลานัดหมาย
               </button>
             </div>
@@ -307,6 +299,128 @@ const Appointment = () => {
             ))}
           </ul>
         </div>
+
+        {/* Pop Up สำหรับจองเวลานัดหมาย */}
+        {showPopup && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg max-w-[600px] w-full">
+              <div className="flex flex-row justify-between">
+                <h2 className="text-lg font-medium text-dark-brown mb-4">
+                  จองเวลานัดหมาย
+                </h2>
+                <img
+                  onClick={closePopup}
+                  src={assets.Cross_button}
+                  alt="ยกเลิก"
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+
+              <div className="flex flex-row gap-6 h-auto">
+                <div>
+                  <div>
+                    <div className="flex flex-row gap-2 mb-2">
+                      <p className="text-dark-brown font-medium">เลือกวัน</p>
+                      <img src={assets.Calendar} alt="" className="w-5 h-5" />
+                    </div>
+                    {/* ปฏิทิน */}
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={handleDateChange}
+                      locale="th"
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
+                      filterDate={filterWeekdays}
+                      inline
+                    />
+                  </div>
+                </div>
+
+                <div className="w-full">
+                  {/* เวลา */}
+                  <div className="flex flex-row gap-2 mb-2">
+                    <p className="text-dark-brown font-medium">เลือกเวลา</p>
+                    <img src={assets.Time} alt="" className="w-5 h-5" />
+                  </div>
+                  <div
+                    className="flex flex-col items-center gap-2 border border-[#DADADA] rounded p-2 overflow-y-auto scrollbar-visible"
+                    style={{
+                      maxHeight: 242.3
+                    }}
+                  >
+                    {lawSlots.length &&
+                      lawSlots[slotIndex].map((item, index) => (
+                        <div
+                          onClick={() => setSlotTimes(item.time)}
+                          className={`text-center py-3 px-4 w-3/4 rounded cursor-pointer transition-all duration-200
+              ${
+                item.time === slotTime
+                  ? "bg-primary text-white"
+                  : "border border-dark-brown text-dark-brown hover:bg-primary hover:text-white"
+              }`}
+                          key={index}
+                        >
+                          <p className="text-sm">{item.time.toLowerCase()}</p>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-dark-brown font-medium mt-6">
+                  เลือกจำนวนชั่วโมง
+                </p>
+                <div className="mt-4 flex items-center gap-4">
+                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
+                    30 นาที
+                  </button>
+                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
+                    1 ชั่วโมง
+                  </button>
+                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
+                    2 ชั่วโมง
+                  </button>
+                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
+                    3 ชั่วโมง
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-dark-brown font-medium mt-6">
+                  สรุปการนัดหมาย
+                </p>
+                <p className="text-primary font-legular text-sm mt-2">
+                  วันที่ 17/12/2024 เวลา 8.00-8.30 น.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-dark-brown font-medium mt-6">
+                  เรื่องที่ต้องการปรึกษา
+                </p>
+                <input
+                  className="w-full mt-2 px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
+                  type="text"
+                  placeholder="โปรดระบุเรื่องที่คุณต้องการปรึกษาเบื้องต้น"
+                />
+              </div>
+
+              <div>
+                <p className="text-dark-brown font-medium mt-6">
+                  อัปโหลดเอกสารเบื้องต้น
+                </p>
+              </div>
+
+              <div className="flex justify-center mt-10">
+                <button className="border border-dark-brown text-dark-brown px-4 py-1 rounded hover:bg-dark-brown hover:text-white">
+                  จองเวลานัดหมาย
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* รีวิวทั้งหมด */}
         <div>
