@@ -29,7 +29,12 @@ const lawyerSchema = new mongoose.Schema({
     bio: {type: String, default: ""},
     fees_detail: {type: String, default: ""},
     license_number: {type: String, default: ""},
-    avaliable_slots: {type:Object, default:{}}
+    lawyerNationalId: {type: String, default: ""},
+    available_slots: [{
+        day: {type: String},         // วันที่ เช่น "2024-03-20"
+        startTime: {type: String},         // เวลา เช่น "10:00"
+        endTime: {type: String,},  // สถานะ: available, booked
+    }],
 },{minimize:false})
 
 const lawyerModel = mongoose.models.lawyer || mongoose.model('lawyer', lawyerSchema)

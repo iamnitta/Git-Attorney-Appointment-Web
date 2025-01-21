@@ -82,11 +82,11 @@ const Lawyers = () => {
             </p>
 
             <p
-              onClick={() => (speciality === "กฎหมายปกครอง" ? navigate("/lawyers") : navigate("/lawyers/กฎหมายปกครอง"))}
+              onClick={() => (speciality === "กฎหมายภาษี" ? navigate("/lawyers") : navigate("/lawyers/กฎหมายภาษี"))}
               className={`cursor-pointer hover:bg-brown-lawyerpic p-3 transition-all border-2 border-brown-lawyerpic shadow-sm flex items-center justify-between rounded-lg md:ml-6 ml-4 md:h-full h-10 md:mr-0 mr-4 md:text-sm text-xs
-              ${speciality === "กฎหมายปกครอง" ? "bg-brown-lawyerpic text-black" : ""}`}
+              ${speciality === "กฎหมายภาษี" ? "bg-brown-lawyerpic text-black" : ""}`}
             >
-              กฎหมายปกครอง
+              กฎหมายภาษี
               <img className="hidden md:block md:w-10 md:h-10 ml-2" src={assets.Administrative} alt="" />
             </p>
 
@@ -105,6 +105,15 @@ const Lawyers = () => {
               ${speciality === "กฎหมายครอบครัวและมรดก" ? "bg-brown-lawyerpic text-black" : ""}`}
             >
               กฎหมายครอบครัวและมรดก
+              <img className="hidden md:block md:w-10 md:h-10 ml-2" src={assets.Family} alt="" />
+            </p>
+
+            <p
+              onClick={() => (speciality === "กฎหมายล้มละลาย" ? navigate("/lawyers") : navigate("/lawyers/กฎหมายล้มละลาย"))}
+              className={`cursor-pointer hover:bg-brown-lawyerpic p-3 transition-all border-2 border-brown-lawyerpic shadow-sm flex items-center justify-between rounded-lg md:ml-6 ml-4 md:h-full h-10 md:mr-0 mr-4 md:text-sm text-xs
+              ${speciality === "กฎหมายล้มละลาย" ? "bg-brown-lawyerpic text-black" : ""}`}
+            >
+              กฎหมายล้มละลาย
               <img className="hidden md:block md:w-10 md:h-10 ml-2" src={assets.Family} alt="" />
             </p>
           </div>

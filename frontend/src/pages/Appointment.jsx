@@ -165,7 +165,7 @@ const Appointment = () => {
                   <p className="text-left font-medium ml-4 lg:ml-0">
                     แนะนำตัว/ข้อมูลเพิ่มเติม
                   </p>
-                  <p className="mt-2 lg:w-full ml-4 lg:ml-0">{lawInfo.about}</p>
+                  <p className="mt-2 lg:w-full ml-4 lg:ml-0">{lawInfo.bio}</p>
                   {/*<p className="text-left font-medium mt-2">
                   ราคา {lawInfo.fees} บาท
                 </p> */}
@@ -180,7 +180,7 @@ const Appointment = () => {
               <p className="text-left font-medium ml-4 mt-4 text-dark-brown">
                 ค่าบริการ
               </p>
-              <p className="mt-2 ml-4 text-sm">{lawInfo.fees}</p>{" "}
+              <p className="mt-2 ml-4 text-sm">{lawInfo.fees_detail}</p>{" "}
               {/* ต้องแก้ fees เป็น string */}
               {/* วันเวลาของทนาย */}
               <p className="text-left font-medium ml-4 mt-8 text-dark-brown">
