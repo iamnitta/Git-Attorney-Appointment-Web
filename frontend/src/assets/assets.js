@@ -1,41 +1,3 @@
-import appointment_img from './appointment_img.png'
-import header_img from './header_img.png'
-import group_profiles from './group_profiles.png'
-import profile_pic from './profile_pic.png'
-import contact_image from './contact_image.png'
-import about_image from './about_image.png'
-import logo from './logo.svg'
-import dropdown_icon from './dropdown_icon.svg'
-import menu_icon from './menu_icon.svg'
-import cross_icon from './cross_icon.png'
-import chats_icon from './chats_icon.svg'
-import verified_icon from './verified_icon.svg'
-import arrow_icon from './arrow_icon.svg'
-import info_icon from './info_icon.svg'
-import upload_icon from './upload_icon.png'
-import stripe_logo from './stripe_logo.png'
-import razorpay_logo from './razorpay_logo.png'
-import doc1 from './doc1.png'
-import doc2 from './doc2.png'
-import doc3 from './doc3.png'
-import doc4 from './doc4.png'
-import doc5 from './doc5.png'
-import doc6 from './doc6.png'
-import doc7 from './doc7.png'
-import doc8 from './doc8.png'
-import doc9 from './doc9.png'
-import doc10 from './doc10.png'
-import doc11 from './doc11.png'
-import doc12 from './doc12.png'
-import doc13 from './doc13.png'
-import doc14 from './doc14.png'
-import doc15 from './doc15.png'
-import Dermatologist from './Dermatologist.svg'
-import Gastroenterologist from './Gastroenterologist.svg'
-import General_physician from './General_physician.svg'
-import Gynecologist from './Gynecologist.svg'
-import Neurologist from './Neurologist.svg'
-import Pediatricians from './Pediatricians.svg'
 import HomePage from './HomePage.png'
 import law from './law.png'
 import Criminal from './Criminal.png'
@@ -71,22 +33,6 @@ import Upload from './Upload.png'
 import Upload_Icon1 from './Upload_Icon1.png'
 
 export const assets = {
-    appointment_img,
-    header_img,
-    group_profiles,
-    chats_icon,
-    verified_icon,
-    info_icon,
-    profile_pic,
-    arrow_icon,
-    contact_image,
-    about_image,
-    menu_icon,
-    cross_icon,
-    dropdown_icon,
-    upload_icon,
-    stripe_logo,
-    razorpay_logo,
     HomePage,
     law,
     Criminal,
@@ -200,6 +146,18 @@ export const lawyers = [
               startDate: '2022',
               endDate: '2024'
             }
+          ],
+          available_slots: [
+            {
+                "day": "วันจันทร์",
+                "startTime": "08:00",
+                "endTime": "16:00"
+              },
+              {
+                "day": "วันศุกร์",
+                "startTime": "09:00",
+                "endTime": "12:00"
+              }
           ]
 
     },
@@ -219,7 +177,19 @@ export const lawyers = [
         is_thaibar: false,
         license_number: '12345/66',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc3',
@@ -237,7 +207,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc4',
@@ -255,7 +237,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc5',
@@ -273,7 +267,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc6',
@@ -291,7 +297,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc7',
@@ -309,7 +327,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc8',
@@ -327,7 +357,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc9',
@@ -345,7 +387,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc10',
@@ -363,7 +417,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc11',
@@ -381,7 +447,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc12',
@@ -399,7 +477,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc13',
@@ -417,7 +507,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc14',
@@ -435,7 +537,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
     {
         _id: 'doc15',
@@ -453,7 +567,19 @@ export const lawyers = [
         is_thaibar: true,
         license_number: '789012',
         education: [],
-        work_experience: []
+        work_experience: [],
+        available_slots: [
+          {
+              "day": "วันจันทร์",
+              "startTime": "08:00",
+              "endTime": "16:00"
+            },
+            {
+              "day": "วันศุกร์",
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+        ]
     },
 ]
 
