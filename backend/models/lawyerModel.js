@@ -34,7 +34,9 @@ const lawyerSchema = new mongoose.Schema({
         day: {type: String},         // วันที่ เช่น "2024-03-20"
         startTime: {type: String},         // เวลา เช่น "10:00"
         endTime: {type: String,},  // สถานะ: available, booked
+        status: {type: String, enum: ['ว่าง', 'จองแล้ว'], default: 'ว่าง'}
     }],
+    slots_booked: {type: Object, default: {}},
 },{minimize:false})
 
 const lawyerModel = mongoose.models.lawyer || mongoose.model('lawyer', lawyerSchema)

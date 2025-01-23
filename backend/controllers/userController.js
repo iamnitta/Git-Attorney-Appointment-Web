@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import userModel from "../models/userModel.js";
 import {v2 as cloudinary} from 'cloudinary'
+import appointmentModel from "../models/appointmentModel.js";
+import lawyerModel from "../models/lawyerModel.js";
 
 // API to register user
 const registerUser = async (req,res) => {
@@ -181,7 +183,7 @@ const updateProfile = async (req,res) => {
          }    
 
 
-        res.json({success:true,message:'อัพเดทโปรเสร็จสิ้น'})
+        res.json({success:true,message:'อัพเดทโปรไฟล์เสร็จสิ้น'})
 
 
     } catch (error) {
@@ -190,4 +192,54 @@ const updateProfile = async (req,res) => {
     }
 }
 
-export {registerUser, loginUser, getProfile, updateProfile}
+// API to book apointment
+const bookAppointment = async (req,res) => {
+    try {
+        const {userId, lawId, slotDate, slotTime} = req.body
+
+        const lawyerData = await lawyerModel.findById(lawId).select('-password')
+
+        let slots_booked = lawyerData.slots_booked
+        
+        // checking for slot availability
+        if(slots_booked[slotDate]) {
+            if(slots_booked[slotDate].includes(slotTime)) {
+                return res.json({success:false, message:'เวลาไม่ว่าง'})
+            }else{
+                slots_booked[slotDate].push(slotTime)
+            }
+        } else {
+            slots_booked[slotDate] = []
+            slots_booked[slotDate].push(slotTime)
+        }
+
+        const userData = await userModel.findById(userId).select('-password')
+
+        delete lawyerData.slots_booked
+
+        const appointmentData = {
+            userId,
+            lawId,
+            userData,
+            lawyerData,
+            fees: lawyerData.fees_detail,
+            slotTime,
+            slotDate,
+            date: Date.now()
+        }
+
+        const newAppointment = new appointmentModel(appointmentData)
+        await newAppointment.save()
+
+        // save new slots data in lawyerData
+        await lawyerModel.findByIdAndUpdate(lawId,{slots_booked})
+
+        res.json({success:true, message:'จองเสร็จสิ้น'})
+
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})  
+    }
+}
+
+export {registerUser, loginUser, getProfile, updateProfile, bookAppointment}

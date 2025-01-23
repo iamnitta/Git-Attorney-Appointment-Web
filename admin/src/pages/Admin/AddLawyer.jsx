@@ -35,6 +35,13 @@ const AddLawyer = () => {
   ]);
   const [fees_detail, setFees_detail] = useState("");
   const [bio, setBio] = useState("");
+  const [available_slots, setAvailable_slots] = useState([
+    {
+      day: "",
+      startTime: "",
+      endTime: "",
+    },
+  ]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,6 +56,25 @@ const AddLawyer = () => {
         return [...prev, value];
       }
     });
+  };
+
+  //ฟังก์ชั่นสำหรับเพิ่มช่วงเวลา
+  const handleAddSlot = () => {
+    setAvailable_slots([
+      ...available_slots,
+      {
+        day: "",
+        startTime: "",
+        endTime: "",
+      },
+    ]);
+  };
+
+  // เพิ่มฟังก์ชันสำหรับลบเวลาให้บริการ
+  const handleDeleteSlot = (indexToDelete) => {
+    setAvailable_slots(
+      available_slots.filter((_, index) => index !== indexToDelete)
+    );
   };
 
   // เพิ่มประวัติการศึกษา
@@ -87,6 +113,13 @@ const AddLawyer = () => {
     setWork_experience(
       work_experience.filter((_, index) => index !== indexToDelete)
     );
+  };
+
+  //ฟังก์ชันอัปเดตข้อมูลแต่ละช่องของเวลา
+  const handleSlotChange = (index, field, value) => {
+    const newSlots = [...available_slots];
+    newSlots[index][field] = value;
+    setAvailable_slots(newSlots);
   };
 
   //ฟังก์ชันอัปเดตข้อมูลในแต่ละช่องของการศึกษา
@@ -140,6 +173,7 @@ const AddLawyer = () => {
       formData.append("work_experience", JSON.stringify(work_experience));
       formData.append("fees_detail", fees_detail);
       formData.append("bio", bio);
+      formData.append("available_slots", JSON.stringify(available_slots));
 
       formData.forEach((value, key) => {
         console.log(`${key} : ${value}`);
@@ -363,44 +397,125 @@ const AddLawyer = () => {
 
           <div>
             <p className="text-dark-brown text-lg mb-2 mt-10">เวลาให้บริการ</p>
-          </div>
 
-          <div className="flex gap-10">
-            <div className="flex flex-col w-1/3">
-              <label className="mb-2">วัน</label>
-              <input
-                // onChange={(e) => setDob(e.target.value)}
-                // value={dob}
-                type="text"
-                className="w-full border border-[#DADADA] rounded p-2"
-              />
+            {available_slots.map((slot, index) => (
+              <div key={index} className="relative mb-6">
+                <div className="flex gap-10">
+                  <div className="flex flex-col w-1/3">
+                    <label className="mb-2">วัน</label>
+                    <select
+                      value={slot.day}
+                      onChange={(e) =>
+                        handleSlotChange(index, "day", e.target.value)
+                      }
+                      className="w-full border border-[#DADADA] rounded p-2"
+                    >
+                      <option value="" disabled>
+                        เลือกวัน
+                      </option>
+                      <option value="จันทร์">จันทร์</option>
+                      <option value="อังคาร">อังคาร</option>
+                      <option value="พุธ">พุธ</option>
+                      <option value="พฤหัสบดี">พฤหัสบดี</option>
+                      <option value="ศุกร์">ศุกร์</option>
+                      <option value="เสาร์">เสาร์</option>
+                      <option value="อาทิตย์">อาทิตย์</option>
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col w-1/3">
+                    <label className="mb-2">เวลาเริ่มให้คำปรึกษา</label>
+                    <select
+                      value={slot.startTime}
+                      onChange={(e) =>
+                        handleSlotChange(index, "startTime", e.target.value)
+                      }
+                      className="w-full border border-[#DADADA] rounded p-2"
+                    >
+                      <option value="" disabled>
+                        เลือกเวลา
+                      </option>
+                      <option value="09:00">09:00 น.</option>
+                      <option value="09:30">09:30 น.</option>
+                      <option value="10:00">10:00 น.</option>
+                      <option value="10:30">10:30 น.</option>
+                      <option value="11:00">11:00 น.</option>
+                      <option value="11:30">11:30 น.</option>
+                      <option value="12:00">12:00 น.</option>
+                      <option value="12:30">12:30 น.</option>
+                      <option value="13:00">13:00 น.</option>
+                      <option value="13:30">13:30 น.</option>
+                      <option value="14:00">14:00 น.</option>
+                      <option value="14:30">14:30 น.</option>
+                      <option value="15:00">15:00 น.</option>
+                      <option value="15:30">15:30 น.</option>
+                      <option value="16:00">16:00 น.</option>
+                      <option value="16:30">16:30 น.</option>
+                      <option value="17:00">17:00 น.</option>
+                      <option value="17:30">17:30 น.</option>
+                      <option value="18:00">18:00 น.</option>
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col w-1/3">
+                    <label className="mb-2">เวลาสิ้นสุดการให้คำปรึกษา</label>
+                    <select
+                      value={slot.endTime}
+                      onChange={(e) =>
+                        handleSlotChange(index, "endTime", e.target.value)
+                      }
+                      className="w-full border border-[#DADADA] rounded p-2"
+                    >
+                      <option value="" disabled>
+                        เลือกเวลา
+                      </option>
+                      <option value="09:00">09:00 น.</option>
+                      <option value="09:30">09:30 น.</option>
+                      <option value="10:00">10:00 น.</option>
+                      <option value="10:30">10:30 น.</option>
+                      <option value="11:00">11:00 น.</option>
+                      <option value="11:30">11:30 น.</option>
+                      <option value="12:00">12:00 น.</option>
+                      <option value="12:30">12:30 น.</option>
+                      <option value="13:00">13:00 น.</option>
+                      <option value="13:30">13:30 น.</option>
+                      <option value="14:00">14:00 น.</option>
+                      <option value="14:30">14:30 น.</option>
+                      <option value="15:00">15:00 น.</option>
+                      <option value="15:30">15:30 น.</option>
+                      <option value="16:00">16:00 น.</option>
+                      <option value="16:30">16:30 น.</option>
+                      <option value="17:00">17:00 น.</option>
+                      <option value="17:30">17:30 น.</option>
+                      <option value="18:00">18:00 น.</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* แก้ไขเงื่อนไขการแสดงปุ่มลบ */}
+                <button
+                  type="button"
+                  onClick={() => handleDeleteSlot(index)}
+                  className="absolute -top-4 -right-4 flex items-center justify-center rounded-full text-white hover:scale-105 transition-transform duration-200"
+                >
+                  <img
+                    src={assets.Delete}
+                    alt="Delete Icon"
+                    className="w-6 h-6"
+                  />
+                </button>
+              </div>
+            ))}
+
+            <div className="flex items-start mt-4">
+              <button
+                type="button"
+                onClick={handleAddSlot}
+                className="bg-[#A3806C] text-white py-1 px-6 rounded hover:scale-105 transition-transform duration-200 text-sm"
+              >
+                เพิ่มเวลาให้บริการ
+              </button>
             </div>
-
-            <div className="flex flex-col w-1/3">
-              <label className="mb-2">เวลาเข้างาน</label>
-              <input
-                // onChange={(e) => setDob(e.target.value)}
-                // value={dob}
-                type="time"
-                className="w-full border border-[#DADADA] rounded p-2"
-              />
-            </div>
-
-            <div className="flex flex-col w-1/3">
-              <label className="mb-2">เวลาเลิกงาน</label>
-              <input
-                // onChange={(e) => setDob(e.target.value)}
-                // value={dob}
-                type="time"
-                className="w-full border border-[#DADADA] rounded p-2"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-start mt-4">
-            <button className="bg-[#A3806C] text-white py-1 px-6 rounded hover:scale-105 transition-transform duration-200 text-sm">
-              เพิ่มเวลาให้บริการ
-            </button>
           </div>
 
           <div>
@@ -500,19 +615,12 @@ const AddLawyer = () => {
                   type="checkbox"
                   className="mr-2"
                   checked={speciality.includes("กฎหมายล้มละลาย")}
-                  onChange={() =>
-                    handleSpecialityChange("กฎหมายล้มละลาย")
-                  }
+                  onChange={() => handleSpecialityChange("กฎหมายล้มละลาย")}
                 />
                 กฎหมายล้มละลาย
               </label>
             </div>
-
           </div>
-
-          
-
-
 
           <div>
             <p className="text-dark-brown text-lg mb-4 mt-10">เนติบัณฑิต</p>
@@ -538,7 +646,6 @@ const AddLawyer = () => {
 
           {education.map((edu, index) => (
             <div key={index} className="mb-8 relative">
-              
               {/* เพิ่ม relative */}
               <div className="flex gap-10 mb-2">
                 <div className="flex flex-col w-1/2">
@@ -640,7 +747,6 @@ const AddLawyer = () => {
 
           {work_experience.map((work, index) => (
             <div key={index} className="mb-8 relative">
-              
               {/* เพิ่ม relative */}
               <div className="flex gap-10 mb-4">
                 <div className="flex flex-col w-1/2">

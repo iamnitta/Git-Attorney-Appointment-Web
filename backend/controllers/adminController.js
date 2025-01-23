@@ -9,13 +9,13 @@
 
 const addLawyer = async (req,res) => {
     try {
-        const {email, firstName, lastName, password, phone, dob, gender, license_number, lawyerNationalId, speciality, is_thaibar, education, work_experience,fees_detail,bio} = req.body
+        const {email, firstName, lastName, password, phone, dob, gender, license_number, lawyerNationalId, speciality, is_thaibar, education, work_experience,fees_detail,bio, available_slots} = req.body
         const imageFile = req.file
         console.log('--------------------------')
-        console.log({email, firstName, lastName, password, phone, dob, gender, license_number, lawyerNationalId, speciality, is_thaibar, education, work_experience,fees_detail,bio}, imageFile);
+        console.log({email, firstName, lastName, password, phone, dob, gender, license_number, lawyerNationalId, speciality, is_thaibar, education, work_experience,fees_detail,bio, available_slots}, imageFile);
 
         //checking for all data to add lawyer
-        if(!email || !firstName || !lastName || !password || !phone || !dob || !gender || !license_number || !lawyerNationalId || !speciality || !education || !work_experience || !fees_detail){
+        if(!email || !firstName || !lastName || !password || !phone || !dob || !gender || !license_number || !lawyerNationalId || !speciality || !education || !work_experience || !fees_detail || !available_slots){
             return res.json({success:false,message: 'กรุณากรอกข้อมูลให้ครบถ้วน'})
         }
 
@@ -53,6 +53,7 @@ const addLawyer = async (req,res) => {
             work_experience: JSON.parse(work_experience),
             fees_detail,
             bio,
+            available_slots: JSON.parse(available_slots),
             image: imageUrl
         }
 

@@ -1,22 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { assets } from "../assets/assets"; //เพิ่ม
 import th from "date-fns/locale/th";
 import Feedback from "../components/Feedback";
+import { toast } from "react-toastify";
+import axios from "axios";
 registerLocale("th", th);
 
 const Appointment = () => {
   const { lawId } = useParams();
-  const { lawyers } = useContext(AppContext);
+  const { lawyers, backendUrl, token, getLawyersData } = useContext(AppContext);
+
+  const navigate = useNavigate()
 
   const [lawInfo, setLawInfo] = useState(null);
   const [lawSlots, setLawSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTimes] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
 
   //ฟังก์ชันเปิดปิด Pop Up
@@ -31,47 +35,72 @@ const Appointment = () => {
 
   const getAvailableSlots = async (selectedDate) => {
     setLawSlots([]);
-    let today = new Date();
-    let currentDate = new Date(selectedDate);
-    let endTime = new Date(selectedDate);
-    endTime.setHours(18, 0, 0, 0);
+    // แปลงวันที่เลือกเป็นภาษาไทย
+    const dayOfWeek = selectedDate.getDay();
+    const dayNames = [
+      "อาทิตย์",
+      "จันทร์",
+      "อังคาร",
+      "พุธ",
+      "พฤหัสบดี",
+      "ศุกร์",
+      "เสาร์",
+    ];
+    const currentDayName = dayNames[dayOfWeek];
 
-    if (today.getDate() === currentDate.getDate()) {
-      currentDate.setHours(
-        currentDate.getHours() > 8 ? currentDate.getHours() + 1 : 8
-      );
-      currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0);
-    } else {
-      currentDate.setHours(8);
-      currentDate.setMinutes(0);
+    // หาช่วงเวลาที่ทนายว่างในวันที่เลือก
+    const availableSlot = lawInfo.available_slots.find(
+      (slot) => slot.day === currentDayName
+    );
+
+    if (!availableSlot) {
+      return; // ถ้าไม่มีเวลาว่างในวันนี้
     }
+
+    // แปลงเวลาเริ่มและสิ้นสุดเป็น Date object
+    // เริ่มจาก split ค่าเอา start กับ  end  ออกมา
+    let currentDate = new Date(selectedDate);
+    const [startHour, startMinute] = availableSlot.startTime.split(":");
+    const [endHour, endMinute] = availableSlot.endTime.split(":");
+
+    // นำเวลาเริ่มต้นที่ว่าง ที่ทำการแปลงมาเมื่อกี้มาใส่ให้กับ currentDate
+    currentDate.setHours(parseInt(startHour), parseInt(startMinute), 0);
+
+    // นำเวลาสุดท้ายที่ว่าง ที่ทำการแปลงมาเมื่อกี้มาใส่ให้กับ endTime
+    let endTime = new Date(selectedDate);
+    endTime.setHours(parseInt(endHour), parseInt(endMinute), 0);
 
     let timeSlots = [];
 
     while (currentDate < endTime) {
-      if (currentDate.getHours() === 12) {
-        currentDate.setHours(13, 0, 0);
-        continue;
-      }
-
       let formattedTime = currentDate.toLocaleTimeString("th-TH", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       });
 
-      timeSlots.push({
-        datetime: new Date(currentDate),
-        time: formattedTime,
-      });
+      let day = currentDate.getDate()
+      let month = currentDate.getMonth() + 1
+      let year = currentDate.getFullYear()      
+
+      const slotDate = day + "_" + month + "_" + year
+      const slotTime = formattedTime
+
+      const isSlotAvailable = lawInfo.slots_booked[slotDate] && lawInfo.slots_booked[slotDate].includes(slotTime) ? false : true
+
+      if (isSlotAvailable) {
+        timeSlots.push({
+          datetime: new Date(currentDate),
+          time: formattedTime,
+        });
+      }
+
 
       currentDate.setMinutes(currentDate.getMinutes() + 30);
     }
 
     setLawSlots([timeSlots]);
     setSlotIndex(0);
-
-    console.log(timeSlots);
   };
 
   const handleDateChange = (date) => {
@@ -81,11 +110,89 @@ const Appointment = () => {
 
   // เพิ่มฟังก์ชันสำหรับกรองวันที่
   const filterWeekdays = (date) => {
-    const day = date.getDay();
+    const dayNames = [
+      "อาทิตย์",
+      "จันทร์",
+      "อังคาร",
+      "พุธ",
+      "พฤหัสบดี",
+      "ศุกร์",
+      "เสาร์",
+    ];
+    const dayName = dayNames[date.getDay()];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return day !== 0 && date >= today;
+
+    // เช็คว่ามีวันนี้ในตารางเวลาว่างของทนายไหม
+    const hasAvailableSlot = lawInfo.available_slots.some(
+      (slot) => slot.day === dayName
+    );
+
+    return date >= today && hasAvailableSlot;
   };
+
+  //สร้างฟังก์ชันหาวันที่ว่างที่ใกล้ที่สุด
+  const getNextAvailableDate = (lawInfo) => {
+    const today = new Date();
+    let checkDate = new Date(today);
+
+    // วนหาวันที่ว่างถัดไป
+    while (true) {
+      const dayNames = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัสบดี",
+        "ศุกร์",
+        "เสาร์",
+      ];
+      const dayName = dayNames[checkDate.getDay()];
+
+      // เช็คว่าวันนี้ทนายว่างไหม
+      const hasAvailableSlot = lawInfo.available_slots.some(
+        (slot) => slot.day === dayName
+      );
+
+      if (hasAvailableSlot) {
+        return checkDate;
+      }
+
+      // ถ้าไม่ว่าง เพิ่มไปอีก 1 วัน
+      checkDate.setDate(checkDate.getDate() + 1);
+    }
+  };
+
+  const bookAppointment = async () => {
+    if (!token) {
+      toast.warn('เข้าสู่ระบบ เพื่อทำการจองนัดหมายทนาย')
+      return navigate('/login')
+    }
+
+    try {
+
+      const date = lawSlots[slotIndex][0].datetime
+
+      let day = date.getDate()
+      let month = date.getMonth() + 1
+      let year = date.getFullYear()
+
+      const slotDate = day + "_" + month + "_" + year
+
+      const {data} = await axios.post(backendUrl + '/api/user/book-appointment',{lawId, slotDate, slotTime}, {headers:{token}})
+      if(data.success) {
+        toast.success(data.message)
+        getLawyersData()
+        navigate('/my-appointments')
+      }else{
+        toast.error(data.message)
+      }
+      
+    } catch (error) {
+      console.log(error)
+      toast.error(error)
+    }
+  }
 
   useEffect(() => {
     fetchLawInfo();
@@ -93,7 +200,9 @@ const Appointment = () => {
 
   useEffect(() => {
     if (lawInfo) {
-      getAvailableSlots(selectedDate);
+      const nextAvailable = getNextAvailableDate(lawInfo);
+      setSelectedDate(nextAvailable);
+      getAvailableSlots(nextAvailable);
     }
   }, [lawInfo]);
 
@@ -345,7 +454,7 @@ const Appointment = () => {
                   <div
                     className="flex flex-col items-center gap-2 border border-[#DADADA] rounded p-2 overflow-y-auto scrollbar-visible"
                     style={{
-                      maxHeight: 242.3
+                      maxHeight: 242.3,
                     }}
                   >
                     {lawSlots.length &&
@@ -414,7 +523,7 @@ const Appointment = () => {
               </div>
 
               <div className="flex justify-center mt-10">
-                <button className="border border-dark-brown text-dark-brown px-4 py-1 rounded hover:bg-dark-brown hover:text-white">
+                <button onClick={bookAppointment} className="border border-dark-brown text-dark-brown px-4 py-1 rounded hover:bg-dark-brown hover:text-white">
                   จองเวลานัดหมาย
                 </button>
               </div>

@@ -49,7 +49,7 @@ const AppContextProvider = (props) => {
     }
 
     const value = {
-        lawyers,
+        lawyers,getLawyersData,
         token,setToken,
         backendUrl,
         userData,setUserData,
