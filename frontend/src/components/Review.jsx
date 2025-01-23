@@ -8,7 +8,7 @@ import { reviews } from '../assets/assets'
 
 const Review = () => {
   return (
-    <div className="bg-light-brown">
+    <div className="bg-light-brown px-4 lg:px-10">
       <div className="flex flex-col items-center gap-4 py-16 bg-light-brown">
         <h1 className="text-2xl font-medium font-prompt">รีวิวของเรา</h1>
         <p className="sm:w-2/3 text-center text-sm font-prompt text-dark-brown font-medium md:text-xl">

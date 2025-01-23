@@ -171,7 +171,7 @@ const Finance = () => {
             <thead className="bg-[#D4C7BD]">
               <tr>
                 <th className="p-4 font-medium text-left"></th>
-                <th className="p-4 font-medium text-left"></th>{" "}
+                <th className="p-4 font-medium text-left"></th>
                 {/* รูปทนายความ */}
                 <th className="p-4 font-medium text-left">ทนายความ</th>
                 <th className="p-4 font-medium text-center">รายรับ</th>
@@ -182,7 +182,7 @@ const Finance = () => {
             <tbody>
               {groupedAppointments.map((item, index) => (
                 <tr
-                  key={item.lawyer_id}
+                  key={`${item.lawyer_id}-${index}`}
                   className="bg-[#FFFFFF] border-b border-[#DADADA] hover:bg-gray-100"
                 >
                   <td className="p-4">{index + 1}</td>

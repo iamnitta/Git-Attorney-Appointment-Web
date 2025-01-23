@@ -4,23 +4,33 @@ import { assets } from "../assets/assets";
 const Contact = () => {
   return (
     <div className="bg-light-brown pb-12">
-      <p className="text-center text-2xl font-medium py-4 text-dark-brown">
-        ติดต่อเรา
-      </p>
+      <div className="container px-4 m-auto pt-5 lg:px-0">
+        <div
+          className="flex flex-col bg-cover bg-center justify-center items-center rounded-lg mb-10"
+          style={{
+            backgroundImage: `url(${assets.Background})`,
+            height: "200px",
+          }}
+        >
+          <p className="text-2xl font-medium py-2 text-white">ติดต่อเรา</p>
+          <p className="text-xl font-medium py-2 text-brown-lawyerpic">
+            สำนักงานกฎหมายทนายนอร์ท
+          </p>
+        </div>
+      </div>
 
-      <div className="text-center">
-        <p className="text-xl font-medium py-4 mb-12">สำนักงานกฎหมายทนายนอร์ท</p>
-
+      <div className="text-center lg:bg-[#FFFFFF] container px-4 m-auto pt-5 lg:px-0 py-4 rounded-lg mb-20">
         <div className="flex flex-col lg:flex-row justify-between items-start px-4 lg:px-0">
-          <div className="flex flex-col lg:ml-28">
-
+          <div className="flex flex-col lg:ml-28 mt-10">
             <div className="flex items-center">
               <img
                 src={assets.Location}
                 alt="Office"
                 className="w-7 h-auto rounded-lg"
               />
-              <p className="text-lg font-medium ml-2 text-dark-brown transform hover:-translate-y-1 transition duration-300">ที่ตั้งสำนักงาน</p>
+              <p className="text-lg font-medium ml-2 text-dark-brown transform hover:-translate-y-1 transition duration-300">
+                ที่ตั้งสำนักงาน
+              </p>
             </div>
 
             <div className="flex flex-col items-start ml-9 mb-12">
@@ -34,7 +44,9 @@ const Contact = () => {
                 alt="Phone"
                 className="w-7 h-auto rounded-lg"
               />
-              <p className="text-lg font-medium ml-2 text-dark-brown transform hover:-translate-y-1 transition duration-300">เบอร์โทรติดต่อ</p>
+              <p className="text-lg font-medium ml-2 text-dark-brown transform hover:-translate-y-1 transition duration-300">
+                เบอร์โทรติดต่อ
+              </p>
             </div>
 
             <div className="flex flex-col items-start ml-9 mb-12">
@@ -47,7 +59,9 @@ const Contact = () => {
                 alt="Line"
                 className="w-7 h-auto rounded-lg"
               />
-              <p className="text-lg font-medium ml-2 text-dark-brown transform hover:-translate-y-1 transition duration-300">Line ID</p>
+              <p className="text-lg font-medium ml-2 text-dark-brown transform hover:-translate-y-1 transition duration-300">
+                Line ID
+              </p>
             </div>
 
             <div className="flex flex-col items-start ml-9">
@@ -58,7 +72,7 @@ const Contact = () => {
           <img
             src={assets.Office}
             alt="Office"
-            className="w-full sm:w-64 lg:w-96 h-auto mx-auto rounded-lg mt-8 lg:mt-0 transform hover:scale-105 transition duration-300"
+            className="w-full sm:w-64 lg:w-96 h-auto mx-auto rounded-lg transform hover:scale-105 transition duration-300 mb-10 mt-10"
           />
         </div>
       </div>

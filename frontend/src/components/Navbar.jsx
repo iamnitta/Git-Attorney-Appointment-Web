@@ -22,7 +22,7 @@ const Navbar = () => {
 
       <ul className=" md:flex items-start gap-5 font-medium">
         <NavLink to="/">
-          <li className="py-1 text-gray-700 hover:text-gray-900 md:text-lg text-sm ml-5">
+          <li className="py-1 text-dark-brown hover:bg-gradient-to-l hover:from-[#AC8A47] hover:to-[#744F0F] hover:bg-clip-text hover:text-transparent md:text-lg text-sm ml-5 lg:ml-8">
             สำนักงานกฎหมายทนายนอร์ท
           </li>
         </NavLink>
@@ -81,7 +81,7 @@ const Navbar = () => {
                     alt="Appointments"
                     className="w-6 h-6 mr-4"
                   />
-                  สถานะการจอง
+                  การนัดหมาย
                 </p>
                 <p
                   onClick={logout}
@@ -100,7 +100,7 @@ const Navbar = () => {
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className=" px-6 py-2 rounded-full font-medium outline outline-[1px] outline-gray-700 hidden md:block text-gray-700 hover:text-gray-900 text-lg"
+            className="lg:px-6 lg:py-1 px-2 py-1 rounded-full font-medium bg-gradient-to-r from-primary to-dark-brown hover:bg-gradient-to-r hover:from-[#AC8A47] hover:to-[#744F0F]  text-white lg:text-lg text-sm mr-6"
           >
             เข้าสู่ระบบ
           </button>

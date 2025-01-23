@@ -8,24 +8,26 @@ const MyAppointments = () => {
 
   return (
     <div className="bg-light-brown p-4 md:p-6">
-      <p className="bg-primary text-white rounded-lg text-base md:text-lg font-medium mb-4 md:mb-6 px-4 md:px-6 py-2 w-fit">
+      <p className="flex justify-center items-center text-center bg-dark-brown bg-clip-text text-transparent text-2xl md:text-2xl font-medium mb-10">
         การนัดหมายของฉัน
       </p>
 
-      <div className="flex items-center justify-start space-x-4 border-gray-300 pb-2 mb-4">
+      <div className="flex items-center lg:justify-start justify-center gap-2 pb-2 mb-4">
         <button
           onClick={() => setStatus("scheduled")}
-          className={`text-dark-brown font-medium ${
-            status === "scheduled" ? "border-b-2 border-[#A17F6B]" : ""
+          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white ${
+            status === "scheduled"
+              ? "bg-dark-brown rounded-full px-8 py-1 text-white"
+              : ""
           }`}
         >
           นัดหมายแล้ว
         </button>
         <button
           onClick={() => setStatus("completed")}
-          className={`text-dark-brown font-medium ${
+          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white ${
             status === "completed"
-              ? "border-b-2 border-[#A17F6B] text-brown"
+              ? "bg-dark-brown rounded-full px-8 py-1 text-white"
               : ""
           }`}
         >
@@ -33,7 +35,7 @@ const MyAppointments = () => {
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 mb-10">
         {lawyers.slice(0, 2).map((item, index) => (
           <div
             key={index}
@@ -56,48 +58,51 @@ const MyAppointments = () => {
             </div>
 
             <div className="flex-1 w-full md:w-auto">
-              <div className="flex flex-row gap-2 lg:flex-row lg:gap-2 items-start lg:items-center mb-2">
-                <p className="text-lg font-medium">
-                  {item.firstName} {item.lastName}
+              <div className="flex flex-col gap-2 lg:flex-row lg:gap-2 items-start lg:items-center mb-2">
+                <p className="text-lg font-medium text-dark-brown">
+                  ทนาย {item.firstName} {item.lastName}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {item.speciality.map((spec, idx) => (
                     <span
                       key={idx}
-                      className="bg-brown-lawyerpic px-3 py-1 rounded-md text-sm"
+                      className="bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-3 py-1 text-sm"
                     >
                       {spec}
                     </span>
                   ))}
                 </div>
               </div>
-              <div className="space-y-2 text-gray-600">
+              <div className="space-y-2 text-gray-600 mt-4">
                 <div className="flex items-center gap-4">
                   <img
                     src={assets.Calendar}
                     alt="calendar icon"
                     className="w-5 h-5"
                   />
-                  <p>20/01/2024</p>
+
+                  <p className="text-dark-brown font-medium">20/01/2024</p>
                 </div>
 
                 <div className="flex items-center gap-4">
                   <img src={assets.Time} alt="clock icon" className="w-5 h-5" />
-                  <p>8.30</p>
+
+                  <p className="text-dark-brown font-medium">8.30-9.00 น.</p>
                 </div>
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   <img
                     src={assets.Location}
                     alt="location icon"
-                    className="w-5 h-5 mt-1"
+                    className="w-5 h-5"
                   />
-                  <p className="text-sm md:text-base">
+
+                  <p className="text-dark-brown font-medium">
                     สำนักงานกฎหมายทนายนอร์ท
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <p className="text-sm md:text-base font-medium mt-6">
+                  <p className="text-sm md:text-base font-medium mt-6 text-dark-brown">
                     รายละเอียดเบื้องต้น
                   </p>
                   <p className="text-sm md:text-base font-legular">

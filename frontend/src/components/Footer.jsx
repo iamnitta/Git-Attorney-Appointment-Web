@@ -6,8 +6,8 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
-    <div className="bg-gray">
-      <div className="sm:ml-4 md:mx-10 bg-gray">
+    <div className="bg-dark-brown">
+      <div className="sm:ml-4 md:mx-10 bg-dark-brown text-white">
         <div className="flex flex-col sm:grid grid-cols-[2fr_1fr_1fr_1fr] gap-14  pt-10 pb-5 text-sm">
           {/* ----- first section -----*/}
           <div className="pl-4 sm:pl-0">

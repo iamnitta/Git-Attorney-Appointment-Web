@@ -31,6 +31,19 @@ import Consult from './Consult.png'
 import Win from './Win.png'
 import Upload from './Upload.png'
 import Upload_Icon1 from './Upload_Icon1.png'
+import Tax from './Tax.png'
+import Bankrupt  from './Bankrupt.png'
+import Background from './Background.png'
+import Logo_Gold from './Logo_Gold.png'
+import Criminal_Law from './Criminal_Law.png'
+import Drug_Law from './Drug_Law.png'
+import Family_Law from './Family_Law.png'
+import Labor_Law from './Labor_Law.png'
+import Civil_Law from './Civil_Law.png'
+import Consumer_Law from './Consumer_Law.png'
+import Property_Law from './Property_Law.png'
+import Tax_Law from './Tax_Law.png'
+import Bankrupt_Law from './Bankrupt_Law.png'
 
 export const assets = {
     HomePage,
@@ -65,42 +78,59 @@ export const assets = {
     Consult,
     Win,
     Upload,
-    Upload_Icon1
+    Upload_Icon1,
+    Tax,
+    Bankrupt,
+    Background,
+    Logo_Gold,
+    Criminal_Law,
+    Labor_Law,
+    Drug_Law,
+    Civil_Law,
+    Property_Law,
+    Family_Law,
+    Bankrupt_Law,
+    Consumer_Law,
+    Tax_Law
 }
 
 export const specialityData = [
     {
         speciality: 'กฎหมายอาญา',
-        image: Criminal
+        image: Criminal_Law
     },
     {
         speciality: 'กฎหมายแรงงาน',
-        image: Labor
+        image: Labor_Law
     },
     {
         speciality: 'กฎหมายยาเสพติด',
-        image: Drug
+        image: Drug_Law
     },
     {
-        speciality: 'กฎหมายการแพ่ง',
-        image: Civil
+        speciality: 'กฎหมายแพ่ง',
+        image: Civil_Law
     },
     {
         speciality: 'กฎหมายทรัพย์สินทางปัญญา',
-        image: IP
+        image: Property_Law
     },
     {
-        speciality: 'กฎหมายปกครอง',
-        image: Administrative
+        speciality: 'กฎหมายภาษี',
+        image: Tax_Law
     },
     {
         speciality: 'กฎหมายผู้บริโภค',
-        image: Consumer
+        image: Consumer_Law
     },
     {
         speciality: 'กฎหมายครอบครัวและมรดก',
-        image: Family
-    }
+        image: Family_Law
+    },
+    {
+      speciality: 'กฎหมายล้มละลาย',
+      image: Bankrupt_Law
+  }
 ]
 
 export const lawyers = [

@@ -72,10 +72,10 @@ const Login = () => {
   return (
     <form
       onSubmit={onSubmitHandler}
-      className="lg:min-h-[100vh] min-h-[140vh] flex items-start justify-center bg-light-brown px-4 sm:px-6 md:px-8"
+      className="lg:min-h-auto min-h-[140vh] flex items-start justify-center bg-light-brown px-4 sm:px-6 md:px-8"
     >
       <div className="w-[95%] max-w-[800px] min-h-[500px] p-8  bg-light-gray rounded-lg shadow-md mt-10">
-        <p className="text-2xl font-medium text-center mb-8 text-dark-brown">
+        <p className="text-2xl font-medium text-center mb-8 bg-gradient-to-l from-dark-brown to-primary bg-clip-text text-transparent">
           {state === "ลงทะเบียน" ? "สมัครบัญชี" : "เข้าสู่ระบบ"}
         </p>
 
@@ -83,7 +83,7 @@ const Login = () => {
         {state === "ลงทะเบียน" && (
           <div className="flex flex-col md:flex-row justify-center gap-4">
             <div className="w-full md:w-auto">
-              <p className="mb-2">ชื่อจริง</p>
+              <p className="mb-2 text-dark-brown">ชื่อจริง</p>
               <input
                 className="w-full md:w-[200px] px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
                 type="text"
@@ -95,7 +95,7 @@ const Login = () => {
             </div>
 
             <div className="w-full md:w-auto">
-              <p className="mb-2">นามสกุล</p>
+              <p className="mb-2 text-dark-brown">นามสกุล</p>
               <input
                 className="w-full md:w-[200px] px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
                 type="text"
@@ -112,7 +112,7 @@ const Login = () => {
         {state === "ลงทะเบียน" && (
           <div className="flex flex-col md:flex-row justify-center gap-4">
             <div className="w-full md:w-auto">
-              <p className="mb-2 mt-4">วันเกิด</p>
+              <p className="mb-2 mt-4 text-dark-brown">วันเกิด</p>
               <input
                 className="w-full md:w-[200px] px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
                 type="date"
@@ -123,7 +123,7 @@ const Login = () => {
             </div>
 
             <div className="w-full md:w-auto">
-              <p className="mb-2 mt-4">เพศ</p>
+              <p className="mb-2 lg:mt-4 text-dark-brown">เพศ</p>
               <select
                 className="w-full md:w-[200px] px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
                 type="text"
@@ -131,7 +131,7 @@ const Login = () => {
                 value={gender}
                 required
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   เลือกเพศ
                 </option>
                 <option value="ชาย">ชาย</option>
@@ -146,7 +146,7 @@ const Login = () => {
           <>
             <div className="flex justify-center">
               <div className="w-full md:w-[420px]">
-                <p className="mb-2 mt-4">เบอร์โทร</p>
+                <p className="mb-2 mt-4 text-dark-brown">เบอร์โทร</p>
                 <input
                   type="text"
                   maxLength={12}
@@ -156,9 +156,9 @@ const Login = () => {
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, ""); // กรองให้เหลือแค่ตัวเลข * อธิบายเพิ่ม \D = ทุกตัวอักษรที่ "ไม่ใช่" ตัวเลข g = ให้ทำทั้งข้อความ (ไม่ใช่แค่ตัวแรกที่เจอ) แทนที่ข้อความที่ไม่ใช่ตัวเลขด้วยช่องว่าง
                     const formattedValue = value
-                    .replace(/^(\d{3})(?=\d)/, "$1-")                    // จับ 3 ตัวแรก
-                    .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-");            // จับ 3 ตัวถัดไป
-                    setPhone(formattedValue); // ใช้ setPhone เก็บค่าที่กรองแล้ว 
+                      .replace(/^(\d{3})(?=\d)/, "$1-") // จับ 3 ตัวแรก
+                      .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-"); // จับ 3 ตัวถัดไป
+                    setPhone(formattedValue); // ใช้ setPhone เก็บค่าที่กรองแล้ว
                   }}
                   value={phone}
                   required
@@ -168,7 +168,7 @@ const Login = () => {
 
             <div className="flex justify-center">
               <div className="w-full md:w-[420px]">
-                <p className="mb-2 mt-4">บัตรประชาชน</p>
+                <p className="mb-2 mt-4 text-dark-brown">บัตรประชาชน</p>
                 <input
                   type="text"
                   maxLength={17}
@@ -177,10 +177,10 @@ const Login = () => {
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, ""); // กรองให้เหลือแค่ตัวเลข
                     const formattedValue = value
-                    .replace(/^(\d{1})(?=\d)/, "$1-")                 
-                    .replace(/^(\d{1}-\d{4})(?=\d)/, "$1-")          // ^(\d-\d{4}) จับรูปแบบ "เลข1ตัว-เลข4ตัว" เมื่อพิมพ์ "1-2345" → กลายเป็น "1-2345-"
-                    .replace(/^(\d{1}-\d{4}-\d{5})(?=\d)/, "$1-")    
-                    .replace(/^(\d{1}-\d{4}-\d{5}-\d{2})(?=\d)/, "$1-");    
+                      .replace(/^(\d{1})(?=\d)/, "$1-")
+                      .replace(/^(\d{1}-\d{4})(?=\d)/, "$1-") // ^(\d-\d{4}) จับรูปแบบ "เลข1ตัว-เลข4ตัว" เมื่อพิมพ์ "1-2345" → กลายเป็น "1-2345-"
+                      .replace(/^(\d{1}-\d{4}-\d{5})(?=\d)/, "$1-")
+                      .replace(/^(\d{1}-\d{4}-\d{5}-\d{2})(?=\d)/, "$1-");
                     setNationalId(formattedValue);
                   }}
                   value={nationalId}
@@ -194,7 +194,7 @@ const Login = () => {
         {/* อีเมล รหัสผ่าน*/}
         <div className="flex justify-center">
           <div className="w-full md:w-[420px]">
-            <p className="mb-2 mt-4">อีเมล</p>
+            <p className="mb-2 mt-4 text-dark-brown">อีเมล</p>
             <input
               type="text"
               placeholder="example@email.com"
@@ -208,7 +208,7 @@ const Login = () => {
 
         <div className="flex justify-center">
           <div className="w-full md:w-[420px]">
-            <p className="mb-2 mt-4">รหัสผ่าน</p>
+            <p className="mb-2 mt-4 text-dark-brown">รหัสผ่าน</p>
             <input
               type="password"
               className="w-full px-3 py-2 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
@@ -224,7 +224,7 @@ const Login = () => {
         <div className="mt-16">
           <button
             type="submit"
-            className="w-[200px] mx-auto block bg-[#A17666] text-white py-2 rounded-full hover:bg-[#8B6455]"
+            className="w-[200px] mx-auto block bg-primary hover:bg-[#8B6455] text-white py-2 rounded-full"
           >
             {state === "ลงทะเบียน" ? "สมัครบัญชี" : "เข้าสู่ระบบ"}
           </button>

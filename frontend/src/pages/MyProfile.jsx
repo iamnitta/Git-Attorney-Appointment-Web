@@ -60,8 +60,8 @@ const MyProfile = () => {
   return (
     userData && (
       <div className="flex justify-center items-center min-h-screen bg-light-brown px-4">
-        <div className="bg-white p-8 rounded-lg shadow-md w-[800px]">
-          <h1 className="text-2xl font-bold text-center mb-8">โปรไฟล์ของฉัน</h1>
+        <div className="bg-white p-8 rounded-lg shadow-md w-[800px] mb-10">
+          <h1 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-dark-brown to-primary bg-clip-text text-transparent">โปรไฟล์ของฉัน</h1>
 
           <div className="flex flex-col md:flex-row gap-8 ">
             {/* left side - ไม่มีการเปลี่ยนแปลง */}
@@ -100,16 +100,16 @@ const MyProfile = () => {
 
             {/* right side */}
             <div className="flex-1 space-y-6">
-              <div className="grid grid-cols-[120px,1fr] gap-4 items-center max-w-full">
-                <p className="font-semibold h-9 flex items-center">อีเมล</p>
+              <div className="grid grid-cols-[160px,1fr] gap-4 items-center max-w-full">
+                <p className="font-semibold h-9 flex items-center text-dark-brown">อีเมล</p>
                 <p className="h-9 flex items-center">{userData.email}</p>
 
-                <p className="font-semibold h-9 flex items-center">
+                <p className="font-semibold h-9 flex items-center text-dark-brown">
                   บัตรประชาชน
                 </p>
-                <p className="h-9 flex items-center">{userData.nationalId}</p>
+                <p className="h-9 flex items-center text-dark-brown">{userData.nationalId}</p>
 
-                <p className="font-semibold h-9 flex items-center">ชื่อจริง</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">ชื่อจริง</p>
                 {isEdit ? (
                   <input
                     type="text"
@@ -126,7 +126,7 @@ const MyProfile = () => {
                   <p className="h-9 flex items-center">{userData.firstName}</p>
                 )}
 
-                <p className="font-semibold h-9 flex items-center">นามสกุล</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">นามสกุล</p>
                 {isEdit ? (
                   <input
                     type="text"
@@ -143,7 +143,7 @@ const MyProfile = () => {
                   <p className="h-9 flex items-center">{userData.lastName}</p>
                 )}
 
-                <p className="font-semibold h-9 flex items-center">เบอร์โทร</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">เบอร์โทร</p>
                 {isEdit ? (
                   <input
                     type="text"
@@ -172,7 +172,7 @@ const MyProfile = () => {
               <p className="h-9 flex items-center">{userData.nationalId}</p>
             )} */}
 
-                <p className="font-semibold h-9 flex items-center">วันเกิด</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">วันเกิด</p>
                 {isEdit ? (
                   <input
                     type="date"
@@ -186,7 +186,7 @@ const MyProfile = () => {
                   <p className="h-9 flex items-center">{userData.dob}</p>
                 )}
 
-                <p className="font-semibold h-9 flex items-center">เพศ</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">เพศ</p>
                 {isEdit ? (
                   <select
                     value={userData.gender}
@@ -211,14 +211,14 @@ const MyProfile = () => {
                 {isEdit ? (
                   <button
                     onClick={updateUserProfileData}
-                    className="bg-[#B08D7B] text-white text-base px-10 py-2 rounded-full hover:bg-[#97786A] transition-colors font-semibold"
+                    className="bg-primary hover:bg-[#8B6455] text-white text-base px-10 py-2 rounded-full transition-colors font-semibold"
                   >
                     บันทึกข้อมูล
                   </button>
                 ) : (
                   <button
                     onClick={() => setIsEdit(true)}
-                    className="bg-[#B08D7B] text-white text-base px-10 py-2 rounded-full hover:bg-[#97786A] transition-colors font-semibold"
+                    className="bg-primary hover:bg-[#8B6455] text-white text-base px-10 py-2 rounded-full transition-colors font-semibold"
                   >
                     แก้ไขข้อมูล
                   </button>

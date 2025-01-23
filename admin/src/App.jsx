@@ -9,6 +9,7 @@ import AllAppointments from './pages/Admin/AllAppointments';
 import AddLawyer from './pages/Admin/AddLawyer';
 import LawyersList from './pages/Admin/LawyersList';
 import Finance from './pages/Admin/Finance';
+import CommentApproval from './pages/Admin/CommentApproval';
 
 const App = () => {
   
@@ -26,6 +27,7 @@ const App = () => {
           <Route path='/lawyer-list' element={<LawyersList/>} />
           <Route path='/add-lawyer' element={<AddLawyer/>} />
           <Route path='/finance-lawyer' element={<Finance/>} />
+          <Route path='/comment-approval' element={<CommentApproval/>} />
         </Routes>
         </div>
       </div>

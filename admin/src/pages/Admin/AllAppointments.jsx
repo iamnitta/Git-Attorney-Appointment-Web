@@ -44,7 +44,7 @@ const AllApointments = () => {
             <tbody>
               {appointments.map((appointment, index) => (
                 <tr
-                  key={appointment.lawyer_id}
+                  key={`${appointment.lawyer_id}-${index}`}
                   className="bg-[#FFFFFF] border-b border-[#DADADA] hover:bg-gray-100"
                 >
                   <td className="p-4">{index + 1}</td>

@@ -4,15 +4,23 @@ import { assets } from "../assets/assets";
 const About = () => {
   return (
     <div className="bg-light-brown pb-12">
-      <p className="text-center text-2xl font-medium py-4 text-dark-brown">
-        เกี่ยวกับเรา
-      </p>
-      <p className="text-xl font-medium py-4 mb-12 text-center">
-        สำนักงานกฎหมายทนายนอร์ท
-      </p>
+      <div className="container px-4 m-auto pt-5 lg:px-0">
+        <div
+          className="flex flex-col bg-cover bg-center justify-center items-center rounded-lg mb-10"
+          style={{
+            backgroundImage: `url(${assets.Background})`,
+            height: "200px",
+          }}
+        >
+          <p className="text-2xl font-medium py-2 text-white">เกี่ยวกับเรา</p>
+          <p className="text-xl font-medium py-2 text-brown-lawyerpic">
+            สำนักงานกฎหมายทนายนอร์ท
+          </p>
+        </div>
+      </div>
 
-      <div className="text-center mb-40">
-        <div className="flex flex-wrap justify-center items-start gap-8 px-4 lg:px-0">
+      <div className="text-center mb-40 lg:bg-[#FFFFFF] container px-4 m-auto pt-5 lg:px-0 py-4 rounded-lg">
+        <div className="flex flex-wrap justify-center items-start gap-8 px-4 lg:px-0 mt-10 mb-10">
           {/* เกี่ยวกับเรา */}
           <div className="flex flex-col lg:flex-row w-full lg:w-5/6">
             <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">

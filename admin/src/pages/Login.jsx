@@ -45,13 +45,13 @@ const Login = () => {
    <form onSubmit={onSubmitHandler} className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 md:px-8">
      {/* ลบ bg-light-brown ออกจากตรงนี้ */}
      <div className="w-[95%] max-w-[800px] min-h-[500px] p-8 bg-light-gray rounded-lg shadow-md">
-       <p className="text-2xl font-medium text-center mb-8 text-dark-brown">
+       <p className="text-2xl font-medium text-center mb-8 bg-gradient-to-l from-dark-brown to-primary bg-clip-text text-transparent">
          เข้าสู่ระบบสำหรับ <span>{state}</span>
        </p>
        {/* อีเมล รหัสผ่าน*/}
        <div className="flex justify-center">
          <div className="w-full md:w-[420px]">
-           <p className="mb-2 mt-4">อีเมล</p>
+           <p className="mb-2 mt-4 text-dark-brown">อีเมล</p>
            <input
              onChange={(e)=>setEmail(e.target.value)}
              type="email"
@@ -62,7 +62,7 @@ const Login = () => {
        </div>
        <div className="flex justify-center">
          <div className="w-full md:w-[420px]">
-           <p className="mb-2 mt-4">รหัสผ่าน</p>
+           <p className="mb-2 mt-4 text-dark-brown">รหัสผ่าน</p>
            <input
              onChange={(e)=>setPassword(e.target.value)}
              type="password"
@@ -72,7 +72,7 @@ const Login = () => {
          </div>
        </div>
        <div className="mt-16">
-         <button className="w-[200px] mx-auto block bg-primary text-white py-2 rounded-full hover:bg-[#8B6455]">
+         <button className="w-[200px] mx-auto block bg-primary hover:bg-[#8B6455] text-white py-2 rounded-full">
            เข้าสู่ระบบ
          </button>
        </div>

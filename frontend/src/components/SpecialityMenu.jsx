@@ -7,9 +7,8 @@ const SpecialityMenu = () => {
       <div className='flex flex-col items-center gap-4 py-16 bg-light-brown' id='speciality'>
           <h1 className='text-2xl font-medium font-prompt'>บริการปรึกษาทนายความ</h1>
           <p className='sm:w-2/3 text-center text-sm font-prompt text-dark-brown font-medium md:text-xl'>คุณต้องการทนายความที่มีความเชี่ยวชาญทางด้านใด</p>
-          
-          {/* เปลี่ยนจาก flex เป็น grid และจัดให้แสดง 2 แถว */}
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-10 pt-5 w-full place-items-center items-start'>
+        
+          <div className='grid grid-cols-2 md:grid-cols-3 gap-10 pt-5 w-full place-items-center items-start'>
               {specialityData.map((item,index)=>(
                   <Link className='flex flex-col items-center text-xs cursor-pointer hover:translate-y-[-10px] transition-all duration-500' key={index} to={`/lawyers/${item.speciality}`}>
                       <img className='w-20 md:w-36 mb-3' src={item.image} alt="" />

@@ -14,8 +14,8 @@ const TopLawyers = () => {
           ทนายความพร้อมให้คำปรึกษาทุกเรื่องด้านกฎหมาย
         </p>
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 pt-5 px-3 place-items-center">
-          {lawyers.slice(0, 8).map((item, index) => (
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 pt-5 px-4 lg:px-10 place-items-center">
+          {lawyers.slice(12, 24).map((item, index) => (
             <div
               onClick={() => navigate(`/appointment/${item._id}`)}
               className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 w-full md:h-[200px]"
@@ -35,17 +35,23 @@ const TopLawyers = () => {
                 <p className="font-prompt text-lg font-medium text-dark-brown">
                   ทนาย {item.firstName} {item.lastName}
                 </p>
-                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2">
-                  <p className="font-prompt text-sm">ความเชี่ยวชาญ</p>
+
+                <div className="flex gap-1 md:gap-2">
+                  <p className="font-prompt text-sm whitespace-nowrap">ความเชี่ยวชาญ</p>
                   <div className="flex flex-wrap gap-1">
-                    {item.speciality.map((spec, index) => (
+                    {item.speciality.slice(0, 2).map((spec, index) => (
                       <p
                         key={index}
-                        className="font-prompt text-xs bg-brown-lawyerpic rounded-full px-2 py-1"
+                        className="font-prompt text-xs bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-2 py-1"
                       >
                         {spec}
                       </p>
                     ))}
+                    {item.speciality.length > 2 && (
+                      <p className="font-prompt text-xs bg-dark-brown text-white rounded-full px-2 py-1">
+                        +{item.speciality.length - 2}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -58,9 +64,9 @@ const TopLawyers = () => {
             navigate("/lawyers");
             scrollTo(0, 0);
           }}
-          className="bg-brown-lawyerpic md:px-12 md:py-3 px-4 py-1 rounded-full mt-10 font-prompt text-dark-brown font-medium md:text-base text-xs hover:scale-105 transition-all duration-300"
+          className="bg-dark-brown md:px-6 md:py-2 px-4 py-1 rounded-full mt-10 font-prompt text-white font-medium md:text-base text-sm hover:scale-105 transition-all duration-300"
         >
-          ทนายความทั้งหมด
+          ดูทนายความทั้งหมด
         </button>
       </div>
     </div>
