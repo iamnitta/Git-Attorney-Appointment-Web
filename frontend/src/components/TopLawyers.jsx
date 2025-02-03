@@ -15,7 +15,7 @@ const TopLawyers = () => {
         </p>
 
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 pt-5 px-4 lg:px-10 place-items-center">
-          {lawyers.slice(12, 24).map((item, index) => (
+          {lawyers.slice(0, 6).map((item, index) => (
             <div
               onClick={() => navigate(`/appointment/${item._id}`)}
               className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 w-full md:h-[200px]"

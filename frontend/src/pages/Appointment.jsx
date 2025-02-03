@@ -14,7 +14,7 @@ const Appointment = () => {
   const { lawId } = useParams();
   const { lawyers, backendUrl, token, getLawyersData } = useContext(AppContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [lawInfo, setLawInfo] = useState(null);
   const [lawSlots, setLawSlots] = useState([]);
@@ -22,6 +22,7 @@ const Appointment = () => {
   const [slotTime, setSlotTimes] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
+  const [user_topic, setUser_topic] = useState("");
 
   //ฟังก์ชันเปิดปิด Pop Up
   const openPopup = () => setShowPopup(true);
@@ -71,6 +72,8 @@ const Appointment = () => {
     endTime.setHours(parseInt(endHour), parseInt(endMinute), 0);
 
     let timeSlots = [];
+    // เอามาเช็คเวลาว่าเกินเวลาปัจจุบันไหม
+    const now = new Date();
 
     while (currentDate < endTime) {
       let formattedTime = currentDate.toLocaleTimeString("th-TH", {
@@ -79,22 +82,28 @@ const Appointment = () => {
         hour12: false,
       });
 
-      let day = currentDate.getDate()
-      let month = currentDate.getMonth() + 1
-      let year = currentDate.getFullYear()      
+      let day = currentDate.getDate();
+      let month = currentDate.getMonth() + 1;
+      let year = currentDate.getFullYear();
 
-      const slotDate = day + "_" + month + "_" + year
-      const slotTime = formattedTime
+      const slotDate = day + "_" + month + "_" + year;
+      const slotTime = formattedTime;
 
-      const isSlotAvailable = lawInfo.slots_booked[slotDate] && lawInfo.slots_booked[slotDate].includes(slotTime) ? false : true
+      const isSlotAvailable =
+        lawInfo.slots_booked[slotDate] &&
+        lawInfo.slots_booked[slotDate].includes(slotTime)
+          ? false
+          : true;
 
-      if (isSlotAvailable) {
+      const isTimeValid =
+        selectedDate.getDate() !== now.getDate() || currentDate > now;
+
+      if (isSlotAvailable && isTimeValid) {
         timeSlots.push({
           datetime: new Date(currentDate),
           time: formattedTime,
         });
       }
-
 
       currentDate.setMinutes(currentDate.getMinutes() + 30);
     }
@@ -165,34 +174,50 @@ const Appointment = () => {
 
   const bookAppointment = async () => {
     if (!token) {
-      toast.warn('เข้าสู่ระบบ เพื่อทำการจองนัดหมายทนาย')
-      return navigate('/login')
+      toast.warn("เข้าสู่ระบบ เพื่อทำการจองนัดหมายทนาย");
+      return navigate("/login");
     }
 
     try {
+      const date = lawSlots[slotIndex][0].datetime;
 
-      const date = lawSlots[slotIndex][0].datetime
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
 
-      let day = date.getDate()
-      let month = date.getMonth() + 1
-      let year = date.getFullYear()
+      const slotDate = day + "_" + month + "_" + year;
 
-      const slotDate = day + "_" + month + "_" + year
-
-      const {data} = await axios.post(backendUrl + '/api/user/book-appointment',{lawId, slotDate, slotTime}, {headers:{token}})
-      if(data.success) {
-        toast.success(data.message)
-        getLawyersData()
-        navigate('/my-appointments')
-      }else{
-        toast.error(data.message)
+      const { data } = await axios.post(
+        backendUrl + "/api/user/book-appointment",
+        { lawId, slotDate, slotTime, user_topic },
+        { headers: { token } }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        getLawyersData();
+        navigate("/my-appointments");
+      } else {
+        toast.error(data.message);
       }
-      
     } catch (error) {
-      console.log(error)
-      toast.error(error)
+      console.log(error);
+      toast.error(error);
     }
-  }
+  };
+
+  //คำนวนเวลาให้เวลาแสดงในสรุปเช่น 12:30 - 13:00
+  const calculateEndTime = (startTime) => {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    let endMinutes = minutes + 30;
+    let endHours = hours;
+    
+    if (endMinutes >= 60) {
+      endMinutes -= 60;
+      endHours += 1;
+    }
+    
+    return `${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     fetchLawInfo();
@@ -417,12 +442,45 @@ const Appointment = () => {
                 <h2 className="text-lg font-medium text-dark-brown mb-4">
                   จองเวลานัดหมาย
                 </h2>
+
                 <img
                   onClick={closePopup}
                   src={assets.Cross_button}
-                  alt="ยกเลิก"
+                  alt="ปิด PopUp"
                   className="w-7 h-7 cursor-pointer"
                 />
+              </div>
+
+              {/* เพิ่มส่วนแสดงข้อมูลทนายและค่าบริการ */}
+              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-4">
+                <img
+                  src={lawInfo.image}
+                  alt="lawyer"
+                  className="w-12 h-12 rounded-full"
+                />
+                <div className="w-full">
+                  <div className="flex justify-between items-center">
+                    <p className="font-medium">
+                      ทนาย {lawInfo.firstName} {lawInfo.lastName}
+                    </p>
+                    <p className="text-sm text-gray-600">ค่าบริการ</p>
+                  </div>
+                  <div className="flex justify-between items-center mt-1">
+                    <div className="flex gap-2 items-center">
+                      <p className="text-sm text-gray-600">ความเชี่ยวชาญ:</p>
+                      {lawInfo.speciality.map((spec, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-brown-lawyerpic px-2 py-0.5 rounded-full text-xs"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-primary"> 199 บาท/ชั่วโมง</p>
+                    {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
+                  </div>
+                </div>
               </div>
 
               <div className="flex flex-row gap-6 h-auto">
@@ -476,7 +534,7 @@ const Appointment = () => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <p className="text-dark-brown font-medium mt-6">
                   เลือกจำนวนชั่วโมง
                 </p>
@@ -494,14 +552,23 @@ const Appointment = () => {
                     3 ชั่วโมง
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 <p className="text-dark-brown font-medium mt-6">
                   สรุปการนัดหมาย
                 </p>
                 <p className="text-primary font-legular text-sm mt-2">
-                  วันที่ 17/12/2024 เวลา 8.00-8.30 น.
+                  {selectedDate && (
+                    <>
+                      วันที่ {selectedDate.toLocaleDateString('th-TH', {
+                        day: 'numeric',
+                        month: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </>
+                  )}
+                  {slotTime && ` เวลา ${slotTime} - ${calculateEndTime(slotTime)} น.`}
                 </p>
               </div>
 
@@ -512,6 +579,8 @@ const Appointment = () => {
                 <input
                   className="w-full mt-2 px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
                   type="text"
+                  value={user_topic}
+                  onChange={(e) => setUser_topic(e.target.value)}
                   placeholder="โปรดระบุเรื่องที่คุณต้องการปรึกษาเบื้องต้น"
                 />
               </div>
@@ -523,7 +592,10 @@ const Appointment = () => {
               </div>
 
               <div className="flex justify-center mt-10">
-                <button onClick={bookAppointment} className="border border-dark-brown text-dark-brown px-4 py-1 rounded hover:bg-dark-brown hover:text-white">
+                <button
+                  onClick={bookAppointment}
+                  className="border border-dark-brown text-dark-brown px-4 py-1 rounded hover:bg-dark-brown hover:text-white"
+                >
                   จองเวลานัดหมาย
                 </button>
               </div>
@@ -535,58 +607,6 @@ const Appointment = () => {
         <div>
           <Feedback />
         </div>
-
-        {/* Appointment Booking */}
-        {/* <div className="bg-white p-6 rounded-lg mt-4">
-          <h2 className="text-2xl font-medium mb-6">จองเวลานัดหมาย</h2> */}
-
-        {/* Calendar Section */}
-        {/* <div className="mb-8">
-            <h3 className="text-lg mb-4 text-gray-700">เลือกวันที่</h3>
-            <DatePicker
-              selected={selectedDate}
-              onChange={handleDateChange}
-              locale="th"
-              dateFormat="dd/MM/yyyy"
-              minDate={new Date()}
-              filterDate={filterWeekdays}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-brown-lawyerpic"
-              customInput={
-                <input className="w-full p-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-brown-lawyerpic cursor-pointer" />
-              }
-            />
-          </div> */}
-
-        {/* Time Slots Section */}
-        {/* <div className="mb-8">
-            <h3 className="text-lg mb-4 text-gray-700">เลือกเวลา</h3>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-              {lawSlots.length &&
-                lawSlots[slotIndex].map((item, index) => (
-                  <div
-                    onClick={() => setSlotTimes(item.time)}
-                    className={`text-center py-3 px-4 rounded-lg cursor-pointer transition-all duration-200
-              ${
-                item.time === slotTime
-                  ? "bg-brown-lawyerpic text-white shadow-md transform scale-105"
-                  : "border border-gray-200 hover:border-brown-lawyerpic hover:shadow-sm"
-              }`}
-                    key={index}
-                  >
-                    <p className="text-sm">{item.time.toLowerCase()}</p>
-                  </div>
-                ))}
-            </div>
-          </div> */}
-
-        {/* Confirm Button */}
-        {/* <button
-            className="w-full sm:w-auto bg-brown-lawyerpic text-white rounded-lg px-8 py-3 font-medium
-    hover:bg-opacity-90 transition-all duration-200"
-          >
-            ยืนยันการนัดหมาย
-          </button>
-        </div> */}
       </div>
     )
   );

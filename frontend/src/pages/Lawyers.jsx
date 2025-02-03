@@ -116,7 +116,7 @@ const Lawyers = () => {
                 }
                 className={`cursor-pointer hover:bg-dark-brown hover:text-white p-3 transition-all border-2 border-dark-brown text-dark-brown flex items-center justify-between rounded-lg md:h-full h-10 md:mr-0 mr-4 md:text-sm text-xs
               ${
-                speciality === "กฎหมายการแพ่ง" ? "text-white bg-dark-brown" : ""
+                speciality === "กฎหมายแพ่ง" ? "text-white bg-dark-brown" : ""
               }`}
               >
                 กฎหมายแพ่ง
