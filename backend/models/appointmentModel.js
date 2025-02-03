@@ -7,10 +7,11 @@ const appointmentSchema = new mongoose.Schema({
     slotTime: { type: String, required: true},
     userData: { type: Object, required: true},
     lawyerData: { type: Object, required: true},
-    fees: { type: Number, required: true},
+    fees: { type: Number, required: true, default: 0},
     date: { type: String, required: true},
     isCompleted: { type: Boolean, default: false},
-    cancelled: { type: Boolean, default: false}
+    cancelled: { type: Boolean, default: false},
+    user_topic : {type: String, default: ""},
     
 })
 
