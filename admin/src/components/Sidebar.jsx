@@ -3,9 +3,11 @@ import { AdminContext } from "../context/AdminContext";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { LawyerContext } from "../context/LawyerContext";
 
 const Sidebar = () => {
   const { aToken, setAToken } = useContext(AdminContext);
+  const { lawyerToken, setLawyerToken} = useContext(LawyerContext)
 
   const navigate = useNavigate();
 
@@ -13,6 +15,7 @@ const Sidebar = () => {
     navigate("/");
     aToken && setAToken("");
     aToken && localStorage.removeItem("aToken");
+
   };
 
   return (
@@ -26,11 +29,7 @@ const Sidebar = () => {
                   สำนักงานกฎหมายทนายนอร์ท
                 </h1>
                 <div className="inline-flex items-center gap-2">
-                <img
-                      src={assets.Logo_2}
-                      alt="icon"
-                      className="w-6 h-6"
-                    />
+                  <img src={assets.Logo_2} alt="icon" className="w-6 h-6" />
                   <span className="text-white bg-gradient-to-b from-dark-brown to-primary rounded-full py-0.5 px-2.5 ">
                     {aToken ? "แอดมิน" : "ทนายความ"}
                   </span>
@@ -96,6 +95,78 @@ const Sidebar = () => {
                 <img src={assets.Finance_Admin} alt="" className="w-6 h-6" />
                 <p>ข้อมูลการเงิน</p>
               </NavLink>
+            </ul>
+          </div>
+
+          <div className="mt-auto">
+            <NavLink
+              onClick={logout}
+              className="flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer"
+            >
+              <img src={assets.Logout_Admin} alt="" className="w-6 h-6" />
+              <p>ออกจากระบบ</p>
+            </NavLink>
+          </div>
+        </>
+      )}
+       {lawyerToken && (
+        <>
+          <div className="flex-grow overflow-y-auto">
+            <ul className="mt-5">
+              <div className="p-4 text-center">
+                <h1 className="text-lg font-medium mb-4 text-dark-brown">
+                  สำนักงานกฎหมายทนายนอร์ท
+                </h1>
+                <div className="inline-flex items-center gap-2">
+                <img
+                      src={assets.Logo_2}
+                      alt="icon"
+                      className="w-6 h-6"
+                    />
+                  <span className="text-white bg-gradient-to-b from-dark-brown to-primary rounded-full py-0.5 px-2.5 ">
+                    {aToken ? "แอดมิน" : "ทนายความ"}
+                  </span>
+                </div>
+              </div>
+
+              <NavLink
+                className={({ isActive }) =>
+                  `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
+                    isActive ? "bg-brown-lawyerpic" : ""
+                  }`
+                }
+                to={"/lawyer-appointment"}
+              >
+                <img src={assets.Booking_Admin} alt="" className="w-6 h-6" />
+                <p>นัดหมาย</p>
+              </NavLink>
+
+              <NavLink
+                className={({ isActive }) =>
+                  `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
+                    isActive ? "bg-brown-lawyerpic" : ""
+                  }`
+                }
+                to={"/lawyer-profile"}
+              >
+                <img src={assets.Lawyers_Admin} alt="" className="w-6 h-6" />
+                <p>โปรไฟล์</p>
+              </NavLink>
+
+              <NavLink
+                className={({ isActive }) =>
+                  `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
+                    isActive ? "bg-brown-lawyerpic" : ""
+                  }`
+                }
+                to={"/lawyer-case"}
+              >
+                <img src={assets.AddLawyer2_Admin} alt="" className="w-6 h-6" />
+                <p>ข้อมูลการว่าความ</p>
+              </NavLink>
+
+
+
             </ul>
           </div>
 

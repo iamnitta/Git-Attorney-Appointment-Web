@@ -1,11 +1,16 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 export const LawyerContext = createContext()
 
 const LawyerContextProvider = (props) => {
 
-    const value = {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL
 
+    const [lawyerToken, setLawyerToken] = useState(localStorage.getItem('lawyerToken')?localStorage.getItem('lawyerToken'):'')
+
+    const value = {
+        lawyerToken,setLawyerToken,
+        backendUrl
     }
 
     return (

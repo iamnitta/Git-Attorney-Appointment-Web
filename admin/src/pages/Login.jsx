@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { AdminContext } from "../context/AdminContext";
 import axios from 'axios'
 import { toast } from "react-toastify";
+import { LawyerContext } from "../context/LawyerContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState("แอดมิน");
@@ -11,6 +13,9 @@ const Login = () => {
   console.log(email)
 
   const {setAToken,backendUrl} = useContext(AdminContext)
+  const {setLawyerToken} = useContext(LawyerContext)
+
+  const navigate = useNavigate()
 
   const onSubmitHandler = async (event) => {
     event.preventDefault()
@@ -24,12 +29,24 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem('aToken', data.token)
           setAToken(data.token)
+          navigate('/all-appointments')
         }else{
           toast.error(data.message)
         }
 
 
       }else{
+
+        const {data} = await axios.post(backendUrl + '/api/lawyer/login', {email,password})
+
+        if (data.success) {
+          localStorage.setItem('lawyerToken', data.token)
+          setLawyerToken(data.token)
+          console.log(data.token)
+          navigate('/lawyer-appointment')
+        }else{
+          toast.error(data.message)
+        }
 
       }
       

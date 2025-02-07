@@ -3,6 +3,7 @@
  import { v2 as clodinary } from "cloudinary"
  import lawyerModel from "../models/lawyerModel.js"
  import jwt from 'jsonwebtoken'
+import appointmentModel from "../models/appointmentModel.js"
 
 
 //API for adding lawyer
@@ -102,5 +103,18 @@ const allLawyers = async (req,res) => {
     }
 }
 
-export {addLawyer,loginAdmin,allLawyers}
+//API to get all appointment list
+const apppointmentsAdmin = async (req, res) => {
+    try {
+
+        const appointments = await appointmentModel.find({})
+        res.json({success:true, appointments})
+        
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
+
+export {addLawyer,loginAdmin,allLawyers, apppointmentsAdmin}
 
