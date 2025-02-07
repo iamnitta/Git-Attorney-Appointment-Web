@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 const Header = () => {
   return (
-    <div className="w-full bg-light-brown">
+    <div className="w-full bg-white">
       <div className="container px-4 m-auto pt-5 lg:px-0">
         <div className="flex flex-col md:flex-row flex-wrap bg-cover bg-center rounded-lg"
         style={{ backgroundImage: `url(${assets.Background})`}}>

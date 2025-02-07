@@ -72,9 +72,9 @@ const Login = () => {
   return (
     <form
       onSubmit={onSubmitHandler}
-      className="lg:min-h-auto min-h-[140vh] flex items-start justify-center bg-light-brown px-4 sm:px-6 md:px-8"
+      className="lg:min-h-auto min-h-[140vh] flex items-start justify-center bg-white px-4 sm:px-6 md:px-8"
     >
-      <div className="w-[95%] max-w-[800px] min-h-[500px] p-8  bg-light-gray rounded-lg shadow-md mt-10">
+      <div className="w-[95%] max-w-[800px] min-h-[500px] p-8  bg-[#F7F7F7] rounded-lg shadow-md mt-10">
         <p className="text-2xl font-medium text-center mb-8 bg-gradient-to-l from-dark-brown to-primary bg-clip-text text-transparent">
           {state === "ลงทะเบียน" ? "สมัครบัญชี" : "เข้าสู่ระบบ"}
         </p>

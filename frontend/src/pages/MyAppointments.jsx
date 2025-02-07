@@ -69,7 +69,7 @@ const MyAppointments = () => {
 
 
   return (
-    <div className="bg-light-brown p-4 md:p-6">
+    <div className="bg-white p-4 md:p-6">
       <p className="flex justify-center items-center text-center bg-dark-brown bg-clip-text text-transparent text-2xl md:text-2xl font-medium mb-10">
         การนัดหมายของฉัน
       </p>
@@ -101,7 +101,7 @@ const MyAppointments = () => {
         {appointments.filter(item => !item.cancelled).map((item, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 relative"
+            className="bg-light-brown rounded-lg p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 relative"
           >
             <div
               className={`absolute top-6 right-6 px-3 py-1 text-base rounded-full font-medium ${

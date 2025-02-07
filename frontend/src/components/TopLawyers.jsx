@@ -7,7 +7,7 @@ const TopLawyers = () => {
   const { lawyers } = useContext(AppContext);
 
   return (
-    <div className="w-full bg-light-brown">
+    <div className="w-full bg-white">
       <div className="flex flex-col items-center gap-4 py-16 text-black md:mx-10">
         <h1 className="text-2xl font-medium font-prompt">ค้นหาทนายความ</h1>
         <p className="sm:w-1/3 text-center text-sm font-prompt text-dark-brown font-medium md:text-xl md:w-2/3">
@@ -18,7 +18,7 @@ const TopLawyers = () => {
           {lawyers.slice(0, 6).map((item, index) => (
             <div
               onClick={() => navigate(`/appointment/${item._id}`)}
-              className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 w-full md:h-[200px]"
+              className="flex flex-col md:flex-row bg-light-brown rounded-lg overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 w-full md:h-[200px]"
               key={index}
             >
               {/* รูปโปรไฟล์ */}

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const SpecialityMenu = () => {
     return (
-      <div className='flex flex-col items-center gap-4 py-16 bg-light-brown' id='speciality'>
+      <div className='flex flex-col items-center gap-4 py-16 bg-white' id='speciality'>
           <h1 className='text-2xl font-medium font-prompt'>บริการปรึกษาทนายความ</h1>
           <p className='sm:w-2/3 text-center text-sm font-prompt text-dark-brown font-medium md:text-xl'>คุณต้องการทนายความที่มีความเชี่ยวชาญทางด้านใด</p>
         

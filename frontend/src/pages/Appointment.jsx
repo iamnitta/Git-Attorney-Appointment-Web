@@ -13,6 +13,7 @@ registerLocale("th", th);
 const Appointment = () => {
   const { lawId } = useParams();
   const { lawyers, backendUrl, token, getLawyersData } = useContext(AppContext);
+  const [tab, setTab] = useState("about");
 
   const navigate = useNavigate();
 
@@ -207,16 +208,19 @@ const Appointment = () => {
 
   //คำนวนเวลาให้เวลาแสดงในสรุปเช่น 12:30 - 13:00
   const calculateEndTime = (startTime) => {
-    const [hours, minutes] = startTime.split(':').map(Number);
+    const [hours, minutes] = startTime.split(":").map(Number);
     let endMinutes = minutes + 30;
     let endHours = hours;
-    
+
     if (endMinutes >= 60) {
       endMinutes -= 60;
       endHours += 1;
     }
-    
-    return `${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
+
+    return `${String(endHours).padStart(2, "0")}:${String(endMinutes).padStart(
+      2,
+      "0"
+    )}`;
   };
 
   useEffect(() => {
@@ -235,124 +239,124 @@ const Appointment = () => {
 
   return (
     lawInfo && (
-      <div className="bg-light-brown p-4">
-        <p className="text-center text-dark-brown text-2xl font-medium pb-2">
-          นัดหมายทนายความ
-        </p>
+      <div className="bg-white p-4">
 
-        <div className="flex flex-col lg:flex-row w-full">
-          <div className="flex flex-col lg:flex-row w-full">
-            {/* Lawyer Details */}
-            <div className="bg-light-brown p-4 rounded w-full border-brown-lawyerpic">
-              <div className="flex flex-col items-center lg:w-[780px]">
-                {/* ส่วนรูปและข้อมูลหลัก */}
-                <div className="flex flex-col sm:flex-row items-center w-full gap-6">
-                  <div className="w-[220px] h-[220px] object-cover bg-white rounded-md flex justify-center items-center">
-                    <img
-                      className="w-[200px] h-[200px] object-cover bg-brown-lawyerpic rounded-full"
-                      src={lawInfo.image}
-                      alt=""
-                    />
-                  </div>
-
-                  <div className="mt-4 sm:mt-0 sm:ml-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center">
-                      <p className="font-medium text-2xl">
-                        ทนาย {lawInfo.firstName} {lawInfo.lastName}
-                      </p>
-                      {lawInfo.is_thaibar && (
-                        <div className="flex flex-row lg:flex-row items-center">
-                          <img
-                            src={assets.Is_Thaibar}
-                            alt="Profile"
-                            className="w-4 h-4 lg:ml-4 mr-1"
-                          />
-                          <p>เนติบัณฑิต</p>
-                        </div>
-                      )}
+          <div className="bg-white border border-dark-brown rounded-lg shadow-lg lg:p-6 lg:h-auto lg:w-[95%] mx-auto"> 
+            <div className="flex flex-col lg:flex-row w-full">
+              {/* Lawyer Details */}
+              <div className="bg-white p-4 rounded w-full border-brown-lawyerpic">
+                <div className="flex flex-col items-center lg:w-[780px]">
+                  {/* ส่วนรูปและข้อมูลหลัก */}
+                  <div className="flex flex-col sm:flex-row items-center w-full gap-6">
+                    <div className="lg:w-[220px] lg:h-[220px] w-[120px] h-[120px] object-cover bg-white rounded-md flex justify-center items-center">
+                      <img
+                        className="lg:w-[200px] lg:h-[200px] w-[120px] h-[120px] object-cover bg-brown-lawyerpic rounded-full"
+                        src={lawInfo.image}
+                        alt=""
+                      />
                     </div>
-                    <p className="font-regular text-primary">
-                      ทนายความ สำนักงานกฎหมายทนายนอร์ท
-                    </p>
-                    {/*<p>ประสบการณ์ทำงาน {lawInfo.experience} ปี</p>*/}
-                    <p className="font-regular mt-5">
-                      เลขที่ใบอนุญาตว่าความ {lawInfo.license_number}
-                    </p>{" "}
-                    <div className="flex items-center gap-2 mt-5">
-                      <p>ความเชี่ยวชาญ</p>
-                      <div className="flex flex-wrap gap-2">
-                        {lawInfo.speciality.map((spec, idx) => (
-                          <p
-                            key={idx}
-                            className="font-prompt text-xs bg-brown-lawyerpic text-black rounded-full px-2 py-1"
-                          >
-                            {spec}
-                          </p>
-                        ))}
+
+                    <div className="lg:mt-4">
+                      <div className="gap-4 flex flex-col">
+                        {lawInfo.is_thaibar && (
+                          <div className="flex flex-row items-center gap-2">
+                            <p className="text-dark-brown border border-dark-brown rounded-full px-4">
+                              เนติบัณฑิต
+                            </p>
+                          </div>
+                        )}
+                        <p className="font-medium lg:text-2xl text-xl text-dark-brown">
+                          ทนาย {lawInfo.firstName} {lawInfo.lastName}
+                        </p>
+                      </div>
+                      {/* <p className="font-regular text-primary">
+                        ทนายความ สำนักงานกฎหมายทนายนอร์ท
+                      </p> */}
+                      {/*<p>ประสบการณ์ทำงาน {lawInfo.experience} ปี</p>*/}
+                      <p className="font-regular mt-5">
+                        เลขที่ใบอนุญาตว่าความ {lawInfo.license_number}
+                      </p>{" "}
+                      <div className="flex items-center gap-2 mt-5">
+                        <p className="whitespace-nowrap">ความเชี่ยวชาญ</p>
+                        <div className="flex flex-wrap gap-2">
+                          {lawInfo.speciality.map((spec, idx) => (
+                            <p
+                              key={idx}
+                              className="font-prompt text-xs bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-2 py-1"
+                            >
+                              {spec}
+                            </p>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* ส่วนแนะนำตัว */}
-                <div className="w-full mt-10">
-                  <p className="text-left font-medium ml-4 lg:ml-0">
-                    แนะนำตัว/ข้อมูลเพิ่มเติม
-                  </p>
-                  <p className="mt-2 lg:w-full ml-4 lg:ml-0">{lawInfo.bio}</p>
-                  {/*<p className="text-left font-medium mt-2">
+                  {/* ส่วนแนะนำตัว */}
+                  <div className="w-full mt-10">
+                    <p className="text-left font-medium text-dark-brown">
+                      แนะนำตัว/ข้อมูลเพิ่มเติม
+                    </p>
+                    <p className="mt-2 lg:w-full">{lawInfo.bio}</p>
+                    {/*<p className="text-left font-medium mt-2">
                   ราคา {lawInfo.fees} บาท
                 </p> */}
+                  </div>
+                </div>
+              </div>
+
+              {/* ก้อนทางขวา ค่าบริการ วันเวลาของทนาย */}
+              <div className="flex flex-col lg:w-1/2 p-4 bg-light-brown rounded-lg lg:mr-6 mt-4 h-full lg:ml-0 ml-2 mr-2 lg:mb-0 mb-2">
+                <div className="flex-grow">
+                  <p className="text-left font-medium ml-4 mt-4 text-dark-brown">
+                    ค่าบริการ
+                  </p>
+                  <p className="mt-2 ml-4 text-sm">{lawInfo.fees_detail}</p>{" "}
+                  {/* ต้องแก้ fees เป็น string */}
+                  {/* วันเวลาของทนาย */}
+                  <p className="text-left font-medium ml-4 mt-8 text-dark-brown">
+                    เวลาให้บริการ
+                  </p>
+                  {lawInfo.available_slots && lawInfo.available_slots.length > 0
+                    ? lawInfo.available_slots.map((slot, index) => (
+                        <ul key={index} className="mt-3 ml-4">
+                          <li className="flex items-center justify-between mb-2">
+                            <p className="text-sm leading-6">{slot.day}</p>
+                            <p className="text-sm leading-6">
+                              {slot.startTime} - {slot.endTime} น.
+                            </p>
+                          </li>
+                        </ul>
+                      ))
+                    : null}
+                  {/* ปุ่มจองเวลานัดหมาย */}
+                  <button
+                    onClick={openPopup}
+                    className="mt-4 mx-auto bg-dark-brown text-white w-full rounded h-10"
+                  >
+                    จองเวลานัดหมาย
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ก้อนทางขวา ค่าบริการ วันเวลาของทนาย */}
-          <div className="flex flex-col lg:w-1/2 p-4 bg-white rounded-lg lg:mr-6 mt-4 h-full">
-            <div className="flex-grow">
-              <p className="text-left font-medium ml-4 mt-4 text-dark-brown">
-                ค่าบริการ
-              </p>
-              <p className="mt-2 ml-4 text-sm">{lawInfo.fees_detail}</p>{" "}
-              {/* ต้องแก้ fees เป็น string */}
-              {/* วันเวลาของทนาย */}
-              <p className="text-left font-medium ml-4 mt-8 text-dark-brown">
-                เวลาให้บริการ
-              </p>
-              {lawInfo.available_slots && lawInfo.available_slots.length > 0
-                ? lawInfo.available_slots.map((slot, index) => (
-                    <ul key={index} className="mt-3 ml-4">
-                      <li className="flex items-center justify-between mb-2">
-                        <p className="text-sm leading-6">{slot.day}</p>
-                        <p className="text-sm leading-6">
-                          {slot.startTime} - {slot.endTime} น.
-                        </p>
-                      </li>
-                    </ul>
-                  ))
-                : null}
-              {/* ปุ่มจองเวลานัดหมาย */}
-              <button
-                onClick={openPopup}
-                className="mt-4 mx-auto bg-primary text-white w-full rounded h-10"
-              >
-                จองเวลานัดหมาย
-              </button>
-            </div>
-          </div>
-        </div>
 
         {/* ส่วนรายละเอียดคดี */}
-        <div className="flex flex-col bg-[#F7F7F7] mt-10 rounded-lg items-center">
+        <div className="flex flex-col justify-center bg-light-brown mt-10 rounded-lg items-center lg:p-6 p-2 mx-auto shadow-lg lg:w-[95%]">
           <div className="flex flex-col sm:flex-row justify-between w-full">
             <div className="flex flex-row items-center mt-4 mb-4 ml-8 mr-8">
               <img
                 className="w-8 h-8 mr-4 rounded-full"
-                src={assets.Consult}
+                src={assets.Consult_1}
                 alt="จำนวนการให้คำปรึกษา"
               />
-              <p className="flex-1 lg:text-center">ให้คำปรึกษามาแล้ว ครั้ง</p>{" "}
+              <p className="flex-1 lg:text-center text-dark-brown">
+                ให้คำปรึกษามาแล้ว{" "}
+                <span className="text-white bg-primary rounded-full px-6">
+                  10
+                </span>{" "}
+                ครั้ง
+              </p>{" "}
               {/* เพิ่มการดึงค่ามาแสดง */}
             </div>
 
@@ -362,77 +366,112 @@ const Appointment = () => {
                 src={assets.Case}
                 alt="จำนวนคดี"
               />
-              <p className="flex-1 lg:text-center"> ว่าความมาแล้ว คดี</p>{" "}
+              <p className="flex-1 lg:text-center text-dark-brown">
+                {" "}
+                ว่าความมาแล้ว{" "}
+                <span className="text-white bg-primary rounded-full px-6">
+                  5
+                </span>{" "}
+                คดี
+              </p>{" "}
               {/* เพิ่มการดึงค่ามาแสดง */}
             </div>
 
             <div className="flex flex-row items-center mt-4 mb-4 ml-8 mr-8">
               <img
                 className="w-8 h-8 mr-4 rounded-full"
-                src={assets.Win}
+                src={assets.Win_1}
                 alt="จำนวนคดีที่ชนะ"
               />
-              <p className="flex-1 lg:text-center">ชนะคิดเป็นร้อยละ</p>{" "}
+              <p className="flex-1 lg:text-center text-dark-brown">
+                ชนะคิดเป็นร้อยละ{" "}
+                <span className="text-white bg-primary rounded-full px-4">
+                  75%
+                </span>
+              </p>{" "}
               {/* เพิ่มการดึงค่ามาแสดง */}
             </div>
           </div>
 
-          <button className="lg:w-1/3 px-6 py-2 mt-4 ml-4 mb-4 border text-dark-brown mr-4 rounded-full h-10">
+          <button className="lg:px-8 px-6 mt-6 lg:mt-10 ml-4 mb-4 lg:text-base text-sm border text-dark-brown mr-4 rounded-full h-10 hover:bg-dark-brown hover:text-white">
             ดูรายละเอียดการว่าความ
           </button>
         </div>
 
-        {/* ประวัติการศึกษา */}
-        <div className="bg-[#F7F7F7] mt-5 rounded-lg">
-          <div className="flex ml-4 lg:ml-20 mt-5 mr-4">
-            <p className="font-medium text-dark-brown mt-5 mb-5">
-              ประวัติการศึกษา
-            </p>
-          </div>
-
-          <ul className="ml-4 lg:ml-20">
-            {lawInfo.education.map((edu, index) => (
-              <li key={index} className="flex flex-col mt-5">
-                <div className="flex flex-col gap-1">
-                  <span className="text-primary">
-                    {edu.enrollmentYear}-{edu.graduationYear}
-                  </span>
-                </div>
-
-                <div className="flex flex-col lg:flex-row gap-1 lg:gap-20 mt-1 mb-10">
-                  <p className="lg:w-1/3">{edu.degree}</p>
-                  <p>{edu.institution}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+        <div className="mt-20 border-b border-solid border-[#DADADA] mx-auto lg:w-[95%]">
+          <button
+            onClick={() => setTab("about")}
+            className={`py-2 px-5 mr-5 text-dark-brown font-semibold ${
+              tab === "about" && "border-b border-solid border-dark-brown"
+            }`}
+          >
+            ข้อมูลส่วนตัว
+          </button>
+          <button
+            onClick={() => setTab("reviews")}
+            className={`py-2 px-5 mr-5 text-dark-brown font-semibold ${
+              tab === "reviews" && "border-b border-solid border-dark-brown"
+            }`}
+          >
+            ความคิดเห็น
+          </button>
         </div>
 
-        {/* ประวัติการทำงาน */}
-        <div className="bg-[#F7F7F7] mt-5 rounded-lg">
-          <div className="flex ml-4 lg:ml-20 mt-5 mr-4">
-            <p className="font-medium text-dark-brown mt-5 mb-5">
-              ประวัติการทำงาน
-            </p>
-          </div>
+        {tab === "about" && (
+          <>
+            {/* ประวัติการศึกษา */}
+            <div className="bg-[#F7F7F7] mt-5 rounded-lg mx-auto lg:w-[95%]">
+              <div className="flex ml-4 lg:ml-20 mt-5 mr-4">
+                <p className="font-medium text-dark-brown mt-5 mb-5">
+                  ประวัติการศึกษา
+                </p>
+              </div>
 
-          <ul className="ml-4 lg:ml-20">
-            {lawInfo.work_experience.map((work, index) => (
-              <li key={index} className="flex flex-col mt-5">
-                <div className="flex flex-col gap-1">
-                  <span className="text-primary">
-                    {work.startDate} - {work.endDate}
-                  </span>
-                </div>
+              <ul className="ml-4 lg:ml-20">
+                {lawInfo.education.map((edu, index) => (
+                  <li key={index} className="flex flex-col mt-5">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-primary">
+                        {edu.enrollmentYear}-{edu.graduationYear}
+                      </span>
+                    </div>
 
-                <div className="flex flex-col lg:flex-row gap-1 lg:gap-20 mt-1 mb-10">
-                  <p className="w-1/3">{work.position}</p>
-                  <p>{work.company}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                    <div className="flex flex-col lg:flex-row gap-1 lg:gap-20 mt-1 mb-10">
+                      <p className="lg:w-1/3">{edu.degree}</p>
+                      <p>{edu.institution}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* ประวัติการทำงาน */}
+            <div className="bg-[#F7F7F7] mt-5 rounded-lg mx-auto lg:w-[95%]">
+              <div className="flex ml-4 lg:ml-20 mt-5 mr-4">
+                <p className="font-medium text-dark-brown mt-5 mb-5">
+                  ประวัติการทำงาน
+                </p>
+              </div>
+
+              <ul className="ml-4 lg:ml-20">
+                {lawInfo.work_experience.map((work, index) => (
+                  <li key={index} className="flex flex-col mt-5">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-primary">
+                        {work.startDate} - {work.endDate}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row gap-1 lg:gap-20 mt-1 mb-10">
+                      <p className="w-1/3">{work.position}</p>
+                      <p>{work.company}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        )}
 
         {/* Pop Up สำหรับจองเวลานัดหมาย */}
         {showPopup && (
@@ -445,14 +484,14 @@ const Appointment = () => {
 
                 <img
                   onClick={closePopup}
-                  src={assets.Cross_button}
+                  src={assets.Close_2}
                   alt="ปิด PopUp"
                   className="w-7 h-7 cursor-pointer"
                 />
               </div>
 
               {/* เพิ่มส่วนแสดงข้อมูลทนายและค่าบริการ */}
-              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-4">
+              <div className="flex items-center gap-4 p-4 bg-light-brown rounded-lg mb-4 border border-primary">
                 <img
                   src={lawInfo.image}
                   alt="lawyer"
@@ -460,24 +499,24 @@ const Appointment = () => {
                 />
                 <div className="w-full">
                   <div className="flex justify-between items-center">
-                    <p className="font-medium">
+                    <p className="font-medium text-dark-brown">
                       ทนาย {lawInfo.firstName} {lawInfo.lastName}
                     </p>
-                    <p className="text-sm text-gray-600">ค่าบริการ</p>
+                    <p className="text-sm text-dark-brown font-medium">ค่าบริการ </p>
                   </div>
                   <div className="flex justify-between items-center mt-1">
                     <div className="flex gap-2 items-center">
-                      <p className="text-sm text-gray-600">ความเชี่ยวชาญ:</p>
+                      <p className="text-sm text-gray-600">ความเชี่ยวชาญ</p>
                       {lawInfo.speciality.map((spec, idx) => (
                         <span
                           key={idx}
-                          className="bg-brown-lawyerpic px-2 py-0.5 rounded-full text-xs"
+                          className="bg-gradient-to-r from-primary to-dark-brown text-white px-2 py-0.5 rounded-full text-xs"
                         >
                           {spec}
                         </span>
                       ))}
                     </div>
-                    <p className="text-primary"> 199 บาท/ชั่วโมง</p>
+                    <p className="text-primary text-sm">500 บาท ต่อ 30 นาที</p>
                     {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
                   </div>
                 </div>
@@ -554,21 +593,23 @@ const Appointment = () => {
                 </div>
               </div> */}
 
-              <div>
-                <p className="text-dark-brown font-medium mt-6">
+              <div className="flex flex-row mt-6">
+                <p className="font-medium text-sm bg-gradient-to-r from-dark-brown to-primary text-white px-4 py-1 rounded-l w-1/4">
                   สรุปการนัดหมาย
                 </p>
-                <p className="text-primary font-legular text-sm mt-2">
+                <p className="text-primary font-legular text-sm px-4 py-1 bg-light-brown w-3/4 rounded-r">
                   {selectedDate && (
                     <>
-                      วันที่ {selectedDate.toLocaleDateString('th-TH', {
-                        day: 'numeric',
-                        month: 'numeric',
-                        year: 'numeric'
+                      วันที่{" "}
+                      {selectedDate.toLocaleDateString("th-TH", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
                       })}
                     </>
                   )}
-                  {slotTime && ` เวลา ${slotTime} - ${calculateEndTime(slotTime)} น.`}
+                  {slotTime &&
+                    ` เวลา ${slotTime} - ${calculateEndTime(slotTime)} น.`}
                 </p>
               </div>
 
@@ -589,24 +630,22 @@ const Appointment = () => {
                 <p className="text-dark-brown font-medium mt-6">
                   อัปโหลดเอกสารเบื้องต้น
                 </p>
+                <div className="w-full h-10 border border-[#DADADA] rounded mt-2"></div>
               </div>
 
               <div className="flex justify-center mt-10">
                 <button
                   onClick={bookAppointment}
-                  className="border border-dark-brown text-dark-brown px-4 py-1 rounded hover:bg-dark-brown hover:text-white"
+                  className="px-4 py-1 bg-dark-brown text-white rounded"
                 >
-                  จองเวลานัดหมาย
+                  ยืนยันการนัดหมาย
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* รีวิวทั้งหมด */}
-        <div>
-          <Feedback />
-        </div>
+        {tab === "reviews" && <Feedback />}
       </div>
     )
   );

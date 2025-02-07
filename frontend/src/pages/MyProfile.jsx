@@ -59,8 +59,8 @@ const MyProfile = () => {
   //value={userData.firstName} ทำให้ค่าแสดงตอนเริ่มต้น
   return (
     userData && (
-      <div className="flex justify-center items-center min-h-screen bg-light-brown px-4">
-        <div className="bg-white p-8 rounded-lg shadow-md w-[800px] mb-10">
+      <div className="flex justify-center items-center min-h-screen bg-white px-4">
+        <div className="bg-[#F7F7F7] p-8 rounded-lg shadow-md w-[800px] mb-10">
           <h1 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-dark-brown to-primary bg-clip-text text-transparent">โปรไฟล์ของฉัน</h1>
 
           <div className="flex flex-col md:flex-row gap-8 ">

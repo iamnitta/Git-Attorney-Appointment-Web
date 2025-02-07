@@ -17,7 +17,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex items-center justify-between text-sm py-4  bg-light-brown font-prompt">
+    <div className="flex items-center justify-between text-sm py-4 bg-white font-prompt">
       {/* <img className="w-44 cursor-pointer ml-5" src={assets.logo} alt="" /> */}
 
       <ul className=" md:flex items-start gap-5 font-medium">
@@ -60,7 +60,7 @@ const Navbar = () => {
             <img className="w-8 h-8 rounded-full" src={userData.image} alt="" />
             <img className="w-4" src={assets.Dropdown_button} alt="" />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-700 hidden group-hover:block">
-              <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
+              <div className="min-w-48 bg-[#F7F7F7] rounded flex flex-col gap-4 p-4">
                 <p
                   onClick={() => navigate("/my-profile")}
                   className="hover:text-primary cursor-pointer flex items-center"

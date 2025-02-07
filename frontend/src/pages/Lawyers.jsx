@@ -27,7 +27,7 @@ const Lawyers = () => {
   }, [lawyers, speciality]);
 
   return (
-    <div className="bg-light-brown pb-12">
+    <div className="bg-white pb-12">
       <div className="container px-4 m-auto pt-5 lg:px-0">
         <div
           className="flex flex-col flex-wrap bg-cover bg-center justify-center items-center rounded-lg mb-10"
@@ -234,7 +234,7 @@ const Lawyers = () => {
               {filterLaw.map((item, index) => (
                 <div
                   onClick={() => navigate(`/appointment/${item._id}`)}
-                  className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 w-full md:h-[200px]"
+                  className="flex flex-col md:flex-row bg-light-brown rounded-lg overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 w-full md:h-[200px]"
                   key={index}
                 >
                   {/* รูปโปรไฟล์ */}

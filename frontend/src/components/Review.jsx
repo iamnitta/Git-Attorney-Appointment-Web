@@ -8,8 +8,8 @@ import { reviews } from '../assets/assets'
 
 const Review = () => {
   return (
-    <div className="bg-light-brown px-4 lg:px-10">
-      <div className="flex flex-col items-center gap-4 py-16 bg-light-brown">
+    <div className="bg-white px-4 lg:px-10">
+      <div className="flex flex-col items-center gap-4 py-16 bg-white">
         <h1 className="text-2xl font-medium font-prompt">รีวิวของเรา</h1>
         <p className="sm:w-2/3 text-center text-sm font-prompt text-dark-brown font-medium md:text-xl">
           ยืนยันความเชื่อมั่นในบริการคุณภาพ
@@ -38,7 +38,7 @@ const Review = () => {
       >
         {reviews.map((review) => (
           <SwiperSlide key={review._id} className="hover:!scale-105 transition-transform duration-300">
-            <div className="py-8 px-5 mx-8 mb-10 rounded-lg bg-white flex flex-col justify-between min-h-[180px]">
+            <div className="py-8 px-5 mx-8 mb-10 rounded-lg bg-light-brown flex flex-col justify-between min-h-[180px]">
               <div className="flex items-center gap-[13px]">
                 <img
                   className="w-8 h-8 rounded-full"

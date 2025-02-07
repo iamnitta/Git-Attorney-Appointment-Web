@@ -44,6 +44,10 @@ import Consumer_Law from './Consumer_Law.png'
 import Property_Law from './Property_Law.png'
 import Tax_Law from './Tax_Law.png'
 import Bankrupt_Law from './Bankrupt_Law.png'
+import Win_1 from './Win_1.png'
+import Consult_1 from './Consult_1.png'
+import Close_1 from './Close_1.png'
+import Close_2 from './Close_2.png'
 
 export const assets = {
     HomePage,
@@ -91,7 +95,11 @@ export const assets = {
     Family_Law,
     Bankrupt_Law,
     Consumer_Law,
-    Tax_Law
+    Tax_Law,
+    Win_1,
+    Consult_1,
+    Close_1,
+    Close_2
 }
 
 export const specialityData = [

@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 const Contact = () => {
   return (
-    <div className="bg-light-brown pb-12">
+    <div className="bg-white pb-12">
       <div className="container px-4 m-auto pt-5 lg:px-0">
         <div
           className="flex flex-col bg-cover bg-center justify-center items-center rounded-lg mb-10"
@@ -19,7 +19,7 @@ const Contact = () => {
         </div>
       </div>
 
-      <div className="text-center lg:bg-[#FFFFFF] container px-4 m-auto pt-5 lg:px-0 py-4 rounded-lg mb-20">
+      <div className="text-center lg:bg-light-brown container px-4 m-auto pt-5 lg:px-0 py-4 rounded-lg mb-20">
         <div className="flex flex-col lg:flex-row justify-between items-start px-4 lg:px-0">
           <div className="flex flex-col lg:ml-28 mt-10">
             <div className="flex items-center">
