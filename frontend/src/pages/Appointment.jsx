@@ -240,8 +240,8 @@ const Appointment = () => {
   return (
     lawInfo && (
       <div className="bg-white p-4 animate-fadeIn">
-        <div className=" ml-20 mb-8">
-          <h1 className="text-2xl font-medium text-dark-brown">
+        <div className="mb-8">
+          <h1 className="text-center text-2xl font-medium text-dark-brown">
             นัดหมายทนายความ
           </h1>
         </div>
@@ -252,7 +252,7 @@ const Appointment = () => {
             backgroundImage: `url(${assets.Background})`,
           }}
         >
-          <div className="bg-white border border-dark-brown rounded-lg shadow-lg lg:p-6 lg:h-auto w-full -mb-20">
+          <div className="bg-white rounded-lg shadow-lg lg:p-6 lg:h-auto w-full -mb-20">
             <div className="flex flex-col lg:flex-row w-full">
               {/* Lawyer Details */}
               <div className="bg-white p-4 rounded w-full border-brown-lawyerpic">
@@ -309,7 +309,7 @@ const Appointment = () => {
               </div>
 
               {/* ก้อนทางขวา ค่าบริการ วันเวลาของทนาย */}
-              <div className="flex flex-col lg:w-1/2 p-4 bg-light-brown rounded-lg lg:mr-6 mt-4 h-full lg:ml-0 ml-2 mr-2 lg:mb-0 mb-2">
+              <div className="flex flex-col lg:w-1/2 p-4 border border-dark-brown bg-white rounded-lg lg:mr-6 mt-4 h-full lg:ml-0 ml-2 mr-2 lg:mb-0 mb-2">
                 <div className="flex-grow">
                   <p className="text-left font-medium ml-4 mt-4 text-dark-brown">
                     ค่าบริการ

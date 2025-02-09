@@ -60,7 +60,7 @@ const MyProfile = () => {
   return (
     userData && (
       <div className="flex justify-center items-center min-h-screen bg-white px-4 animate-fadeIn">
-        <div className="bg-[#F7F7F7] p-8 rounded-lg shadow-md w-[800px] mb-10">
+        <div className="bg-light-brown p-8 rounded-lg shadow-md w-[800px] mb-10">
           <h1 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-dark-brown to-primary bg-clip-text text-transparent">โปรไฟล์ของฉัน</h1>
 
           <div className="flex flex-col md:flex-row gap-8 ">

@@ -435,6 +435,8 @@ const AddLawyer = () => {
                       <option value="" disabled>
                         เลือกเวลา
                       </option>
+                      <option value="09:00">08:00 น.</option>
+                      <option value="09:30">08:30 น.</option>
                       <option value="09:00">09:00 น.</option>
                       <option value="09:30">09:30 น.</option>
                       <option value="10:00">10:00 น.</option>
@@ -469,6 +471,8 @@ const AddLawyer = () => {
                       <option value="" disabled>
                         เลือกเวลา
                       </option>
+                      <option value="09:00">08:00 น.</option>
+                      <option value="09:30">08:30 น.</option>
                       <option value="09:00">09:00 น.</option>
                       <option value="09:30">09:30 น.</option>
                       <option value="10:00">10:00 น.</option>
