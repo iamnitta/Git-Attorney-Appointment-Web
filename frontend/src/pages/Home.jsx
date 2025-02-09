@@ -7,7 +7,7 @@ import Review from '../components/Review'
 
 const Home = () => {
   return (
-    <div>
+    <div className='animate-fadeIn'>
       <Header />
       <SpecialityMenu />
       <TopLawyers />

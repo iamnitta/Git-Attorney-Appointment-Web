@@ -239,9 +239,20 @@ const Appointment = () => {
 
   return (
     lawInfo && (
-      <div className="bg-white p-4">
+      <div className="bg-white p-4 animate-fadeIn">
+        <div className=" ml-20 mb-8">
+          <h1 className="text-2xl font-medium text-dark-brown">
+            นัดหมายทนายความ
+          </h1>
+        </div>
 
-          <div className="bg-white border border-dark-brown rounded-lg shadow-lg lg:p-6 lg:h-auto lg:w-[95%] mx-auto"> 
+        <div
+          className="p-4 rounded-lg shadow-lg lg:w-[95%] mx-auto bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(${assets.Background})`,
+          }}
+        >
+          <div className="bg-white border border-dark-brown rounded-lg shadow-lg lg:p-6 lg:h-auto w-full -mb-20">
             <div className="flex flex-col lg:flex-row w-full">
               {/* Lawyer Details */}
               <div className="bg-white p-4 rounded w-full border-brown-lawyerpic">
@@ -269,10 +280,6 @@ const Appointment = () => {
                           ทนาย {lawInfo.firstName} {lawInfo.lastName}
                         </p>
                       </div>
-                      {/* <p className="font-regular text-primary">
-                        ทนายความ สำนักงานกฎหมายทนายนอร์ท
-                      </p> */}
-                      {/*<p>ประสบการณ์ทำงาน {lawInfo.experience} ปี</p>*/}
                       <p className="font-regular mt-5">
                         เลขที่ใบอนุญาตว่าความ {lawInfo.license_number}
                       </p>{" "}
@@ -297,9 +304,6 @@ const Appointment = () => {
                       แนะนำตัว/ข้อมูลเพิ่มเติม
                     </p>
                     <p className="mt-2 lg:w-full">{lawInfo.bio}</p>
-                    {/*<p className="text-left font-medium mt-2">
-                  ราคา {lawInfo.fees} บาท
-                </p> */}
                   </div>
                 </div>
               </div>
@@ -311,7 +315,6 @@ const Appointment = () => {
                     ค่าบริการ
                   </p>
                   <p className="mt-2 ml-4 text-sm">{lawInfo.fees_detail}</p>{" "}
-                  {/* ต้องแก้ fees เป็น string */}
                   {/* วันเวลาของทนาย */}
                   <p className="text-left font-medium ml-4 mt-8 text-dark-brown">
                     เวลาให้บริการ
@@ -331,7 +334,7 @@ const Appointment = () => {
                   {/* ปุ่มจองเวลานัดหมาย */}
                   <button
                     onClick={openPopup}
-                    className="mt-4 mx-auto bg-dark-brown text-white w-full rounded h-10"
+                    className="mt-4 mx-auto bg-dark-brown text-white w-full rounded h-10 hover:brightness-75 transition-all duration-300"
                   >
                     จองเวลานัดหมาย
                   </button>
@@ -339,10 +342,10 @@ const Appointment = () => {
               </div>
             </div>
           </div>
-
+        </div>
 
         {/* ส่วนรายละเอียดคดี */}
-        <div className="flex flex-col justify-center bg-light-brown mt-10 rounded-lg items-center lg:p-6 p-2 mx-auto shadow-lg lg:w-[95%]">
+        <div className="flex flex-col justify-center bg-light-brown mt-32 rounded-lg items-center lg:p-6 p-2 mx-auto shadow-lg lg:w-[95%]">
           <div className="flex flex-col sm:flex-row justify-between w-full">
             <div className="flex flex-row items-center mt-4 mb-4 ml-8 mr-8">
               <img
@@ -475,8 +478,8 @@ const Appointment = () => {
 
         {/* Pop Up สำหรับจองเวลานัดหมาย */}
         {showPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg max-w-[600px] w-full">
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-[600px] w-full animate-popup">
               <div className="flex flex-row justify-between">
                 <h2 className="text-lg font-medium text-dark-brown mb-4">
                   จองเวลานัดหมาย
@@ -502,7 +505,9 @@ const Appointment = () => {
                     <p className="font-medium text-dark-brown">
                       ทนาย {lawInfo.firstName} {lawInfo.lastName}
                     </p>
-                    <p className="text-sm text-dark-brown font-medium">ค่าบริการ </p>
+                    <p className="text-sm text-dark-brown font-medium">
+                      ค่าบริการ{" "}
+                    </p>
                   </div>
                   <div className="flex justify-between items-center mt-1">
                     <div className="flex gap-2 items-center">

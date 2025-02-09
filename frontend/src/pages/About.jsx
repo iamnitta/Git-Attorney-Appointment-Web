@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 const About = () => {
   return (
-    <div className="bg-white pb-12">
+    <div className="bg-white pb-12 animate-fadeIn">
       <div className="container px-4 m-auto pt-5 lg:px-0">
         <div
           className="flex flex-col bg-cover bg-center justify-center items-center rounded-lg mb-10"

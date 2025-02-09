@@ -59,7 +59,7 @@ const MyProfile = () => {
   //value={userData.firstName} ทำให้ค่าแสดงตอนเริ่มต้น
   return (
     userData && (
-      <div className="flex justify-center items-center min-h-screen bg-white px-4">
+      <div className="flex justify-center items-center min-h-screen bg-white px-4 animate-fadeIn">
         <div className="bg-[#F7F7F7] p-8 rounded-lg shadow-md w-[800px] mb-10">
           <h1 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-dark-brown to-primary bg-clip-text text-transparent">โปรไฟล์ของฉัน</h1>
 
@@ -70,13 +70,13 @@ const MyProfile = () => {
                 <label htmlFor="image">
                   <div className="relative w-[150px] h-[150px] mb-4 mr-4 cursor-pointer">
                     <img
-                      className="w-full h-full rounded-full opacity-50"
+                      className="w-full h-full rounded-full opacity-50 object-cover"
                       src={image ? URL.createObjectURL(image) : userData.image}
                       alt=""
                     />
                     {!image && (
                       <img
-                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20"
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 object-cover"
                         src={assets.Upload_Icon1}
                         alt=""
                       />
@@ -93,7 +93,7 @@ const MyProfile = () => {
                 <img
                   src={userData.image}
                   alt="Profile"
-                  className="w-[150px] h-[150px] rounded-full mb-4 mr-4"
+                  className="w-[150px] h-[150px] rounded-full mb-4 mr-4 object-cover"
                 />
               )}
             </div>
