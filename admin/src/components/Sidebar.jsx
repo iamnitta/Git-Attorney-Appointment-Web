@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AdminContext } from "../context/AdminContext";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
@@ -7,16 +7,29 @@ import { LawyerContext } from "../context/LawyerContext";
 
 const Sidebar = () => {
   const { aToken, setAToken } = useContext(AdminContext);
-  const { lawyerToken, setLawyerToken} = useContext(LawyerContext)
+  const { lawyerToken, setLawyerToken, profileData, getProfileData} = useContext(LawyerContext)
+
+  
 
   const navigate = useNavigate();
 
   const logout = () => {
     navigate("/");
-    aToken && setAToken("");
-    aToken && localStorage.removeItem("aToken");
-
+    if (aToken) {
+      setAToken("");
+      localStorage.removeItem("aToken");
+    }
+    if (lawyerToken) {
+      setLawyerToken("");
+      localStorage.removeItem("lawyerToken");
+    }
   };
+
+  useEffect(() => {
+    if (lawyerToken) {
+      getProfileData();
+    }
+  }, [lawyerToken])
 
   return (
     <div className="fixed top-0 left-0 h-full w-64 bg-light-gray flex flex-col">
@@ -109,7 +122,7 @@ const Sidebar = () => {
           </div>
         </>
       )}
-       {lawyerToken && (
+       {lawyerToken &&  profileData &&(
         <>
           <div className="flex-grow overflow-y-auto">
             <ul className="mt-5">
@@ -119,12 +132,12 @@ const Sidebar = () => {
                 </h1>
                 <div className="inline-flex items-center gap-2">
                 <img
-                      src={assets.Logo_2}
+                      src={profileData.image}
                       alt="icon"
-                      className="w-6 h-6"
+                      className="w-12 h-12 rounded-full object-cover"
                     />
                   <span className="text-white bg-gradient-to-b from-dark-brown to-primary rounded-full py-0.5 px-2.5 ">
-                    {aToken ? "แอดมิน" : "ทนายความ"}
+                  {lawyerToken ? `${profileData.firstName} ${profileData.lastName}` : "แอดมิน"}
                   </span>
                 </div>
               </div>
