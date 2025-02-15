@@ -234,7 +234,7 @@ const bookAppointment = async (req,res) => {
         // save new slots data in lawyerData
         await lawyerModel.findByIdAndUpdate(lawId,{slots_booked})
 
-        res.json({success:true, message:'จองเสร็จสิ้น'})
+        res.json({success:true, message:'นัดหมายสำเร็จ'})
 
     } catch (error) {
         console.log(error)

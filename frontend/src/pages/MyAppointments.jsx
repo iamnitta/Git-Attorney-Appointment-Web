@@ -114,7 +114,7 @@ const MyAppointments = () => {
               : ""
           }`}
         >
-          นัดหมายแล้ว
+          รอปรึกษา
         </button>
         <button
           onClick={() => setStatus("completed")}
@@ -124,7 +124,7 @@ const MyAppointments = () => {
               : ""
           }`}
         >
-          เสร็จสิ้นแล้ว
+          ปรึกษาเสร็จสิ้น
         </button>
       </div>
 
@@ -145,7 +145,7 @@ const MyAppointments = () => {
                   status === "scheduled" ? " text-primary" : " text-green-800"
                 }`}
               >
-                {status === "scheduled" ? "นัดหมายแล้ว" : "เสร็จสิ้นแล้ว"}
+                {status === "scheduled" ? "รอปรึกษา" : "ปรึกษาเสร็จสิ้น"}
               </div>
 
               <div className="bg-brown-lawyerpic rounded-full w-20 lg:w-32 h-20 lg:h-32 mx-0 lg:mx-0 ">

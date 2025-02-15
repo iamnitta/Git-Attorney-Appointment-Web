@@ -14,6 +14,7 @@ import Customer from './Customer.png'
 import Appointment from './Appointment.png'
 import Approve from './Approve.png'
 import App from '../App'
+import Close_2 from './Close_2.png'
 
 export const assets = {
     Myprofile,
@@ -30,7 +31,8 @@ export const assets = {
     Income,
     Customer,
     Appointment,
-    Approve
+    Approve,
+    Close_2
 }
 
 export const lawyers = [
