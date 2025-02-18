@@ -18,7 +18,7 @@ const MyProfile = () => {
       formData.append("firstName", userData.firstName);
       formData.append("lastName", userData.lastName);
       formData.append("dob", userData.dob);
-      formData.append("phone", userData.phone);
+      formData.append("phone", userData.phone.replace(/-/g, ""));
       formData.append("gender", userData.gender);
       // formData.append('nationalId',userData.nationalId)
 
@@ -102,14 +102,23 @@ const MyProfile = () => {
             <div className="flex-1 space-y-6">
               <div className="grid md:grid-cols-[140px,1fr] grid-cols-[100px,1fr] gap-4 items-center max-w-full">
                 <p className="font-semibold h-9 flex items-center text-dark-brown">อีเมล</p>
+
                 <p className="h-9 flex items-center">{userData.email}</p>
 
                 <p className="font-semibold h-9 flex items-center text-dark-brown">
                   บัตรประชาชน
                 </p>
-                <p className="h-9 flex items-center text-dark-brown">{userData.nationalId}</p>
+                <p className="h-9 flex items-center">
+                  {userData.nationalId
+                    .replace(/^(\d{1})(?=\d)/, "$1-")
+                    .replace(/^(\d{1}-\d{4})(?=\d)/, "$1-")
+                    .replace(/^(\d{1}-\d{4}-\d{5})(?=\d)/, "$1-")
+                    .replace(/^(\d{1}-\d{4}-\d{5}-\d{2})(?=\d)/, "$1-")}
+                </p>
 
-                <p className="font-semibold h-9 flex items-center text-dark-brown">ชื่อจริง</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">
+                  ชื่อจริง
+                </p>
                 {isEdit ? (
                   <input
                     type="text"
@@ -126,7 +135,9 @@ const MyProfile = () => {
                   <p className="h-9 flex items-center">{userData.firstName}</p>
                 )}
 
-                <p className="font-semibold h-9 flex items-center text-dark-brown">นามสกุล</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">
+                  นามสกุล
+                </p>
                 {isEdit ? (
                   <input
                     type="text"
@@ -143,21 +154,33 @@ const MyProfile = () => {
                   <p className="h-9 flex items-center">{userData.lastName}</p>
                 )}
 
-                <p className="font-semibold h-9 flex items-center text-dark-brown">เบอร์โทร</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">
+                  เบอร์โทร
+                </p>
                 {isEdit ? (
                   <input
                     type="text"
+                    maxLength={12}
+                    inputMode="numeric"
                     value={userData.phone}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      const formattedValue = value
+                        .replace(/^(\d{3})(?=\d)/, "$1-")
+                        .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-");
                       setUserData((prev) => ({
                         ...prev,
-                        phone: e.target.value,
-                      }))
-                    }
+                        phone: formattedValue,
+                      }));
+                    }}
                     className="border rounded px-2 h-9 w-full"
                   />
                 ) : (
-                  <p className="h-9 flex items-center">{userData.phone}</p>
+                  <p className="h-9 flex items-center">
+                    {userData.phone
+                      .replace(/^(\d{3})(?=\d)/, "$1-")
+                      .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-")}
+                  </p>
                 )}
 
                 {/* <p className="font-semibold h-9 flex items-center">บัตรประชาชน</p>
@@ -172,7 +195,9 @@ const MyProfile = () => {
               <p className="h-9 flex items-center">{userData.nationalId}</p>
             )} */}
 
-                <p className="font-semibold h-9 flex items-center text-dark-brown">วันเกิด</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">
+                  วันเกิด
+                </p>
                 {isEdit ? (
                   <input
                     type="date"
@@ -186,7 +211,9 @@ const MyProfile = () => {
                   <p className="h-9 flex items-center">{userData.dob}</p>
                 )}
 
-                <p className="font-semibold h-9 flex items-center text-dark-brown">เพศ</p>
+                <p className="font-semibold h-9 flex items-center text-dark-brown">
+                  เพศ
+                </p>
                 {isEdit ? (
                   <select
                     value={userData.gender}

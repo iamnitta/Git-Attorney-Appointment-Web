@@ -9,6 +9,7 @@ const LawyerAppointment = () => {
     appointments,
     getAppointments,
     completeAppointment,
+    cancelAppointment,
     updateAppointmentFees,
   } = useContext(LawyerContext);
 
@@ -17,7 +18,6 @@ const LawyerAppointment = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [fees, setFees] = useState(0);
   const [sortStatus, setSortStatus] = useState("all"); // 'all', 'pending', 'completed'
-  
 
   // จัดการ popup
   const handleOpenPopup = (appointment) => {
@@ -148,8 +148,8 @@ const LawyerAppointment = () => {
                 <th className="p-4 font-medium text-left"></th>
                 <th className="p-4 font-medium text-left">ชื่อ</th>
                 <th className="p-4 font-medium text-left">นามสกุล</th>
-                <th className="p-4 font-medium text-left">อีเมล</th>
-                <th className="p-4 font-medium text-left">เบอร์โทร</th>
+                {/* <th className="p-4 font-medium text-left">อีเมล</th>
+                <th className="p-4 font-medium text-left">เบอร์โทร</th> */}
                 <th className="p-4 font-medium text-left">วันที่นัดหมาย</th>
                 <th className="p-4 font-medium text-left">เวลาที่นัดหมาย</th>
                 <th className="p-4 font-medium text-left">ค่าบริการ</th>
@@ -167,8 +167,8 @@ const LawyerAppointment = () => {
                     <td className="p-4">{index + 1}</td>
                     <td className="p-4">{item.userData.firstName}</td>
                     <td className="p-4">{item.userData.lastName}</td>
-                    <td className="p-4">{item.userData.email}</td>
-                    <td className="p-4">{item.userData.phone}</td>
+                    {/* <td className="p-4">{item.userData.email}</td>
+                    <td className="p-4">{item.userData.phone}</td> */}
                     <td className="p-4">{slotDateFormat(item.slotDate)}</td>
                     <td className="p-4">{slotTimeFormat(item.slotTime)}</td>
                     <td className="p-4">{item.fees}</td>
@@ -190,12 +190,20 @@ const LawyerAppointment = () => {
                     </td>
                     <td className="p-4">
                       {!item.isCompleted ? (
-                        <button
-                          onClick={() => completeAppointment(item._id)}
-                          className="bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-900"
-                        >
-                          เสร็จสิ้น
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => cancelAppointment(item._id)}
+                            className="bg-[#C5211D] text-white px-4 py-2 rounded-full hover:bg-red-800"
+                          >
+                            ยกเลิก
+                          </button>
+                          <button
+                            onClick={() => completeAppointment(item._id)}
+                            className="bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-900"
+                          >
+                            เสร็จสิ้น
+                          </button>
+                        </div>
                       ) : (
                         <button
                           onClick={() => handleOpenPopup(item)}

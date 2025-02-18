@@ -47,6 +47,23 @@ const LawyerContextProvider = (props) => {
         }
     }
 
+    const cancelAppointment = async (appointmentId) => {
+        try {
+
+            const {data} = await axios.post(backendUrl + '/api/lawyer/cancel-appointment',{appointmentId},{headers:{lawyerToken}})
+            if (data.success) {
+                toast.success(data.message)
+                getAppointments()
+            }else {
+                toast.error(data.message)
+            }
+            
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
+    }
+
     const updateAppointmentFees = async (appointmentId,fees) => {
         try {
 
@@ -83,9 +100,10 @@ const LawyerContextProvider = (props) => {
         appointments,setAppointments,
         getAppointments,
         completeAppointment,
+        cancelAppointment,
         updateAppointmentFees,
         profileData,setProfileData,
-        getProfileData
+        getProfileData,
     }
 
     return (
