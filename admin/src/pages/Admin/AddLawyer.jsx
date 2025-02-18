@@ -854,25 +854,30 @@ const AddLawyer = () => {
             </p>
           </div>
 
-          <div className="flex flex-col w-full">
-            <label className="mb-2">ค่าบริการ</label>
+          {/* ส่วนของค่าบริการ */}
+          <div className="flex items-center gap-2 w-full">
+            <label className="whitespace-nowrap w-[210px]">ค่าบริการ</label>
+            <label className="whitespace-nowrap">เริ่มต้น</label>
             <input
               onChange={(e) => setFees_detail(e.target.value)}
               value={fees_detail}
               type="text"
-              placeholder="ค่าบริการ"
-              className="w-full border border-[#DADADA] rounded p-2"
+              placeholder="ค่าบริการขั้นต่ำ"
+              className="w-[200px] border border-[#DADADA] rounded p-2 mx-4"
             />
+            <label className="whitespace-nowrap">บาท ต่อ 30 นาที</label>
           </div>
 
-          <div className="flex flex-col w-full mt-6">
-            <label className="mb-2">แนะนำตัว/ข้อมูลเพิ่มเติม</label>
-            <input
+          {/* ส่วนของแนะนำตัว */}
+          <div className="flex  w-full mt-6">
+            <label className="whitespace-nowrap w-[200px]">
+              แนะนำตัว/ข้อมูลเพิ่มเติม
+            </label>
+            <textarea
               onChange={(e) => setBio(e.target.value)}
               value={bio}
-              type="text"
               placeholder="แนะนำตัว"
-              className="w-full border border-[#DADADA] rounded p-2"
+              className="w-[800px] border border-[#DADADA] rounded p-2 h-[120px] ml-4"
             />
           </div>
 

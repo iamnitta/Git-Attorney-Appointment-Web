@@ -14,10 +14,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState(""); //เพิ่ม
-  const [gender, setGender] = useState(""); //เพิ่ม
-  const [phone, setPhone] = useState(""); //เพิ่ม
+  const [dob, setDob] = useState(""); 
+  const [gender, setGender] = useState(""); 
+  const [phone, setPhone] = useState(""); 
   const [nationalId, setNationalId] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const onSubmitHandler = async (event) => {
     //ไม่โหลดหน้าเว็บเพจซ้ำ
@@ -27,6 +28,13 @@ const Login = () => {
       // ลงทะเบียน
 
       if (state === "ลงทะเบียน") {
+
+        if (password !== confirmPassword) {
+          toast.error("รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง")
+          return
+        }
+
+
         const { data } = await axios.post(backendUrl + "/api/user/register", {
           firstName,
           lastName,
@@ -214,6 +222,19 @@ const Login = () => {
               className="w-full px-3 py-2 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <div className="w-full md:w-[420px]">
+            <p className="mb-2 mt-4 text-dark-brown">ยืนยันรหัสผ่าน</p>
+            <input
+              type="password"
+              className="w-full px-3 py-2 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
               required
             />
           </div>
