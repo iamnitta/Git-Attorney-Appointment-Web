@@ -60,7 +60,7 @@ const MyProfile = () => {
   return (
     userData && (
       <div className="flex justify-center items-center min-h-screen bg-white px-4 animate-fadeIn">
-        <div className="bg-light-brown p-8 rounded-lg shadow-md w-[800px] mb-10">
+        <div className="bg-light-brown p-8 rounded-lg shadow-md md:w-[800px] w-[380px] mb-10">
           <h1 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-dark-brown to-primary bg-clip-text text-transparent">โปรไฟล์ของฉัน</h1>
 
           <div className="flex flex-col md:flex-row gap-8 ">
@@ -100,7 +100,7 @@ const MyProfile = () => {
 
             {/* right side */}
             <div className="flex-1 space-y-6">
-              <div className="grid grid-cols-[160px,1fr] gap-4 items-center max-w-full">
+              <div className="grid md:grid-cols-[140px,1fr] grid-cols-[100px,1fr] gap-4 items-center max-w-full">
                 <p className="font-semibold h-9 flex items-center text-dark-brown">อีเมล</p>
                 <p className="h-9 flex items-center">{userData.email}</p>
 
