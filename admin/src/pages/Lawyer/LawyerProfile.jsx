@@ -1,12 +1,37 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LawyerContext } from "../../context/LawyerContext";
 import { AppContext } from "../../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const LawyerProfile = () => {
-  const { lawyerToken, profileData, setProfileData, getProfileData } = useContext(LawyerContext);
-  const { backendUrl } = useContext(AppContext);
+  const { lawyerToken, profileData, setProfileData, getProfileData, backendUrl } = useContext(LawyerContext);
 
   const [isEdit, setIsEdit] = useState(false)
+
+  const updateProfile = async () => {
+    try {
+
+      const updateData = {
+        fees_detail: profileData.fees_detail,
+        bio: profileData.bio
+      }
+
+      const { data } = await axios.post(backendUrl + '/api/lawyer/update-profile',updateData,{headers:{lawyerToken}})
+
+      if (data.success) {
+        toast.success(data.message)
+        setIsEdit(false)
+        getProfileData()
+      } else {
+        toast.error(data.message)
+      }
+      
+    } catch (error) {
+      toast.error(error.message)
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     if (lawyerToken) {
@@ -251,7 +276,7 @@ const LawyerProfile = () => {
 
         {
           isEdit
-          ? <button onClick={() => setIsEdit(false)} className="mt-8 bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">บันทึก</button>
+          ? <button onClick={updateProfile} className="mt-8 bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">บันทึก</button>
           : <button onClick={() => setIsEdit(true)} className="mt-8 bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">แก้ไข</button>
         }
 

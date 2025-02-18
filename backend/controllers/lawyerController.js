@@ -116,9 +116,9 @@ const lawyerProfile = async (req,res) => {
 const updateLawyerProfile = async (req,res) => {
   try {
 
-    const { lawId, fees_detail} = req.body
+    const { lawId, fees_detail, bio} = req.body
 
-    await lawyerModel.findByIdAndUpdate(lawId, {fees_detail})
+    await lawyerModel.findByIdAndUpdate(lawId, {fees_detail,bio})
 
     res.json({success:true, message:'อัพเดทเสร็จสิ้น'})
     
