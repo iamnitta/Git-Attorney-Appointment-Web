@@ -8,6 +8,7 @@ import th from "date-fns/locale/th";
 import Feedback from "../components/Feedback";
 import { toast } from "react-toastify";
 import axios from "axios";
+import "react-datepicker/dist/react-datepicker.css";
 registerLocale("th", th);
 
 const Appointment = () => {
@@ -240,14 +241,14 @@ const Appointment = () => {
   return (
     lawInfo && (
       <div className="bg-white p-4 animate-fadeIn">
-        <div className="mb-8">
-          <h1 className="text-center text-2xl font-medium text-dark-brown">
+        <div className="mb-8 lg:w-[95%] mx-auto">
+          <h1 className="text-2xl font-medium text-dark-brown">
             นัดหมายทนายความ
           </h1>
         </div>
 
         <div
-          className="p-4 rounded-lg shadow-lg lg:w-[95%] mx-auto bg-cover bg-center bg-no-repeat"
+          className="p-4 shadow-lg lg:w-[95%] mx-auto bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(${assets.Background})`,
           }}
@@ -396,9 +397,12 @@ const Appointment = () => {
             </div>
           </div>
 
-          <button className="lg:px-8 px-6 mt-6 lg:mt-10 ml-4 mb-4 lg:text-base text-sm border text-dark-brown mr-4 rounded-full h-10 hover:bg-dark-brown hover:text-white">
+          <a
+            href="/case"
+            className="lg:px-8 px-6 mt-6 lg:mt-10 ml-4 mb-4 lg:text-base text-sm border text-dark-brown mr-4 rounded-full h-10 hover:bg-dark-brown hover:text-white flex items-center justify-center"
+          >
             ดูรายละเอียดการว่าความ
-          </button>
+          </a>
         </div>
 
         <div className="mt-20 border-b border-solid border-[#DADADA] mx-auto lg:w-[95%]">
@@ -423,7 +427,7 @@ const Appointment = () => {
         {tab === "about" && (
           <>
             {/* ประวัติการศึกษา */}
-            <div className="bg-[#F7F7F7] mt-5 rounded-lg mx-auto lg:w-[95%]">
+            <div className="bg-[#F7F7F7] mt-5 rounded-lg mx-auto lg:w-[95%] animate-fadeIn">
               <div className="flex ml-4 lg:ml-20 mt-5 mr-4">
                 <p className="font-medium text-dark-brown mt-5 mb-5">
                   ประวัติการศึกษา
@@ -449,7 +453,7 @@ const Appointment = () => {
             </div>
 
             {/* ประวัติการทำงาน */}
-            <div className="bg-[#F7F7F7] mt-5 rounded-lg mx-auto lg:w-[95%]">
+            <div className="bg-[#F7F7F7] mt-5 rounded-lg mx-auto lg:w-[95%] animate-fadeIn">
               <div className="flex ml-4 lg:ml-20 mt-5 mr-4">
                 <p className="font-medium text-dark-brown mt-5 mb-5">
                   ประวัติการทำงาน
@@ -479,8 +483,8 @@ const Appointment = () => {
         {/* Pop Up สำหรับจองเวลานัดหมาย */}
         {showPopup && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-[600px] w-full animate-popup">
-              <div className="flex flex-row justify-between">
+            <div className="bg-white pl-4 pr-4 pb-4 rounded-lg max-w-[600px] w-full h-[80%] md:h-[95%] overflow-y-auto animate-popup mx-2">
+              <div className="sticky top-0 bg-white z-10 pt-4 flex flex-row justify-between">
                 <h2 className="text-lg font-medium text-dark-brown mb-4">
                   จองเวลานัดหมาย
                 </h2>
@@ -493,7 +497,7 @@ const Appointment = () => {
                 />
               </div>
 
-              {/* เพิ่มส่วนแสดงข้อมูลทนายและค่าบริการ */}
+              {/* ส่วนแสดงข้อมูลทนายและค่าบริการ */}
               <div className="flex items-center gap-4 p-4 bg-light-brown rounded-lg mb-4 border border-primary">
                 <img
                   src={lawInfo.image}
@@ -501,33 +505,43 @@ const Appointment = () => {
                   className="w-12 h-12 rounded-full"
                 />
                 <div className="w-full">
-                  <div className="flex justify-between items-center">
-                    <p className="font-medium text-dark-brown">
-                      ทนาย {lawInfo.firstName} {lawInfo.lastName}
-                    </p>
-                    <p className="text-sm text-dark-brown font-medium">
-                      ค่าบริการ{" "}
-                    </p>
-                  </div>
-                  <div className="flex justify-between items-center mt-1">
-                    <div className="flex gap-2 items-center">
-                      <p className="text-sm text-gray-600">ความเชี่ยวชาญ</p>
-                      {lawInfo.speciality.map((spec, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-gradient-to-r from-primary to-dark-brown text-white px-2 py-0.5 rounded-full text-xs"
-                        >
-                          {spec}
-                        </span>
-                      ))}
+                  <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 justify-between">
+                    <div className="flex flex-col gap-1">
+                      <p className="font-medium text-dark-brown">
+                        ทนาย {lawInfo.firstName} {lawInfo.lastName}
+                      </p>
+                      <div className="flex gap-2 items-center mt-1 lg:mt-0">
+                        <div className="flex flex-col lg:flex-row gap-1">
+                          <p className="text-sm text-gray-600 whitespace-nowrap">
+                            ความเชี่ยวชาญ
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {lawInfo.speciality.map((spec, idx) => (
+                              <span
+                                key={idx}
+                                className="bg-gradient-to-r from-primary to-dark-brown text-white px-2 py-0.5 rounded-full text-xs"
+                              >
+                                {spec}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-primary text-sm">500 บาท ต่อ 30 นาที</p>
-                    {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
+                    <div className="flex flex-row lg:flex-col gap-2 lg:gap-1 mt-1 lg:mt-0">
+                      <p className="text-sm text-dark-brown font-medium">
+                        ค่าบริการ
+                      </p>
+                      <p className="text-primary text-sm">
+                        ขั้นต่ำ 500 บาท ต่อ 30 นาที
+                      </p>
+                      {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-row gap-6 h-auto">
+              <div className="flex flex-col md:flex-row gap-6 h-auto">
                 <div>
                   <div>
                     <div className="flex flex-row gap-2 mb-2">
@@ -535,15 +549,17 @@ const Appointment = () => {
                       <img src={assets.Calendar} alt="" className="w-5 h-5" />
                     </div>
                     {/* ปฏิทิน */}
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={handleDateChange}
-                      locale="th"
-                      dateFormat="dd/MM/yyyy"
-                      minDate={new Date()}
-                      filterDate={filterWeekdays}
-                      inline
-                    />
+                    <div className="w-full custom-datepicker">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={handleDateChange}
+                        locale="th"
+                        dateFormat="dd/MM/yyyy"
+                        minDate={new Date()}
+                        filterDate={filterWeekdays}
+                        inline
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -556,7 +572,8 @@ const Appointment = () => {
                   <div
                     className="flex flex-col items-center gap-2 border border-[#DADADA] rounded p-2 overflow-y-auto scrollbar-visible"
                     style={{
-                      maxHeight: 242.3,
+                      maxHeight: 274.8,
+                      minHeight: 274.8,
                     }}
                   >
                     {lawSlots.length &&
@@ -599,7 +616,7 @@ const Appointment = () => {
               </div> */}
 
               <div className="flex flex-row mt-6">
-                <p className="font-medium text-sm bg-gradient-to-r from-dark-brown to-primary text-white px-4 py-1 rounded-l w-1/4">
+                <p className="font-medium text-sm bg-gradient-to-r from-dark-brown to-primary text-white px-4 py-1 rounded-l w-2/4 lg:w-1/4 flex items-center justify-center">
                   สรุปการนัดหมาย
                 </p>
                 <p className="text-primary font-legular text-sm px-4 py-1 bg-light-brown w-3/4 rounded-r">
@@ -638,7 +655,7 @@ const Appointment = () => {
                 <div className="w-full h-10 border border-[#DADADA] rounded mt-2"></div>
               </div>
 
-              <div className="flex justify-center mt-10">
+              <div className="flex justify-center mt-6">
                 <button
                   onClick={bookAppointment}
                   className="px-4 py-1 bg-dark-brown text-white rounded"
@@ -650,7 +667,7 @@ const Appointment = () => {
           </div>
         )}
 
-        {tab === "reviews" && <Feedback />}
+        {tab === "reviews" && <Feedback/>}
       </div>
     )
   );

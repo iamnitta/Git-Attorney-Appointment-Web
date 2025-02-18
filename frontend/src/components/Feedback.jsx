@@ -4,7 +4,7 @@ import { AiFillStar } from "react-icons/ai";
 
 const Feedback = () => {
   return (
-    <div className="w-[95%] mx-auto">
+    <div className="w-[95%] mx-auto animate-fadeIn">
       <div className="ml-4 mt-10 mb-10">
         <p className="font-medium text-dark-brown">รีวิวทั้งหมด (1)</p>
 

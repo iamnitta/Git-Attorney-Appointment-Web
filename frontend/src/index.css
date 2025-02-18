@@ -97,3 +97,12 @@
   background-color: transparent !important;
   color: #A3806C !important;
 }
+
+.custom-datepicker .react-datepicker {
+  width: 100% !important;
+}
+
+.custom-datepicker .react-datepicker__month-container {
+  width: 100% !important;
+  height: 272.8px !important;
+}
