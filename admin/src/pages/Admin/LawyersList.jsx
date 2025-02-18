@@ -15,6 +15,15 @@ const LawyersList = () => {
   const rowsPerPage = 6; // จำนวนแถวที่ต้องการแสดงในแต่ละหน้า
   const [currentPage, setCurrentPage] = useState(1); // หน้าปัจจุบัน (เริ่มต้นที่ 1)
 
+  //จัดรูปแบบเบอร์โทร
+  const formatPhoneNumber = (phone) => {
+    const value = phone.replace(/\D/g, ""); // กรองให้เหลือแค่ตัวเลข
+    const formattedValue = value
+      .replace(/^(\d{3})(?=\d)/, "$1-") // จับ 3 ตัวแรก
+      .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-"); // จับ 3 ตัวถัดไป
+    return formattedValue;
+  };
+
   // กรองรายการทนายความตามคำค้นหา
   const filteredLawyers = lawyers.filter((lawyer) =>
     `${lawyer.firstName} ${lawyer.lastName} ${lawyer.email} ${lawyer.phone}`
@@ -137,7 +146,7 @@ const LawyersList = () => {
                   {lawyer.firstName} {lawyer.lastName}
                 </td>
                 <td className="p-3">{lawyer.email}</td>
-                <td className="p-3">{lawyer.phone}</td>
+                <td className="p-3">{formatPhoneNumber(lawyer.phone)}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-6">
                     <button className="px-4 py-1 border border-dark-brown text-dark-brown rounded-full hover:bg-dark-brown hover:text-white flex items-center">

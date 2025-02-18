@@ -105,10 +105,10 @@ const MyAppointments = () => {
         การนัดหมายของฉัน
       </p>
 
-      <div className="flex items-center lg:justify-start justify-center gap-2 pb-2 mb-4 w-2/4">
+      <div className="flex items-center lg:justify-start justify-center gap-2 pb-2 mb-4 md:w-2/4 w-full">
         <button
           onClick={() => setStatus("scheduled")}
-          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white w-1/3 ${
+          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-1/3 w-full ${
             status === "scheduled"
               ? "bg-dark-brown rounded-full px-8 py-1 text-white"
               : ""
@@ -118,7 +118,7 @@ const MyAppointments = () => {
         </button>
         <button
           onClick={() => setStatus("completed")}
-          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white w-1/3 ${
+          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-1/3 w-full ${
             status === "completed"
               ? "bg-dark-brown rounded-full px-8 py-1 text-white"
               : ""
