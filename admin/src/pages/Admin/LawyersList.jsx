@@ -12,7 +12,7 @@ const LawyersList = () => {
   }, [aToken]);
 
   const [searchTerm, setSearchTerm] = useState(""); // เก็บคำค้นหาที่ผู้ใช้กรอกเข้ามา
-  const rowsPerPage = 6; // จำนวนแถวที่ต้องการแสดงในแต่ละหน้า
+  const rowsPerPage = 7; // จำนวนแถวที่ต้องการแสดงในแต่ละหน้า
   const [currentPage, setCurrentPage] = useState(1); // หน้าปัจจุบัน (เริ่มต้นที่ 1)
 
   //จัดรูปแบบเบอร์โทร
