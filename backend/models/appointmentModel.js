@@ -12,6 +12,9 @@ const appointmentSchema = new mongoose.Schema({
     isCompleted: { type: Boolean, default: false},
     cancelled: { type: Boolean, default: false},
     user_topic : {type: String, default: ""},
+    documentUrl: {
+        type: String // URL จาก Supabase
+    }
     
 })
 

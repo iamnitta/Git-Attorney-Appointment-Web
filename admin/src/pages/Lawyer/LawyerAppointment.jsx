@@ -2,6 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { LawyerContext } from "../../context/LawyerContext";
 import { AppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+// ตั้งค่า worker โดยใช้ CDN ที่ถูกต้อง
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 const LawyerAppointment = () => {
   const {
@@ -18,12 +24,18 @@ const LawyerAppointment = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [fees, setFees] = useState(0);
   const [sortStatus, setSortStatus] = useState("all"); // 'all', 'pending', 'completed'
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [numPages, setNumPages] = useState(null);
 
   // จัดการ popup
   const handleOpenPopup = (appointment) => {
     setSelectedAppointment(appointment);
     setFees(Number(appointment.lawyerData.fees_detail));
     setShowPopup(true);
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
   };
 
   // ฟังก์ชันสำหรับคำนวนจำนวนต่างๆ
@@ -184,7 +196,14 @@ const LawyerAppointment = () => {
                       </span>
                     </td>
                     <td className="p-4">
-                      <button className="underline text-primary hover:text-dark-brown">
+                      <button
+                        onClick={() => {
+                          console.log("documentUrl:", item.documentUrl); // ดูเฉพาะ documentUrl
+                          setSelectedAppointment(item);
+                          setShowPdfModal(true);
+                        }}
+                        className="underline text-primary hover:text-dark-brown"
+                      >
                         คลิก
                       </button>
                     </td>
@@ -329,6 +348,41 @@ const LawyerAppointment = () => {
               >
                 บันทึกค่าบริการ
               </button>
+            </div>
+          </div>
+        )}
+        {/* เพิ่ม Modal PDF ตรงนี้ */}
+        {showPdfModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+              <div className="flex justify-between mb-4">
+                <h2 className="text-2xl font-medium text-dark-brown">
+                  รายละเอียดการปรึกษา
+                </h2>
+                <img
+                  onClick={() => setShowPdfModal(false)}
+                  src={assets.Close_2}
+                  alt="ปิด"
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+              {selectedAppointment?.documentUrl ? (
+                <Document
+                  file={selectedAppointment.documentUrl}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  className="pdf-document"
+                >
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                      width={750}
+                    />
+                  ))}
+                </Document>
+              ) : (
+                <p className="text-center text-gray-500">ไม่พบเอกสารแนบ</p>
+              )}
             </div>
           </div>
         )}
