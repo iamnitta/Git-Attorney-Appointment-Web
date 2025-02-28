@@ -13,7 +13,7 @@ registerLocale("th", th);
 
 const Appointment = () => {
   const { lawId } = useParams();
-  const { lawyers, backendUrl, token, getLawyersData } = useContext(AppContext);
+  const { lawyers, backendUrl, token, getLawyersData, cases, getCases, appointments, getAppoinetments } = useContext(AppContext);
   const [tab, setTab] = useState("about");
 
   const navigate = useNavigate();
@@ -25,6 +25,7 @@ const Appointment = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
   const [user_topic, setUser_topic] = useState("");
+  const [stats, setStats] = useState({ totalCases: 0, winRate: 0 });
 
   // file
   const [file, setfile] = useState("");
@@ -237,6 +238,24 @@ const Appointment = () => {
     )}`;
   };
 
+  //คำนวนค่าของกล่อง case
+  const calculateStats = (cases) => {
+    if (!cases || cases.length === 0) return { totalCases: 0, winRate: 0 };
+  
+    const totalCases = cases.length;
+    
+    // นับจำนวนคดีที่ชนะ
+    const wonCases = cases.filter(
+      caseItem => caseItem.caseOutcome === "ชนะ"
+    ).length;
+  
+    // คำนวณอัตราการชนะเป็นเปอร์เซ็นต์
+    const winRate = totalCases > 0 ? Math.round((wonCases / totalCases) * 100) : 0;
+  
+    return { totalCases, winRate };
+  };
+  
+
   useEffect(() => {
     fetchLawInfo();
   }, [lawyers, lawId]);
@@ -248,6 +267,25 @@ const Appointment = () => {
       getAvailableSlots(nextAvailable);
     }
   }, [lawInfo]);
+
+  useEffect(() => {
+    if (lawInfo) {
+      getCases(lawInfo._id)
+    }
+  }, [lawInfo,])
+
+  useEffect(() => {
+    if (cases) {
+      const calculatedStats = calculateStats(cases);
+      setStats(calculatedStats);
+    }
+  }, [cases])
+
+  useEffect(() => {
+    if (lawId) {
+      getAppoinetments(lawId);
+    }
+  }, [lawId,]);
 
   console.log(lawSlots);
 
@@ -370,7 +408,7 @@ const Appointment = () => {
               <p className="flex-1 lg:text-center text-dark-brown">
                 ให้คำปรึกษามาแล้ว{" "}
                 <span className="text-white bg-primary rounded-full px-6">
-                  10
+                  {appointments ? appointments.filter(appointments => appointments.isCompleted === true).length : 0}
                 </span>{" "}
                 ครั้ง
               </p>{" "}
@@ -387,7 +425,7 @@ const Appointment = () => {
                 {" "}
                 ว่าความมาแล้ว{" "}
                 <span className="text-white bg-primary rounded-full px-6">
-                  5
+                {stats.totalCases}
                 </span>{" "}
                 คดี
               </p>{" "}
@@ -403,7 +441,7 @@ const Appointment = () => {
               <p className="flex-1 lg:text-center text-dark-brown">
                 ชนะคิดเป็นร้อยละ{" "}
                 <span className="text-white bg-primary rounded-full px-4">
-                  75%
+                {stats.winRate}%
                 </span>
               </p>{" "}
               {/* เพิ่มการดึงค่ามาแสดง */}
@@ -411,7 +449,7 @@ const Appointment = () => {
           </div>
 
           <a
-            href="/case"
+            href={`/case/${lawId}`}
             className="lg:px-8 px-6 mt-6 lg:mt-10 ml-4 mb-4 lg:text-base text-sm border text-dark-brown mr-4 rounded-full h-10 hover:bg-dark-brown hover:text-white flex items-center justify-center"
           >
             ดูรายละเอียดการว่าความ

@@ -12,6 +12,8 @@ const LawyerContextProvider = (props) => {
     const [lawyerToken, setLawyerToken] = useState(localStorage.getItem('lawyerToken')?localStorage.getItem('lawyerToken'):'')
     const [appointments, setAppointments] = useState([])
     const [profileData, setProfileData] = useState(false)
+    const [cases,setCases] = useState([])
+    const [courts, setCourts] = useState([])
 
     const getAppointments = async () => {
         try {
@@ -24,6 +26,21 @@ const LawyerContextProvider = (props) => {
                 toast.error(data.message)
             }
             
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
+    }
+
+    const getCases = async () => {
+        try {
+            const {data} = await axios.get(backendUrl + '/api/lawyer/cases', {headers:{lawyerToken}})
+            if (data.success) {
+                setCases(data.cases.reverse())
+                console.log(data.cases)
+            }else {
+                toast.error(data.message)
+            }
         } catch (error) {
             console.log(error);
             toast.error(error.message)
@@ -94,6 +111,20 @@ const LawyerContextProvider = (props) => {
         }
     }
 
+    const getCourts = async () => {
+        try {
+            const {data} = await axios.get(backendUrl + '/api/lawyer/courts', {headers: {lawyerToken}})
+            if (data.success) {
+                setCourts(data.courts)
+            }else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
+    }
+
     const value = {
         lawyerToken,setLawyerToken,
         backendUrl,
@@ -104,6 +135,9 @@ const LawyerContextProvider = (props) => {
         updateAppointmentFees,
         profileData,setProfileData,
         getProfileData,
+        cases,setCases,
+        getCases,
+        courts,getCourts
     }
 
     return (
