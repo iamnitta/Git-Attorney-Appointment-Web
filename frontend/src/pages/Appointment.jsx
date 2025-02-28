@@ -496,7 +496,7 @@ const Appointment = () => {
         {/* Pop Up สำหรับจองเวลานัดหมาย */}
         {showPopup && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white pl-4 pr-4 pb-4 rounded-lg max-w-[600px] w-full h-[80%] md:h-auto overflow-y-auto animate-popup mx-2">
+            <div className="bg-white pl-4 pr-4 pb-4 rounded-lg max-w-[600px] w-full h-[80%] md:h-[800px] overflow-y-auto animate-popup mx-2">
               <div className="sticky top-0 bg-white z-10 pt-4 flex flex-row justify-between">
                 <h2 className="text-lg font-medium text-dark-brown mb-4">
                   จองเวลานัดหมาย
@@ -665,22 +665,14 @@ const Appointment = () => {
                 <p className="text-dark-brown font-medium mt-6">
                   อัปโหลดเอกสารเบื้องต้น
                 </p>
-                <div className="w-full mt-2 p-6 border-2 border-dashed border-[#DADADA] rounded-lg hover:border-dark-brown transition-colors">
+                <div className="w-full mt-2 p-6 border border-[#DADADA] rounded">
                   <div className="flex flex-col items-center justify-center space-y-3">
                     {/* ไอคอน PDF */}
-                    <svg
-                      className="w-12 h-12 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
+                    <img
+                      src={assets.Upload_File}
+                      alt=""
+                      className="w-12 h-12 rounded-full"
+                    />
 
                     {/* ปุ่มเลือกไฟล์ */}
                     <label className="cursor-pointer">
@@ -690,31 +682,25 @@ const Appointment = () => {
                         onChange={(e) => setfile(e.target.files[0])}
                         className="hidden"
                       />
-                      <span className="px-4 py-2 bg-dark-brown text-white rounded-full hover:bg-[#2C1810] transition-colors">
+                      <span className="px-2 py-1 text-dark-brown border border-dark-brown rounded text-sm">
                         เลือกไฟล์ PDF
                       </span>
                     </label>
 
                     {/* แสดงชื่อไฟล์ที่เลือก */}
                     {file && (
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                      <div className="flex items-center space-x-1 text-sm text-gray-600">
+                        <img
+                          src={assets.File}
+                          alt=""
+                          className="w-5 h-5"
+                        />
                         <span>{file.name}</span>
                       </div>
                     )}
 
-                    <p className="text-xs text-gray-500">
-                      *รองรับไฟล์ PDF ขนาดไม่เกิน 5MB
+                    <p className="text-xs text-[#757575]">
+                      รองรับไฟล์ PDF ขนาดไม่เกิน 5MB
                     </p>
                   </div>
                 </div>
