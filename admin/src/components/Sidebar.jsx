@@ -43,7 +43,7 @@ const Sidebar = () => {
                 </h1>
                 <div className="inline-flex items-center gap-2">
                   <img src={assets.Logo_2} alt="icon" className="w-6 h-6" />
-                  <span className="text-white bg-gradient-to-b from-dark-brown to-primary rounded-full py-0.5 px-2.5 ">
+                  <span className="text-white bg-gradient-to-l from-dark-brown to-primary rounded-full py-0.5 px-2.5 text-sm">
                     {aToken ? "แอดมิน" : "ทนายความ"}
                   </span>
                 </div>
@@ -136,7 +136,7 @@ const Sidebar = () => {
                       alt="icon"
                       className="w-12 h-12 rounded-full object-cover"
                     />
-                  <span className="text-white bg-gradient-to-b from-dark-brown to-primary rounded-full py-0.5 px-2.5 ">
+                  <span className="text-white bg-gradient-to-l from-dark-brown to-primary rounded-full py-0.5 px-2.5 text-sm">
                   {lawyerToken ? `${profileData.firstName} ${profileData.lastName}` : "แอดมิน"}
                   </span>
                 </div>
@@ -162,7 +162,7 @@ const Sidebar = () => {
                 }
                 to={"/lawyer-profile"}
               >
-                <img src={assets.Lawyers_Admin} alt="" className="w-6 h-6" />
+                <img src={assets.Profile_Lawyer} alt="" className="w-6 h-6" />
                 <p>โปรไฟล์</p>
               </NavLink>
 
@@ -174,7 +174,7 @@ const Sidebar = () => {
                 }
                 to={"/lawyer-case"}
               >
-                <img src={assets.AddLawyer2_Admin} alt="" className="w-6 h-6" />
+                <img src={assets.Case_Lawyer} alt="" className="w-6 h-6" />
                 <p>ข้อมูลการว่าความ</p>
               </NavLink>
 

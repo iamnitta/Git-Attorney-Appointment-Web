@@ -80,7 +80,7 @@ const Login = () => {
   return (
     <form
       onSubmit={onSubmitHandler}
-      className="lg:min-h-auto min-h-[140vh] flex items-start justify-center bg-white px-4 sm:px-6 md:px-8 animate-fadeIn"
+      className="lg:min-h-auto min-h-[150vh] flex items-start justify-center bg-white px-4 sm:px-6 md:px-8 animate-fadeIn"
     >
       <div className="w-[95%] max-w-[800px] min-h-[500px] p-8  bg-[#F7F7F7] rounded-lg shadow-md mt-10">
         <p className="text-2xl font-medium text-center mb-8 bg-gradient-to-l from-dark-brown to-primary bg-clip-text text-transparent">
@@ -219,7 +219,7 @@ const Login = () => {
             <p className="mb-2 mt-4 text-dark-brown">รหัสผ่าน</p>
             <input
               type="password"
-              className="w-full px-3 py-2 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
+              className="w-full px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               required
@@ -227,18 +227,19 @@ const Login = () => {
           </div>
         </div>
 
-        <div className="flex justify-center">
+        {state === "ลงทะเบียน" && ( <div className="flex justify-center">
           <div className="w-full md:w-[420px]">
             <p className="mb-2 mt-4 text-dark-brown">ยืนยันรหัสผ่าน</p>
             <input
               type="password"
-              className="w-full px-3 py-2 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
+              className="w-full px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
               required
             />
           </div>
         </div>
+        )}
 
         {/* ปุ่มและคำข้างล่างสุด*/}
 

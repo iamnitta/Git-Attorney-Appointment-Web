@@ -1,34 +1,30 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { AppContext } from "../../context/AppContext";
-import Select from "react-select"; // import react-select
+import Select from "react-select";
 
 const AllAppointments = () => {
   const { aToken, appointments, getAllAppointments } = useContext(AdminContext);
   const { slotDateFormat, slotTimeFormat } = useContext(AppContext);
-  const [sortStatus, setSortStatus] = useState("all");
-  const [selectedLawyer, setSelectedLawyer] = useState(""); // เริ่มต้นไม่เลือกทนายความ
+  const [sortStatus, setSortStatus] = useState("pending");
+  const [selectedLawyer, setSelectedLawyer] = useState("");
   const [lawyers, setLawyers] = useState([]);
   const [statusCount, setStatusCount] = useState({}); // เก็บจำนวนสถานะของทนายความแต่ละคน
-  const [startDate, setStartDate] = useState(""); // วันที่เริ่มต้น
-  const [endDate, setEndDate] = useState(""); // วันที่สิ้นสุด
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [filteredStatusCount, setFilteredStatusCount] = useState({}); // เก็บจำนวนสถานะของนัดหมายที่กรองแล้ว
-  const rowsPerPage = 7; // จำนวนแถวที่ต้องการแสดงในแต่ละหน้า
-  const [currentPage, setCurrentPage] = useState(1); // หน้าปัจจุบัน (เริ่มต้นที่ 1)
+  const rowsPerPage = 7;
+  const [currentPage, setCurrentPage] = useState(1);
 
   // ฟังก์ชันสำหรับการกรองนัดหมายตามทนายความที่เลือก และช่วงวันที่
   const getFilteredAppointments = () => {
-    const nonCancelledAppointments = appointments.filter(
-      (item) => !item.cancelled
-    );
-
     const filteredByLawyer = selectedLawyer
-      ? nonCancelledAppointments.filter(
+      ? appointments.filter(
           (item) =>
             `${item.lawyerData.firstName} ${item.lawyerData.lastName}` ===
             selectedLawyer
         )
-      : nonCancelledAppointments;
+      : appointments;
 
     const filteredByDate = filteredByLawyer.filter((item) => {
       const [day, month, year] = item.slotDate.split("_").map(Number);
@@ -54,41 +50,45 @@ const AllAppointments = () => {
       }
     });
 
-    return filteredByDate;
+    return filteredByDate.reverse();
   };
 
   // ฟังก์ชันสำหรับการกรองนัดหมายตามสถานะที่เลือก
   const getAppointmentsByStatus = (appointments) => {
-    return sortStatus === "all" ? appointments : appointments.filter((item) => {
-      if (sortStatus === "pending") {
-        return !item.isCompleted;
-      } else if (sortStatus === "completed") {
-        return item.isCompleted;
-      }
-      return true;
-    });
+    return sortStatus === "all"
+      ? appointments
+      : appointments.filter((item) => {
+          if (sortStatus === "pending") {
+            return !item.isCompleted && !item.cancelled;
+          } else if (sortStatus === "completed") {
+            return item.isCompleted && !item.cancelled;
+          } else if (sortStatus === "cancelled") {
+            return item.cancelled;
+          }
+          return true;
+        });
   };
-
+  
   // ฟังก์ชันสำหรับการคำนวณสถานะของนัดหมายที่กรองแล้ว
   const calculateFilteredStatusCount = (appointments) => {
     const completed = appointments.filter((item) => item.isCompleted).length;
-    const pending = appointments.filter((item) => !item.isCompleted).length;
-
+    const pending = appointments.filter((item) => !item.isCompleted && !item.cancelled).length;
+    const cancelled = appointments.filter((item) => item.cancelled).length;
+  
     return {
       total: appointments.length,
       completed,
       pending,
+      cancelled,
     };
   };
 
-  // ฟังก์ชันที่ทำงานเมื่อเริ่มต้นหรือเมื่อมีการเปลี่ยนแปลง appointments
   useEffect(() => {
     if (aToken) {
       getAllAppointments();
     }
   }, [aToken]);
 
-  // ฟังก์ชันที่ทำงานเมื่อ appointments เปลี่ยนแปลง
   useEffect(() => {
     if (appointments.length > 0) {
       const filteredLawyers = appointments
@@ -139,7 +139,9 @@ const AllAppointments = () => {
     setFilteredStatusCount(statusCount);
   }, [appointments, selectedLawyer, startDate, endDate]);
 
-  const filteredAppointments = getAppointmentsByStatus(getFilteredAppointments());
+  const filteredAppointments = getAppointmentsByStatus(
+    getFilteredAppointments()
+  );
 
   // คำนวณจำนวนหน้าทั้งหมด
   const totalPages = Math.ceil(filteredAppointments.length / rowsPerPage);
@@ -150,7 +152,6 @@ const AllAppointments = () => {
     currentPage * rowsPerPage
   );
 
-  // สร้าง options สำหรับ react-select
   const lawyerOptions = [
     { value: "", label: "ทนายความทั้งหมด" }, // ตัวเลือก "ทั้งหมด"
     ...lawyers.map((lawyer) => ({
@@ -223,30 +224,11 @@ const AllAppointments = () => {
       </div>
 
       <div>
-        <div className="flex flex-row gap-4 justify-between mb-4 mt-4">
+        <div className="flex flex-row gap-2 justify-between mb-4 mt-4">
           {/* กรองตามสถานะ */}
           <div>
             <p className="text-dark-brown mb-1">จำนวนตามสถานะ</p>
             <div className="flex gap-2">
-              <button
-                onClick={() => handleSortStatusChange("all")}
-                className={`px-4 py-2 rounded-lg ${
-                  sortStatus === "all"
-                    ? "bg-dark-brown text-white"
-                    : "bg-[#DADADA]"
-                }`}
-              >
-                ทั้งหมด{" "}
-                <span
-                  className={`ml-2 rounded-full px-2 text-sm ${
-                    sortStatus === "all"
-                      ? "bg-white text-dark-brown"
-                      : "bg-[#9B9B9B] text-[#DADADA]"
-                  }`}
-                >
-                  {filteredStatusCount.total}
-                </span>
-              </button>
               <button
                 onClick={() => handleSortStatusChange("pending")}
                 className={`px-4 py-2 rounded-lg flex items-center ${
@@ -285,10 +267,48 @@ const AllAppointments = () => {
                   {filteredStatusCount.completed}
                 </span>
               </button>
+              <button
+                onClick={() => handleSortStatusChange("cancelled")}
+                className={`px-4 py-2 rounded-lg flex items-center ${
+                  sortStatus === "cancelled"
+                    ? "bg-[#C5211D] text-white"
+                    : "bg-[#DADADA]"
+                }`}
+              >
+                ยกเลิก
+                <span
+                  className={`ml-2 rounded-full px-2 text-sm ${
+                    sortStatus === "cancelled"
+                      ? "bg-white text-[#C5211D]"
+                      : "bg-[#9B9B9B] text-[#DADADA]"
+                  }`}
+                >
+                  {filteredStatusCount.cancelled}
+                </span>
+              </button>
+              <button
+                onClick={() => handleSortStatusChange("all")}
+                className={`px-4 py-2 rounded-lg ${
+                  sortStatus === "all"
+                    ? "bg-dark-brown text-white"
+                    : "bg-[#DADADA]"
+                }`}
+              >
+                ทั้งหมด{" "}
+                <span
+                  className={`ml-2 rounded-full px-2 text-sm ${
+                    sortStatus === "all"
+                      ? "bg-white text-dark-brown"
+                      : "bg-[#9B9B9B] text-[#DADADA]"
+                  }`}
+                >
+                  {filteredStatusCount.total}
+                </span>
+              </button>
             </div>
           </div>
 
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-2">
             {/* กรองตามทนายความ */}
             <div>
               <p className="text-dark-brown mb-1">ทนายความ</p>
@@ -348,7 +368,9 @@ const AllAppointments = () => {
                   key={`${item.lawyerData.lawyer_id}-${index}`}
                   className="bg-[#FFFFFF] border-b border-[#DADADA] hover:bg-gray-100"
                 >
-                  <td className="p-3">{(currentPage - 1) * rowsPerPage + index + 1}</td>
+                  <td className="p-3">
+                    {(currentPage - 1) * rowsPerPage + index + 1}
+                  </td>
                   <td className="p-3">
                     <img
                       src={item.lawyerData.image}
@@ -372,32 +394,40 @@ const AllAppointments = () => {
                   <td className="p-3 text-left text-nowrap">
                     <span
                       className={`${
-                        item.isCompleted ? "text-green-800" : "text-yellow-800"
+                        item.isCompleted
+                          ? "text-green-800"
+                          : item.cancelled
+                          ? "text-red-800"
+                          : "text-yellow-800"
                       }`}
                     >
-                      {item.isCompleted ? "ปรึกษาเสร็จสิ้น" : "รอปรึกษา"}
+                      {item.isCompleted
+                        ? "ปรึกษาเสร็จสิ้น"
+                        : item.cancelled
+                        ? "ยกเลิก"
+                        : "รอปรึกษา"}
                     </span>
                   </td>
                 </tr>
               ))}
 
               {/* เติมแถวเปล่าให้ครบ 6 แถว */}
-              {Array.from({ length: rowsPerPage - currentAppointments.length }).map(
-                (_, index) => (
-                  <tr
-                    key={`empty-${index}`}
-                    className="bg-[#FFFFFF] border-b border-[#DADADA]"
-                    style={{ height: "65px" }}
-                  >
-                    <td className="p-3">&nbsp;</td>
-                    <td className="p-3">&nbsp;</td>
-                    <td className="p-3">&nbsp;</td>
-                    <td className="p-3">&nbsp;</td>
-                    <td className="p-3">&nbsp;</td>
-                    <td className="p-3">&nbsp;</td>
-                  </tr>
-                )
-              )}
+              {Array.from({
+                length: rowsPerPage - currentAppointments.length,
+              }).map((_, index) => (
+                <tr
+                  key={`empty-${index}`}
+                  className="bg-[#FFFFFF] border-b border-[#DADADA]"
+                  style={{ height: "65px" }}
+                >
+                  <td className="p-3">&nbsp;</td>
+                  <td className="p-3">&nbsp;</td>
+                  <td className="p-3">&nbsp;</td>
+                  <td className="p-3">&nbsp;</td>
+                  <td className="p-3">&nbsp;</td>
+                  <td className="p-3">&nbsp;</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

@@ -48,6 +48,8 @@ import Win_1 from './Win_1.png'
 import Consult_1 from './Consult_1.png'
 import Close_1 from './Close_1.png'
 import Close_2 from './Close_2.png'
+import Upload_File from './Upload_File.png'
+import File from './File.png'
 
 export const assets = {
     HomePage,
@@ -99,7 +101,9 @@ export const assets = {
     Win_1,
     Consult_1,
     Close_1,
-    Close_2
+    Close_2,
+    Upload_File,
+    File
 }
 
 export const specialityData = [
