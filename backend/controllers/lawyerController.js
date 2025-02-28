@@ -2,6 +2,8 @@ import lawyerModel from "../models/lawyerModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
+import caseModel from "../models/caseModel.js";
+import courtModel from "../models/court.js";
 
 const lawyerList = async (req, res) => {
   try {
@@ -147,4 +149,112 @@ const updateLawyerProfile = async (req,res) => {
     res.json({ success: false, message: error.message });
   }
 }
-export { lawyerList, loginLawyer, appointmentsLawyer, appointmentComplete, updateFees, lawyerProfile,updateLawyerProfile, appointmentCancel };
+
+//API to add case from lawyer panel
+const addCase =  async (req,res) => {
+  try {
+    const {caseNumber,courtName,courtLevel,caseCompletionDate,caseTitle,caseCategory,caseClientSide,caseOutcome,lawId} = req.body
+
+    
+
+    console.log("Destructured values:", {
+      caseNumber,
+      courtName,
+      courtLevel,
+      caseCompletionDate,
+      caseTitle,
+      caseCategory,
+      caseClientSide,
+      caseOutcome,
+      lawId
+    });
+    
+
+    if (!caseNumber || !courtName || !courtLevel || !caseCompletionDate || !caseTitle || !caseCategory || !caseClientSide || !caseOutcome  ) {
+      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน"})
+    }
+
+    // ดึงข้อมูลทนาย มาเก็บไว้ทำให้รู้ว่า case นี้เป็นของทนายคนไหน
+    const lawyerData = await lawyerModel.findById(lawId).select("-password")
+
+    const caseData = {
+      caseNumber,
+      caseTitle,
+      courtName,
+      courtLevel,
+      caseCategory,
+      caseClientSide,
+      caseOutcome,
+      createAt: Date.now(),
+      caseCompletionDate,
+      lawId,
+      lawyerData
+    }
+
+    const newCase = new caseModel(caseData);
+    await newCase.save()
+
+    res.json({ success: true, message: "บันทึกข้อมูลสำเร็จ"})
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+//API to get lawyer cases from lawyer panel
+const lawyerCases = async (req,res) => {
+  try {
+
+    const { lawId } = req.body
+
+    const cases = await caseModel.find({lawId})
+
+    res.json({success: true, cases})
+    
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+    
+  }
+}
+
+//API to get cases courts
+const getCourts = async (req,res) => {
+  try {
+    const courts = await courtModel.find({});
+    res.json({success: true, courts})
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+
+//API to get case form user panel
+const getLawyerCases = async (req,res) => {
+  try {
+    const { lawId } = req.query  // รับ parameter จาก URL query
+    const cases = await caseModel.find({lawId})
+    res.json({success: true, cases})
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+// API to get lawyer appointment for user panel
+const getAppointmentsLawyer = async (req,res) => {
+  try {
+
+    const {lawId} = req.query
+    const appointments = await appointmentModel.find({ lawId })
+
+    res.json({ success: true, appointments})
+    
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+export { lawyerList, loginLawyer, appointmentsLawyer, appointmentComplete, updateFees, lawyerProfile,updateLawyerProfile, appointmentCancel,addCase,lawyerCases,getCourts, getLawyerCases,getAppointmentsLawyer };

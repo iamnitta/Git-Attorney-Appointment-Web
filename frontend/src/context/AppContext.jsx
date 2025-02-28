@@ -12,7 +12,16 @@ const AppContextProvider = (props) => {
     const [lawyers, setLawyers] = useState([])
     const [token,setToken] = useState(localStorage.getItem('token')?localStorage.getItem('token'):false)
     const [userData,setUserData] = useState(false)
+    const [cases, setCases] = useState([])
+    const [appointments, setAppointments] = useState([])
 
+    const months = [' ', 'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
+
+    //จัดรูปแบบวัน
+    const slotDateFormat = (slotDate) => {
+      const dateArray = slotDate.split('-')
+      return dateArray[2] + " " + months[Number(dateArray[1])] + " " + dateArray[0]
+    }
 
     const getLawyersData = async () => {
         try {
@@ -48,12 +57,43 @@ const AppContextProvider = (props) => {
         }
     }
 
+    const getCases = async (lawId) => {
+        try {
+            console.log(lawId)
+            const { data } = await axios.get(backendUrl + '/api/lawyer/cases-list', 
+                {params: { lawId }})
+            if (data.success) {
+                setCases(data.cases)
+                console.log(data.cases)
+            } 
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getAppoinetments = async (lawId) =>{
+        try {
+            const {data} = await axios.get(backendUrl + '/api/lawyer/appointments-list', {params:{lawId}})
+            if (data.success) {
+                setAppointments(data.appointments)
+                console.log(data.appointments)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
     const value = {
         lawyers,getLawyersData,
         token,setToken,
         backendUrl,
         userData,setUserData,
-        loadUserProfileData
+        loadUserProfileData,
+        cases,getCases,
+        slotDateFormat,
+        appointments,getAppoinetments
     }
 
     useEffect(() => {
