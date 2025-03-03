@@ -2,6 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { LawyerContext } from "../../context/LawyerContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import { assets } from "../../assets/assets";
+// ตั้งค่า worker โดยใช้ CDN ที่ถูกต้อง
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 const LawyerCase = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,10 +19,19 @@ const LawyerCase = () => {
   const [caseCategory, setCaseCategory] = useState("");
   const [caseClientSide, setCaseClientSide] = useState("");
   const [caseOutcome, setCaseOutcome] = useState("");
+  const [file, setFile] = useState(""); // จัดการไฟล์
+
+  //จัดการไฟล์
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [numPages, setNumPages] = useState(null);
 
   const { backendUrl, lawyerToken, cases, getCases, courts, getCourts } =
     useContext(LawyerContext);
 
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
   // เพิ่มฟังก์ชันสำหรับจัดการเมื่อเลือกศาล
   const handleCourtSelect = (e) => {
     const selectedCourtName = e.target.value;
@@ -44,6 +59,9 @@ const LawyerCase = () => {
       formData.append("caseCategory", caseCategory);
       formData.append("caseClientSide", caseClientSide);
       formData.append("caseOutcome", caseOutcome);
+      formData.append("file", file);
+
+      console.log(file);
 
       // แสดงข้อมูลทั้งหมดใน FormData
       for (let pair of formData.entries()) {
@@ -133,7 +151,9 @@ const LawyerCase = () => {
                       value={courtName}
                       onChange={handleCourtSelect}
                     >
-                      <option value="" disabled>เลือกศาล</option>
+                      <option value="" disabled>
+                        เลือกศาล
+                      </option>
                       {courts.map((court) => (
                         <option key={court._id} value={court.courtName}>
                           {court.courtName}
@@ -251,12 +271,19 @@ const LawyerCase = () => {
                         <input
                           type="file"
                           accept="application/pdf"
+                          onChange={(e) => setFile(e.target.files[0])}
                           className="hidden"
                         />
                         <span className="px-4 py-2 bg-dark-brown text-white rounded-full hover:bg-[#2C1810] transition-colors">
                           เลือกไฟล์ PDF
                         </span>
                       </label>
+
+                      {file && (
+                        <div className="flex items-center space-x-1 text-sm text-gray-600">
+                          <span>{file.name}</span>
+                        </div>
+                      )}
 
                       <p className="text-xs text-gray-500">
                         *รองรับไฟล์ PDF ขนาดไม่เกิน 5MB
@@ -321,9 +348,16 @@ const LawyerCase = () => {
                     {caseItem.caseOutcome}
                   </span>
                 </td>
-                <td className="p-4">
-                  <button className="p-2">
-                    <i className="fas fa-file-alt"></i>
+                <td className="p-3">
+                  <button
+                    onClick={() => {
+                      console.log("caseDocument:", caseItem.caseDocument);
+                      setSelectedAppointment(caseItem);
+                      setShowPdfModal(true);
+                    }}
+                    className="underline text-primary hover:text-dark-brown"
+                  >
+                    คลิก
                   </button>
                 </td>
               </tr>
@@ -338,6 +372,41 @@ const LawyerCase = () => {
           <button className="px-3 py-1 border rounded">&gt;</button>
         </div>
       </div>
+      {showPdfModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+            <div className="flex justify-between mb-4">
+              <h2 className="text-2xl font-medium text-dark-brown">
+                คำพิพากษา
+              </h2>
+              <img
+                onClick={() => setShowPdfModal(false)}
+                src={assets.Close_2}
+                alt="ปิด"
+                className="w-7 h-7 cursor-pointer"
+              />
+            </div>
+            {selectedAppointment?.caseDocument ? ( // ใช้ caseDocument แทน documentUrl
+              <Document
+                file={selectedAppointment.caseDocument}
+                onLoadSuccess={onDocumentLoadSuccess}
+                className="pdf-document"
+              >
+                {Array.from(new Array(numPages), (el, index) => (
+                  <Page
+                    key={`page_${index + 1}`}
+                    ç
+                    pageNumber={index + 1}
+                    width={750}
+                  />
+                ))}
+              </Document>
+            ) : (
+              <p className="text-center text-gray-500">ไม่พบเอกสาร</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

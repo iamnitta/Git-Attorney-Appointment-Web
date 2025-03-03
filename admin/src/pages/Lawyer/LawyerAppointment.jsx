@@ -49,14 +49,14 @@ const LawyerAppointment = () => {
       const appointmentDate = new Date(year, month - 1, day);
       const start = startDate ? new Date(startDate) : null;
       const end = endDate ? new Date(endDate) : null;
-  
+
       if (start) {
         start.setHours(0, 0, 0, 0); // ตั้งค่าเวลาเป็น 00:00:00
       }
       if (end) {
         end.setHours(23, 59, 59, 999); // ตั้งค่าเวลาเป็น 23:59:59
       }
-  
+
       if (start && end) {
         return appointmentDate >= start && appointmentDate <= end;
       } else if (start) {
@@ -67,14 +67,16 @@ const LawyerAppointment = () => {
         return true;
       }
     });
-  
+
     const completed = filteredByDate.filter((item) => item.isCompleted).length;
-    const pending = filteredByDate.filter((item) => !item.isCompleted && !item.cancelled).length;
+    const pending = filteredByDate.filter(
+      (item) => !item.isCompleted && !item.cancelled
+    ).length;
     const cancelled = filteredByDate.filter((item) => item.cancelled).length;
     const totalFees = filteredByDate
       .filter((item) => item.isCompleted)
       .reduce((sum, item) => sum + (Number(item.fees) || 0), 0);
-  
+
     return {
       total: filteredByDate.length,
       completed,
@@ -552,8 +554,8 @@ const LawyerAppointment = () => {
         {showPdfModal && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
             <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
-              <div className="flex justify-between mb-4">
-                <h2 className="text-2xl font-medium text-dark-brown">
+              <div className="flex justify-between mb-8">
+                <h2 className="text-3xl font-medium text-dark-brown">
                   รายละเอียดการปรึกษา
                 </h2>
                 <img
@@ -563,23 +565,41 @@ const LawyerAppointment = () => {
                   className="w-7 h-7 cursor-pointer"
                 />
               </div>
-              {selectedAppointment?.documentUrl ? (
-                <Document
-                  file={selectedAppointment.documentUrl}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  className="pdf-document"
-                >
-                  {Array.from(new Array(numPages), (el, index) => (
-                    <Page
-                      key={`page_${index + 1}`}
-                      pageNumber={index + 1}
-                      width={750}
-                    />
-                  ))}
-                </Document>
-              ) : (
-                <p className="text-center text-gray-500">ไม่พบเอกสาร</p>
-              )}
+              {/* เพิ่มส่วนแสดงเรื่องที่ต้องการปรึกษา */}
+              <div className="mb-6">
+                <h3 className="text-xl mb-4">เรื่องที่ต้องการปรึกษา</h3>
+                <div className="bg-[#F9F5F3] p-6 rounded border border-[#D4C7BD]">
+                  <p>{selectedAppointment?.user_topic || "ไม่มีรายละเอียด"}</p>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-xl mb-4">เอกสารเบื้องต้น</h3>
+                <div className="border border-[#D4C7BD] rounded-lg p-4 bg-[#F9F5F3] overflow-x-auto">
+                  <div className="max-w-[750px] mx-auto">
+                    {selectedAppointment?.documentUrl ? (
+                      <Document
+                        file={selectedAppointment.documentUrl}
+                        onLoadSuccess={onDocumentLoadSuccess}
+                        className="pdf-document"
+                      >
+                        {Array.from(new Array(numPages), (el, index) => (
+                          <Page
+                            key={`page_${index + 1}`}
+                            pageNumber={index + 1}
+                            width={700}
+                            className="mb-4"
+                          />
+                        ))}
+                      </Document>
+                    ) : (
+                      <p className="text-center text-gray-500 py-4">
+                        ไม่พบเอกสาร
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

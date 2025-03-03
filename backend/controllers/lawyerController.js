@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
 import caseModel from "../models/caseModel.js";
 import courtModel from "../models/court.js";
+import { supabase } from "../config/supabase.js";
 
 const lawyerList = async (req, res) => {
   try {
@@ -151,11 +152,20 @@ const updateLawyerProfile = async (req,res) => {
 }
 
 //API to add case from lawyer panel
-const addCase =  async (req,res) => {
+const addCase = async (req, res) => {
   try {
-    const {caseNumber,courtName,courtLevel,caseCompletionDate,caseTitle,caseCategory,caseClientSide,caseOutcome,lawId} = req.body
-
-    
+    const {
+      caseNumber,
+      courtName,
+      courtLevel,
+      caseCompletionDate,
+      caseTitle,
+      caseCategory,
+      caseClientSide,
+      caseOutcome,
+      lawId,
+    } = req.body;
+    const file = req.file;
 
     console.log("Destructured values:", {
       caseNumber,
@@ -166,16 +176,50 @@ const addCase =  async (req,res) => {
       caseCategory,
       caseClientSide,
       caseOutcome,
-      lawId
+      lawId,
     });
-    
 
-    if (!caseNumber || !courtName || !courtLevel || !caseCompletionDate || !caseTitle || !caseCategory || !caseClientSide || !caseOutcome  ) {
-      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน"})
+    if (
+      !caseNumber ||
+      !courtName ||
+      !courtLevel ||
+      !caseCompletionDate ||
+      !caseTitle ||
+      !caseCategory ||
+      !caseClientSide ||
+      !caseOutcome
+    ) {
+      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
     }
 
     // ดึงข้อมูลทนาย มาเก็บไว้ทำให้รู้ว่า case นี้เป็นของทนายคนไหน
-    const lawyerData = await lawyerModel.findById(lawId).select("-password")
+    const lawyerData = await lawyerModel.findById(lawId).select("-password");
+
+    // อัพโหลดไฟล์ไป Supabase
+    let documentUrl = null;
+    if (file) {
+      const fileName = `${Date.now()}.pdf`; // เปลี่ยนชื่อไฟล์ให้เป็นแค่ timestamp
+
+      const { data, error } = await supabase.storage
+        .from("document")
+        .upload(fileName, file.buffer, {
+          contentType: "application/pdf",
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("Supabase upload error:", error);
+        throw new Error("ไม่สามารถอัพโหลดไฟล์ได้");
+      }
+
+      // สร้าง URL แบบใหม่
+      const { data: urlData } = await supabase.storage
+        .from("document")
+        .createSignedUrl(fileName, 60 * 60 * 24 * 365); // URL หมดอายุใน 7 วัน
+
+      documentUrl = urlData.signedUrl;
+    }
 
     const caseData = {
       caseNumber,
@@ -188,19 +232,19 @@ const addCase =  async (req,res) => {
       createAt: Date.now(),
       caseCompletionDate,
       lawId,
-      lawyerData
-    }
+      lawyerData,
+      caseDocument: documentUrl
+    };
 
     const newCase = new caseModel(caseData);
-    await newCase.save()
+    await newCase.save();
 
-    res.json({ success: true, message: "บันทึกข้อมูลสำเร็จ"})
-
+    res.json({ success: true, message: "บันทึกข้อมูลสำเร็จ" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
-}
+};
 
 //API to get lawyer cases from lawyer panel
 const lawyerCases = async (req,res) => {

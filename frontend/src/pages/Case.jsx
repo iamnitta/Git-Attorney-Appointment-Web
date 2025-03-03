@@ -2,6 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+// ตั้งค่า worker โดยใช้ CDN ที่ถูกต้อง
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 const Case = () => {
   const rowsPerPage = 6; // จำนวนแถวที่ต้องการแสดงในแต่ละหน้า
@@ -12,7 +18,23 @@ const Case = () => {
   const [lawInfo, setLawInfo] = useState(null);
   const { lawId } = useParams();
 
-  const { lawyers, cases, getCases, slotDateFormat, appointments, getAppoinetments } = useContext(AppContext);
+  //จัดการไฟล์
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+
+  const {
+    lawyers,
+    cases,
+    getCases,
+    slotDateFormat,
+    appointments,
+    getAppoinetments,
+  } = useContext(AppContext);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
 
   const fetchLawInfo = async () => {
     const lawInfo = lawyers.find((law) => law._id === lawId);
@@ -26,15 +48,15 @@ const Case = () => {
 
   useEffect(() => {
     if (lawInfo) {
-      getCases(lawInfo._id)
+      getCases(lawInfo._id);
     }
-  }, [lawInfo,])
+  }, [lawInfo]);
 
   useEffect(() => {
     if (lawId) {
       getAppoinetments(lawId);
     }
-  }, [lawId,]);
+  }, [lawId]);
 
   useEffect(() => {
     // ตัวอย่างข้อมูลที่จะแสดงในตาราง
@@ -146,7 +168,7 @@ const Case = () => {
                   <p className="flex-1 lg:text-center text-dark-brown text-lg">
                     ว่าความมาแล้ว{" "}
                     <span className="text-white bg-primary rounded-full px-6 text-base">
-                      {appointments ? appointments.filter(appointments => appointments.isCompleted === true).length : 0}
+                      {cases ? cases.length : 0}
                     </span>{" "}
                     คดี
                   </p>
@@ -162,8 +184,14 @@ const Case = () => {
                     ชนะคิดเป็นร้อยละ{" "}
                     <span className="text-white bg-primary rounded-full px-4 text-base">
                       {cases && cases.length > 0
-                      ? Math.round((cases.filter(c => c.caseOutcome === "ชนะ").length / cases.length) * 100)
-                      : 0}%
+                        ? Math.round(
+                            (cases.filter((c) => c.caseOutcome === "ชนะ")
+                              .length /
+                              cases.length) *
+                              100
+                          )
+                        : 0}
+                      %
                     </span>
                   </p>
                 </div>
@@ -203,8 +231,8 @@ const Case = () => {
               </tr>
             </thead>
             <tbody>
-              {cases && cases
-                .map((data, index) => (
+              {cases &&
+                cases.map((data, index) => (
                   <tr
                     key={index}
                     className="bg-[#FFFFFF] border-b border-l border-r border-[#DADADA] hover:bg-gray-100"
@@ -212,7 +240,9 @@ const Case = () => {
                   >
                     <td className="p-3">{startIndex + index + 1}</td>
                     <td className="p-3">{data.caseNumber}</td>
-                    <td className="p-3">{slotDateFormat(data.caseCompletionDate)}</td>
+                    <td className="p-3">
+                      {slotDateFormat(data.caseCompletionDate)}
+                    </td>
                     <td className="p-3">{data.courtName}</td>
                     <td className="p-3">
                       <span
@@ -247,7 +277,18 @@ const Case = () => {
                         {data.caseOutcome}
                       </span>
                     </td>
-                    <td className="p-3">{data.case_document}</td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => {
+                          console.log("caseDocument:", data.caseDocument);
+                          setSelectedAppointment(data);
+                          setShowPdfModal(true);
+                        }}
+                        className="underline text-primary hover:text-dark-brown"
+                      >
+                        คลิก
+                      </button>
+                    </td>
                   </tr>
                 ))}
 
@@ -299,6 +340,43 @@ const Case = () => {
             {">"}
           </button>
         </div>
+
+        {showPdfModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+              <div className="flex justify-between mb-4">
+                <h2 className="text-2xl font-medium text-dark-brown">
+                  คำพิพากษา
+                </h2>
+                <img
+                  onClick={() => setShowPdfModal(false)}
+                  src={assets.Close_2}
+                  alt="ปิด"
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+
+              {selectedAppointment?.caseDocument ? ( // ใช้ caseDocument แทน documentUrl
+                <Document
+                  file={selectedAppointment.caseDocument}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  className="pdf-document"
+                >
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page
+                      key={`page_${index + 1}`}
+                      ç
+                      pageNumber={index + 1}
+                      width={750}
+                    />
+                  ))}
+                </Document>
+              ) : (
+                <p className="text-center text-gray-500">ไม่พบเอกสาร</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     )
   );
