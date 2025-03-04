@@ -4,6 +4,7 @@
  import lawyerModel from "../models/lawyerModel.js"
  import jwt from 'jsonwebtoken'
 import appointmentModel from "../models/appointmentModel.js"
+import reviewModel from "../models/review.js"
 
 
 //API for adding lawyer
@@ -116,5 +117,53 @@ const apppointmentsAdmin = async (req, res) => {
     }
 }
 
-export {addLawyer,loginAdmin,allLawyers, apppointmentsAdmin}
+//API to get all Review
+const allReviews = async (req,res) => {
+    try {
+        const reviews = await reviewModel.find({})
+        res.json({success: true, reviews})
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
+
+
+//API to confirm review
+const confirmReview = async (req,res) => {
+    try {
+        const { reviewId } = req.body
+
+        const review = await reviewModel.findByIdAndUpdate(reviewId, {isConfirm: true})
+
+        if(review){
+            res.json({success: true, message: 'อนุมัติเสร็จสิ้น'})
+        }else{
+            res.json({success: false, message: 'ไม่พบความคิดเห็น'})
+        }
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
+
+//API to cancel review
+const cancelReview = async (req,res) => {
+    try {
+        const { reviewId } = req.body
+
+        const review = await reviewModel.findByIdAndUpdate(reviewId, {isCancelled: true})
+
+        if(review){
+            res.json({success: true, message: 'อนุมัติเสร็จสิ้น'})
+        }else{
+            res.json({success: false, message: 'ไม่พบความคิดเห็น'})
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
+export {addLawyer,loginAdmin,allLawyers, apppointmentsAdmin, allReviews, confirmReview, cancelReview}
 

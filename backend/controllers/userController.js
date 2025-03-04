@@ -6,6 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 import appointmentModel from "../models/appointmentModel.js";
 import lawyerModel from "../models/lawyerModel.js";
 import { supabase } from "../config/supabase.js";
+import reviewModel from "../models/review.js";
 
 // API to register user
 const registerUser = async (req, res) => {
@@ -357,6 +358,62 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
+// API to add review
+const addReview = async (req, res) => {
+  try {
+    const { userId, lawId, appointmentId, rating, comment } = req.body;
+
+    console.log("Review data:", {
+      userId,
+      lawId,
+      appointmentId,
+      rating,
+      comment,
+    });
+
+    if (!userId || !lawId || !appointmentId || !rating || !comment) {
+      return res.json({ success: false, message: "ข้อมูลไม่ครบถ้วน" });
+    }
+
+    // ตรวจสอบว่าการนัดหมายนี้เป็นของผู้ใช้นี้จริงหรือไม่
+    const appointmentData = await appointmentModel.findById(appointmentId);
+    if (!appointmentData) {
+      return res.json({ success: false, message: "ไม่พบข้อมูลการนัดหมาย" });
+    }
+
+    if (appointmentData.userId !== userId) {
+      return res.json({ success: false, message: "ไม่มีสิทธิ์เพิ่มรีวิวนี้" });
+    }
+
+    // อัปเดตสถานะ isReviewed ของการนัดหมาย
+    await appointmentModel.findByIdAndUpdate(appointmentId, { isReviewed: true });
+
+    // ดึงข้อมูล user และ lawyer มาเก็บไว้
+    const userData = await userModel.findById(userId).select("-password")
+    const lawyerData = await lawyerModel.findById(lawId).select("-password")
+
+    const reviewData = {
+      rating,
+      comment,
+      createAt: new Date(),
+      userId,
+      lawId,
+      appointmentId,
+      userData: userData,
+      lawyerData: lawyerData,
+      appointmentData: appointmentData,
+    };
+
+    const newReview = new reviewModel(reviewData);
+    await newReview.save();
+
+    res.json({ success: true, message: "แสดงความคิดเห็นสำเร็จ" });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export {
   registerUser,
   loginUser,
@@ -365,4 +422,5 @@ export {
   bookAppointment,
   listAppointment,
   cancelAppointment,
+  addReview,
 };

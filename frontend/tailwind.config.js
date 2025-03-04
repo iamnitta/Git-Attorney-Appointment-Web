@@ -37,6 +37,16 @@ export default {
             transform: 'translateY(0)' 
           }
         },
+        popupClose: { // animation สำหรับ ปิด pop up
+          '0%': { 
+            opacity: '1',
+            transform: 'translateY(0)' 
+          },
+          '100%': { 
+            opacity: '0',
+            transform: 'translateY(100px)' 
+          }
+        },
         fadeIn: {  // animation สำหรับเปลี่ยนหน้า
           '0%': {
             opacity: '0',
@@ -61,7 +71,8 @@ export default {
       animation: {
         popup: 'popup 0.5s ease-out',
         fadeIn: 'fadeIn 0.5s ease-out',
-        slideDown: 'slideDown 0.3s ease-out'
+        slideDown: 'slideDown 0.3s ease-out',
+        popupClose: 'popupClose 0.5s ease-out ',
       }
     },
   },

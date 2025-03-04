@@ -4,23 +4,19 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AiFillStar } from "react-icons/ai";
+import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+// ตั้งค่า worker โดยใช้ CDN ที่ถูกต้อง
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 const MyAppointments = () => {
-  const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
-
-  //ฟังก์ชันเปิดปิด Pop Up
-  const openPopup = () => setShowPopup(true);
-  const closePopup = () => setShowPopup(false);
-
-  const [rating, setRating] = useState(0);
-
-  //ฟังก์ชันให้คะแนน
-  const handleRating = (rate) => {
-    setRating(rate);
-  };
-
   const { backendUrl, token, getLawyersData } = useContext(AppContext);
-
+  const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
+  const [status, setStatus] = useState("scheduled");
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('')
   const [appointments, setAppointments] = useState([]);
   const months = [
     " ",
@@ -37,6 +33,49 @@ const MyAppointments = () => {
     "พฤศจิกายน",
     "ธันวาคม",
   ];
+
+
+  //จัดการไฟล์
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+
+  //ฟังก์ชันเปิดปิด Pop Up
+  const openPopup = (appointment) => {
+    setSelectedAppointment(appointment)
+    setShowPopup(true)
+  };
+  const closePopup = () => {
+    setShowPopup(false)
+    setRating(0)
+  };
+
+  const submitReview = async () => {
+    try {
+      const {data} = await axios.post(backendUrl + '/api/user/add-review', {appointmentId: selectedAppointment._id, lawId: selectedAppointment.lawyerData._id, rating, comment},{headers: {token}})
+
+      if (data.success) {
+        toast.success(data.message)
+        closePopup()
+        getUserAppointments()
+      }else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error);
+    }
+  }
+
+  //ฟังก์ชันให้คะแนน
+  const handleRating = (rate) => {
+    setRating(rate);
+  };
+
+  // จัดการหน้าไฟล์
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
 
   //จัดรูปแบบวัน
   const slotDateFormat = (slotDate) => {
@@ -55,8 +94,6 @@ const MyAppointments = () => {
     }
     return `${hour}:00 - ${hour}:30`;
   };
-
-  const [status, setStatus] = useState("scheduled");
 
   const getUserAppointments = async () => {
     try {
@@ -209,40 +246,105 @@ const MyAppointments = () => {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm md:text-base font-medium mt-6 text-dark-brown">
-                      รายละเอียดเบื้องต้น
+                    <p className="text-base md:text-lg font-medium mt-6 text-dark-brown">
+                      รายละเอียด
                     </p>
                     <p className="text-sm md:text-base font-legular">
                       {item.user_topic}
                     </p>
 
-                    <a
-                      href="#"
-                      className="text-primary underline text-sm flex items-center"
+                    <button
+                      onClick={() => {
+                        console.log("documentUrl:", item.documentUrl);
+                        setSelectedAppointment(item);
+                        setShowPdfModal(true);
+                      }}
+                      className="underline text-primary hover:text-dark-brown text-left"
                     >
-                      <i className="icon-file-pdf"></i>ตัวอย่างข้อความ.pdf
-                    </a>
+                      เอกสารเบื้องต้น
+                    </button>
                   </div>
                 </div>
               </div>
 
               <div className="flex gap-2 mt-auto justify-end">
+                {status === "scheduled" && (
+                  <button
+                    onClick={() => cancelAppointment(item._id)}
+                    className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
+                  >
+                    ยกเลิกการนัดหมาย
+                  </button>
+                )}
                 <button
-                  onClick={() => cancelAppointment(item._id)}
-                  className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
+                  className={`h-10 px-4 py-2 text-white text-sm rounded w-48 ${
+                    status === "scheduled" || item.isReviewed
+                      ? "bg-[#DADADA] cursor-not-allowed"
+                      : "bg-[#A17F6B] hover:bg-[#8B6B59] transition"
+                  }`}
+                  onClick={status === "scheduled" || item.isReviewed ? null : () => openPopup(item)}
+                  disabled={status === "scheduled" || item.isReviewed}
                 >
-                  ยกเลิกการนัดหมาย
-                </button>
-                <button
-                  className="h-10 px-4 py-2 bg-[#DADADA] text-white text-sm rounded hover:bg-gray-400 transition w-40"
-                  onClick={openPopup}
-                >
-                  แสดงความคิดเห็น
+                  {item.isReviewed ? "แสดงความคิดเห็นแล้ว" : "แสดงความคิดเห็น"}
                 </button>
               </div>
             </div>
           ))}
       </div>
+
+      {/* เพิ่ม Modal PDF ตรงนี้ */}
+      {showPdfModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+            <div className="flex justify-between mb-8">
+              <h2 className="text-3xl font-medium text-dark-brown">
+                รายละเอียดการปรึกษา
+              </h2>
+              <img
+                onClick={() => setShowPdfModal(false)}
+                src={assets.Close_2}
+                alt="ปิด"
+                className="w-7 h-7 cursor-pointer"
+              />
+            </div>
+            {/* เพิ่มส่วนแสดงเรื่องที่ต้องการปรึกษา */}
+            <div className="mb-6">
+              <h3 className="text-xl mb-4">เรื่องที่ต้องการปรึกษา</h3>
+              <div className="bg-[#F9F5F3] p-6 rounded border border-[#D4C7BD]">
+                <p>{selectedAppointment?.user_topic || "ไม่มีรายละเอียด"}</p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <h3 className="text-xl mb-4">เอกสารเบื้องต้น</h3>
+              <div className="border border-[#D4C7BD] rounded-lg p-4 bg-[#F9F5F3] overflow-x-auto">
+                <div className="max-w-[750px] mx-auto">
+                  {selectedAppointment?.documentUrl ? (
+                    <Document
+                      file={selectedAppointment.documentUrl}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                      className="pdf-document"
+                    >
+                      {Array.from(new Array(numPages), (el, index) => (
+                        <Page
+                          key={`page_${index + 1}`}
+                          pageNumber={index + 1}
+                          width={700}
+                          className="mb-4"
+                        />
+                      ))}
+                    </Document>
+                  ) : (
+                    <p className="text-center text-gray-500 py-4">
+                      ไม่พบเอกสาร
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Pop Up สำหรับแสดงความคิดเห็นการนัดหมาย */}
       {showPopup && (
@@ -268,7 +370,7 @@ const MyAppointments = () => {
             <div className="flex items-center gap-4 p-4 bg-light-brown rounded-lg mb-4 border border-primary">
               <img
                 // src={lawInfo.image}
-                src={assets.Profile}
+                src={selectedAppointment.lawyerData.image}
                 alt="lawyer"
                 className="w-12 h-12 rounded-full"
               />
@@ -276,8 +378,7 @@ const MyAppointments = () => {
                 <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 justify-between">
                   <div className="flex flex-col gap-1">
                     <p className="font-medium text-dark-brown">
-                      {/* ทนาย {lawInfo.firstName} {lawInfo.lastName} */}
-                      ทนาย นพวัฒน์ พักตร์
+                       ทนาย {selectedAppointment.lawyerData.firstName} {selectedAppointment.lawyerData.lastName} 
                     </p>
                     <div className="flex gap-2 items-center mt-1 lg:mt-0">
                       <div className="flex flex-col lg:flex-row gap-1">
@@ -285,14 +386,14 @@ const MyAppointments = () => {
                           ความเชี่ยวชาญ
                         </p>
                         <div className="flex flex-wrap gap-1">
-                          {/* {lawInfo.speciality.map((spec, idx) => (
+                           {selectedAppointment.lawyerData.speciality.map((spec, idx) => (
                               <span
                                 key={idx}
                                 className="bg-gradient-to-r from-primary to-dark-brown text-white px-2 py-0.5 rounded-full text-xs"
                               >
                                 {spec}
                               </span>
-                            ))} */}
+                            ))} 
                         </div>
                       </div>
                     </div>
@@ -302,7 +403,7 @@ const MyAppointments = () => {
                       ค่าบริการ
                     </p>
                     <p className="text-primary text-sm">
-                      ขั้นต่ำ 500 บาท ต่อ 30 นาที
+                      ขั้นต่ำ {selectedAppointment.lawyerData.fees_detail} บาท ต่อ 30 นาที
                     </p>
                     {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
                   </div>
@@ -331,14 +432,14 @@ const MyAppointments = () => {
             <textarea
               className="w-full mt-2 px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               rows="3"
-              // value={user_topic}
-              // onChange={(e) => setUser_topic(e.target.value)}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
               placeholder="โปรดระบุความคิดเห็นต่อการให้บริการของทนายความ"
             />
 
             <div className="mt-6">
               <button
-                // onClick={}
+                onClick={submitReview}
                 className="px-4 py-1 bg-dark-brown text-white rounded"
               >
                 ส่งความคิดเห็น
@@ -347,6 +448,7 @@ const MyAppointments = () => {
           </div>
         </div>
       )}
+      
     </div>
   );
 };

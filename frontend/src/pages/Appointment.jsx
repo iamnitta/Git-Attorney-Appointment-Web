@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { assets } from "../assets/assets"; //เพิ่ม
+import { assets } from "../assets/assets"; 
 import th from "date-fns/locale/th";
 import Feedback from "../components/Feedback";
 import { toast } from "react-toastify";
@@ -13,7 +13,16 @@ registerLocale("th", th);
 
 const Appointment = () => {
   const { lawId } = useParams();
-  const { lawyers, backendUrl, token, getLawyersData, cases, getCases, appointments, getAppoinetments } = useContext(AppContext);
+  const {
+    lawyers,
+    backendUrl,
+    token,
+    getLawyersData,
+    cases,
+    getCases,
+    appointments,
+    getAppoinetments,
+  } = useContext(AppContext);
   const [tab, setTab] = useState("about");
 
   const navigate = useNavigate();
@@ -26,6 +35,7 @@ const Appointment = () => {
   const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
   const [user_topic, setUser_topic] = useState("");
   const [stats, setStats] = useState({ totalCases: 0, winRate: 0 });
+  const [isLoading, setIsLoading] = useState(false);
 
   // file
   const [file, setfile] = useState("");
@@ -184,6 +194,8 @@ const Appointment = () => {
       return navigate("/login");
     }
 
+    setIsLoading(true);
+
     try {
       const date = lawSlots[slotIndex][0].datetime;
 
@@ -241,20 +253,20 @@ const Appointment = () => {
   //คำนวนค่าของกล่อง case
   const calculateStats = (cases) => {
     if (!cases || cases.length === 0) return { totalCases: 0, winRate: 0 };
-  
+
     const totalCases = cases.length;
-    
+
     // นับจำนวนคดีที่ชนะ
     const wonCases = cases.filter(
-      caseItem => caseItem.caseOutcome === "ชนะ"
+      (caseItem) => caseItem.caseOutcome === "ชนะ"
     ).length;
-  
+
     // คำนวณอัตราการชนะเป็นเปอร์เซ็นต์
-    const winRate = totalCases > 0 ? Math.round((wonCases / totalCases) * 100) : 0;
-  
+    const winRate =
+      totalCases > 0 ? Math.round((wonCases / totalCases) * 100) : 0;
+
     return { totalCases, winRate };
   };
-  
 
   useEffect(() => {
     fetchLawInfo();
@@ -270,22 +282,22 @@ const Appointment = () => {
 
   useEffect(() => {
     if (lawInfo) {
-      getCases(lawInfo._id)
+      getCases(lawInfo._id);
     }
-  }, [lawInfo,])
+  }, [lawInfo]);
 
   useEffect(() => {
     if (cases) {
       const calculatedStats = calculateStats(cases);
       setStats(calculatedStats);
     }
-  }, [cases])
+  }, [cases]);
 
   useEffect(() => {
     if (lawId) {
       getAppoinetments(lawId);
     }
-  }, [lawId,]);
+  }, [lawId]);
 
   console.log(lawSlots);
 
@@ -408,7 +420,11 @@ const Appointment = () => {
               <p className="flex-1 lg:text-center text-dark-brown">
                 ให้คำปรึกษามาแล้ว{" "}
                 <span className="text-white bg-primary rounded-full px-6">
-                  {appointments ? appointments.filter(appointments => appointments.isCompleted === true).length : 0}
+                  {appointments
+                    ? appointments.filter(
+                        (appointments) => appointments.isCompleted === true
+                      ).length
+                    : 0}
                 </span>{" "}
                 ครั้ง
               </p>{" "}
@@ -425,7 +441,7 @@ const Appointment = () => {
                 {" "}
                 ว่าความมาแล้ว{" "}
                 <span className="text-white bg-primary rounded-full px-6">
-                {stats.totalCases}
+                  {stats.totalCases}
                 </span>{" "}
                 คดี
               </p>{" "}
@@ -441,7 +457,7 @@ const Appointment = () => {
               <p className="flex-1 lg:text-center text-dark-brown">
                 ชนะคิดเป็นร้อยละ{" "}
                 <span className="text-white bg-primary rounded-full px-4">
-                {stats.winRate}%
+                  {stats.winRate}%
                 </span>
               </p>{" "}
               {/* เพิ่มการดึงค่ามาแสดง */}
@@ -544,7 +560,7 @@ const Appointment = () => {
                   onClick={closePopup}
                   src={assets.Close_2}
                   alt="ปิด PopUp"
-                  className="w-7 h-7 cursor-pointer"
+                  className="w-7 h-7 cursor-pointer "
                 />
               </div>
 
@@ -728,11 +744,7 @@ const Appointment = () => {
                     {/* แสดงชื่อไฟล์ที่เลือก */}
                     {file && (
                       <div className="flex items-center space-x-1 text-sm text-gray-600">
-                        <img
-                          src={assets.File}
-                          alt=""
-                          className="w-5 h-5"
-                        />
+                        <img src={assets.File} alt="" className="w-5 h-5" />
                         <span>{file.name}</span>
                       </div>
                     )}
@@ -752,6 +764,16 @@ const Appointment = () => {
                   ยืนยันการนัดหมาย
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Loading Overlay */}
+        {isLoading && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+              <p className="mt-4 text-gray-600">กำลังบันทึกข้อมูลการนัดหมาย...</p>
             </div>
           </div>
         )}

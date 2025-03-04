@@ -14,7 +14,8 @@ const appointmentSchema = new mongoose.Schema({
     user_topic : {type: String, default: ""},
     documentUrl: {
         type: String // URL จาก Supabase
-    }
+    },
+    isReviewed: {type: Boolean, default: false}
     
 })
 
