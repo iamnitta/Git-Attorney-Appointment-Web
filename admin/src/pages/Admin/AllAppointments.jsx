@@ -228,7 +228,7 @@ const AllAppointments = () => {
           {/* กรองตามสถานะ */}
           <div>
             <p className="text-dark-brown mb-1">จำนวนตามสถานะ</p>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <button
                 onClick={() => handleSortStatusChange("pending")}
                 className={`px-4 py-2 rounded-lg flex items-center ${

@@ -115,9 +115,7 @@ const Lawyers = () => {
                     : navigate("/lawyers/กฎหมายแพ่ง")
                 }
                 className={`cursor-pointer hover:bg-dark-brown hover:text-white p-3 transition-all border-2 border-dark-brown text-dark-brown flex items-center justify-between rounded-lg md:h-full h-10 md:mr-0 mr-4 md:text-sm text-xs
-              ${
-                speciality === "กฎหมายแพ่ง" ? "text-white bg-dark-brown" : ""
-              }`}
+              ${speciality === "กฎหมายแพ่ง" ? "text-white bg-dark-brown" : ""}`}
               >
                 กฎหมายแพ่ง
                 <img
@@ -256,14 +254,22 @@ const Lawyers = () => {
                         ความเชี่ยวชาญ
                       </p>
                       <div className="flex flex-wrap gap-1">
-                        {item.speciality.slice(0, 2).map((spec, index) => (
-                          <p
-                            key={index}
-                            className="font-prompt text-xs bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-2 py-1"
-                          >
-                            {spec}
-                          </p>
-                        ))}
+                        {item.speciality
+                          .filter((spec) => spec === speciality)
+                          .concat(
+                            item.speciality.filter(
+                              (spec) => spec !== speciality
+                            )
+                          )
+                          .slice(0, 2)
+                          .map((spec, index) => (
+                            <p
+                              key={index}
+                              className="font-prompt text-xs bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-2 py-1"
+                            >
+                              {spec}
+                            </p>
+                          ))}
                         {item.speciality.length > 2 && (
                           <p className="font-prompt text-xs bg-dark-brown text-white rounded-full px-2 py-1">
                             +{item.speciality.length - 2}

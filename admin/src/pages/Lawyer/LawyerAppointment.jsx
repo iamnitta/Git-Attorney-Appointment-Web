@@ -30,6 +30,11 @@ const LawyerAppointment = () => {
   const [endDate, setEndDate] = useState("");
   const rowsPerPage = 7;
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCancelPopup, setShowCancelPopup] = useState(false); // สำหรับแสดง popup ยืนยันการยกเลิก
+  const [appointmentToCancel, setAppointmentToCancel] = useState(null); // สำหรับเก็บข้อมูลการนัดหมายที่ต้องการยกเลิก
+  const [showCompletePopup, setShowCompletePopup] = useState(false); // สำหรับแสดง popup ยืนยันการเสร็จสิ้น
+  const [showReasonPopup, setShowReasonPopup] = useState(false);
+ 
 
   // จัดการ popup
   const handleOpenPopup = (appointment) => {
@@ -40,6 +45,51 @@ const LawyerAppointment = () => {
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
+  };
+
+  // ฟังก์ชันสำหรับ popup ยกเลิกการนัดหมาย
+  const handleOpenCancelPopup = (appointment) => {
+    setSelectedAppointment(appointment);
+    setAppointmentToCancel(appointment);
+    setShowCancelPopup(true);
+  };
+
+  const handleCloseCancelPopup = () => {
+    setAppointmentToCancel(null);
+    setShowCancelPopup(false);
+  };
+
+  const handleConfirmCancel = () => {
+    if (appointmentToCancel) {
+      cancelAppointment(appointmentToCancel._id);
+      handleCloseCancelPopup();
+    }
+  };
+
+  // ฟังก์ชันสำหรับ popup ยืนยันการเสร็จสิ้น
+  const handleOpenCompletePopup = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowCompletePopup(true);
+  };
+
+  const handleCloseCompletePopup = () => {
+    setShowCompletePopup(false);
+  };
+
+  const handleConfirmComplete = () => {
+    if (selectedAppointment) {
+      completeAppointment(selectedAppointment._id);
+      handleCloseCompletePopup();
+    }
+  };
+
+  // ฟังก์ชันสำหรับ popup เหตุผลที่ยกเลิก
+  const handleOpenReasonPopup = (reason) => {
+    setShowReasonPopup(true);
+  };
+
+  const handleCloseReasonPopup = () => {
+    setShowReasonPopup(false);
   };
 
   // ฟังก์ชันสำหรับคำนวนจำนวนต่างๆ
@@ -329,6 +379,7 @@ const LawyerAppointment = () => {
           </div>
         </div>
 
+        {/* แสดงตารางการนัดหมาย */}
         <div className="bg-[#FFFFFF] rounded overflow-hidden mt-2">
           <table className="w-full border-collapse">
             <thead className="bg-[#D4C7BD]">
@@ -339,8 +390,8 @@ const LawyerAppointment = () => {
                 <th className="p-4 font-medium text-left">วันที่นัดหมาย</th>
                 <th className="p-4 font-medium text-left">เวลาที่นัดหมาย</th>
                 <th className="p-4 font-medium text-left">ค่าบริการ</th>
-                <th className="p-4 font-medium text-left">สถานะ</th>
                 <th className="p-4 font-medium text-left">รายละเอียด</th>
+                <th className="p-4 font-medium text-left">สถานะ</th>
                 <th className="p-4 font-medium text-left"></th>
               </tr>
             </thead>
@@ -355,6 +406,18 @@ const LawyerAppointment = () => {
                   <td className="p-4">{slotDateFormat(item.slotDate)}</td>
                   <td className="p-4">{slotTimeFormat(item.slotTime)}</td>
                   <td className="p-4">{item.fees}</td>
+                  <td className="p-4">
+                    <button
+                      onClick={() => {
+                        console.log("documentUrl:", item.documentUrl);
+                        setSelectedAppointment(item);
+                        setShowPdfModal(true);
+                      }}
+                      className="underline text-primary hover:text-dark-brown"
+                    >
+                      คลิก
+                    </button>
+                  </td>
                   <td className="p-4 text-left">
                     <span
                       className={` ${
@@ -372,43 +435,37 @@ const LawyerAppointment = () => {
                         : "รอปรึกษา"}
                     </span>
                   </td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => {
-                        console.log("documentUrl:", item.documentUrl);
-                        setSelectedAppointment(item);
-                        setShowPdfModal(true);
-                      }}
-                      className="underline text-primary hover:text-dark-brown"
-                    >
-                      คลิก
-                    </button>
-                  </td>
+
                   <td className="p-4">
                     {!item.isCompleted && !item.cancelled ? (
                       <div className="flex gap-2">
                         <button
-                          onClick={() => cancelAppointment(item._id)}
+                          onClick={() => handleOpenCancelPopup(item)}
                           className="border border-[#C5211D] text-[#C5211D] px-4 py-1 rounded-full hover:bg-[#C5211D] hover:text-white"
                         >
                           ยกเลิก
                         </button>
                         <button
-                          onClick={() => completeAppointment(item._id)}
+                          onClick={() => handleOpenCompletePopup(item)}
                           className="bg-green-700 text-white px-4 py-1 rounded-full hover:bg-green-900"
                         >
                           เสร็จสิ้น
                         </button>
                       </div>
+                    ) : !item.cancelled ? (
+                      <button
+                        onClick={() => handleOpenPopup(item)}
+                        className="bg-dark-brown text-white px-4 py-1 rounded-full hover:bg-[#2C1810]"
+                      >
+                        ใส่ค่าบริการ
+                      </button>
                     ) : (
-                      !item.cancelled && (
-                        <button
-                          onClick={() => handleOpenPopup(item)}
-                          className="bg-dark-brown text-white px-4 py-1 rounded-full hover:bg-[#2C1810]"
-                        >
-                          ใส่ค่าบริการ
-                        </button>
-                      )
+                      <button
+                        className="underline text-primary hover:text-dark-brown"
+                        onClick={() => handleOpenReasonPopup(item.cancelReason)}
+                      >
+                        คลิกดูเหตุผล
+                      </button>
                     )}
                   </td>
                 </tr>
@@ -434,7 +491,174 @@ const LawyerAppointment = () => {
           </table>
         </div>
 
-        {/*  Popup */}
+        {/*  Popup ยืนยันยกเลิกการนัดหมาย */}
+        {showCancelPopup && selectedAppointment && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg w-[550px]">
+              <div className="flex flex-row justify-between mb-4">
+                <h2 className="text-xl font-medium text-dark-brown">
+                  ยกเลิกการนัดหมาย
+                </h2>
+                <img
+                  onClick={handleCloseCancelPopup}
+                  src={assets.Close_2}
+                  alt="ปิด PopUp"
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+
+              <div className="text-[#DADADA]">
+                <hr />
+              </div>
+
+              {/* ข้อมูลการนัดหมายที่ต้องการยกเลิก */}
+              <div className="p-8">
+                <p className="text-dark-brown font-medium">
+                  ยืนยันว่าต้องการ{" "}
+                  <span className="text-[#C5211D] text-xl">ยกเลิก</span>{" "}
+                  การนัดหมายนี้
+                </p>
+                <div className="border border-primary rounded flex flex-row justify-between mt-2 ml-4 mr-4 p-4">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-dark-brown font-medium">การนัดหมาย</p>
+                    <p className="text-dark-brown font-medium">ลูกค้า</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <p className="text-primary">
+                      {slotDateFormat(selectedAppointment.slotDate)} |{" "}
+                      {slotTimeFormat(selectedAppointment.slotTime)}
+                    </p>
+                    <div className="flex items-center">
+                      <img
+                        src={selectedAppointment.userData.image}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full mr-3 object-cover"
+                      />
+                      <div>
+                        <p className="text-dark-brown">
+                          {selectedAppointment.userData.firstName}{" "}
+                          {selectedAppointment.userData.lastName}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* เหตุผลที่ยกเลิก */}
+                <p className="text-dark-brown font-medium mt-6">
+                  กรุณาเลือกเหตุผลที่{" "}
+                  <span className="text-[#C5211D] text-xl">ยกเลิก</span>{" "}
+                </p>
+                <div className="mt-2 ml-4 mr-4">
+                  <label className="flex items-center text-dark-brown text-sm mb-1">
+                    <input type="checkbox" name="reason1" className="mr-2" />
+                    ติดภารกิจศาลในเวลาดังกล่าว
+                  </label>
+                  <label className="flex items-center text-dark-brown text-sm mb-1">
+                    <input type="checkbox" name="reason1" className="mr-2" />
+                    ติดภารกิจสำคัญในเวลาดังกล่าว
+                  </label>
+                  <label className="flex items-center text-dark-brown text-sm mb-1">
+                    <input type="checkbox" name="reason1" className="mr-2" />
+                    อื่น ๆ
+                  </label>
+                  <input
+                    className="p-2 border border-[#DADADA] w-3/4 rounded text-sm ml-5"
+                    placeholder="กรุณาระบุเหตุผลอื่น ๆ"
+                    type="text"
+                  />
+                </div>
+              </div>
+              {/* ปุ่มปิดและยืนยันการยกเลิก */}
+              <div className="flex flex-row justify-end mt-8 gap-2">
+                <button
+                  onClick={handleCloseCancelPopup}
+                  className="px-8 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white"
+                >
+                  ปิด
+                </button>
+                <button
+                  onClick={handleConfirmCancel}
+                  className="px-6 py-1 bg-primary text-white rounded-full hover:bg-[#927663]"
+                >
+                  ยืนยัน
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/*  Popup ยืนยันว่าการนัดหมายเสร็จสิ้น */}
+        {showCompletePopup && selectedAppointment && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg w-[550px]">
+              <div className="flex flex-row justify-between mb-4">
+                <h2 className="text-xl font-medium text-dark-brown">
+                  ยืนยันว่าการนัดหมายเสร็จสิ้น
+                </h2>
+                <img
+                  onClick={handleCloseCompletePopup}
+                  src={assets.Close_2}
+                  alt="ปิด PopUp"
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+
+              <div className="text-[#DADADA]">
+                <hr />
+              </div>
+
+              <div className="p-8">
+                <p className="text-dark-brown font-medium">
+                  ยืนยันว่าการนัดหมายนี้{" "}
+                  <span className="text-[#397D54] text-xl">เสร็จสิ้น</span> แล้ว
+                </p>
+                <div className="border border-primary rounded flex flex-row justify-between mt-2 ml-4 mr-4 p-4">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-dark-brown font-medium">การนัดหมาย</p>
+                    <p className="text-dark-brown font-medium">ลูกค้า</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <p className="text-primary">
+                      {slotDateFormat(selectedAppointment.slotDate)} |{" "}
+                      {slotTimeFormat(selectedAppointment.slotTime)}
+                    </p>
+                    <div className="flex items-center">
+                      <img
+                        src={selectedAppointment.userData.image}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full mr-3 object-cover"
+                      />
+                      <div>
+                        <p className="text-dark-brown">
+                          {selectedAppointment.userData.firstName}{" "}
+                          {selectedAppointment.userData.lastName}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-end mt-8 gap-2">
+                <button
+                  onClick={handleCloseCompletePopup}
+                  className="px-8 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white"
+                >
+                  ปิด
+                </button>
+                <button
+                  onClick={handleConfirmComplete}
+                  className="px-6 py-1 bg-primary text-white rounded-full hover:bg-[#927663]"
+                >
+                  ยืนยัน
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/*  Popup สำหรับใส่ค่าบริการ */}
         {showPopup && selectedAppointment && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
             <div className="bg-white p-8 rounded-lg w-[500px]">
@@ -525,15 +749,17 @@ const LawyerAppointment = () => {
               {/* ค่าบริการ */}
               <div className="mb-6 ">
                 <div className="flex items-center mt-4 ">
-                  <p className="text-lg mr-4">ค่าบริการ</p>
+                  <p className="text-lg mr-4 text-dark-brown">ค่าบริการ</p>
                   <input
                     type="number"
                     value={fees}
                     onChange={(e) => setFees(Number(e.target.value))}
-                    className="w-32 p-2 rounded-lg text-left bg-[#F7F7F7] border border-[#E5E5E5]"
+                    className="w-32 p-2 rounded-lg text-left bg-[#F7F7F7] border border-[#E5E5E5] text-dark-brown"
                   />
-                  <p className="ml-4">บาท</p>
+                  <p className="ml-4 text-dark-brown">บาท</p>
                 </div>
+                <p className="text-[#757575] text-sm mt-4">*หักค่าธรรมเนียมของสำนักงาน 10% จากค่าบริการที่ได้รับ</p>
+                <p className="text-dark-brown mt-2">ค่าบริการคงเหลือที่ได้รับ</p>
               </div>
 
               {/* ปุ่ม confirm */}
@@ -550,13 +776,14 @@ const LawyerAppointment = () => {
             </div>
           </div>
         )}
+
         {/* เพิ่ม Modal PDF ตรงนี้ */}
         {showPdfModal && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
             <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
               <div className="flex justify-between mb-8">
-                <h2 className="text-3xl font-medium text-dark-brown">
-                  รายละเอียดการปรึกษา
+                <h2 className="text-xl font-medium text-dark-brown">
+                  รายละเอียดการนัดหมาย
                 </h2>
                 <img
                   onClick={() => setShowPdfModal(false)}
@@ -565,16 +792,59 @@ const LawyerAppointment = () => {
                   className="w-7 h-7 cursor-pointer"
                 />
               </div>
+              <div className="p-4 rounded border border-[#D4C7BD] flex flex-row gap-20 mt-2 mb-4">
+                <div className="mb-6 ">
+                  <div className="flex items-center mb-3">
+                    <p className="text-lg text-dark-brown font-medium">
+                      การนัดหมาย
+                    </p>
+                  </div>
+                  <p className="text-gray-600 text-primary">
+                    {slotDateFormat(selectedAppointment.slotDate)} |{" "}
+                    {slotTimeFormat(selectedAppointment.slotTime)}
+                  </p>
+                </div>
+
+                {/* ลูกค้า */}
+                <div className="">
+                  <p className="text-lg mb-2 text-dark-brown font-medium">
+                    ลูกค้า
+                  </p>
+                  <div className="flex items-center">
+                    <img
+                      src={selectedAppointment.userData.image}
+                      alt="Profile"
+                      className="w-16 h-16 rounded-full mr-5 object-cover"
+                    />
+                    <div>
+                      <p className="font-medium mb-1 text-dark-brown">
+                        {selectedAppointment.userData.firstName}{" "}
+                        {selectedAppointment.userData.lastName}
+                      </p>
+                      <p className="text-dark-brown text-sm">
+                        {selectedAppointment.userData.email} |{" "}
+                        {formatPhoneNumber(selectedAppointment.userData.phone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
               {/* เพิ่มส่วนแสดงเรื่องที่ต้องการปรึกษา */}
               <div className="mb-6">
-                <h3 className="text-xl mb-4">เรื่องที่ต้องการปรึกษา</h3>
+                <p className="text-dark-brown text-lg font-medium mb-4">
+                  เรื่องที่ต้องการปรึกษา
+                </p>
                 <div className="bg-[#F9F5F3] p-6 rounded border border-[#D4C7BD]">
-                  <p>{selectedAppointment?.user_topic || "ไม่มีรายละเอียด"}</p>
+                  <p className="text-dark-brown">
+                    {selectedAppointment?.user_topic || "ไม่มีรายละเอียด"}
+                  </p>
                 </div>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-xl mb-4">เอกสารเบื้องต้น</h3>
+                <p className="text-dark-brown text-lg font-medium mb-4">
+                  เอกสารเบื้องต้น
+                </p>
                 <div className="border border-[#D4C7BD] rounded-lg p-4 bg-[#F9F5F3] overflow-x-auto">
                   <div className="max-w-[750px] mx-auto">
                     {selectedAppointment?.documentUrl ? (
@@ -593,12 +863,37 @@ const LawyerAppointment = () => {
                         ))}
                       </Document>
                     ) : (
-                      <p className="text-center text-gray-500 py-4">
-                        ไม่พบเอกสาร
+                      <p className="text-center text-dark-brown py-4">
+                        ไม่มีเอกสาร
                       </p>
                     )}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/*  Popup สำหรับเหตุผลที่ยกเลิก */}
+        {showReasonPopup && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg w-[500px]">
+              <div className="flex flex-row justify-between mb-4">
+                <h2 className="text-xl font-medium text-dark-brown">
+                  เหตุผลการยกเลิก
+                </h2>
+                <img
+                  onClick={handleCloseReasonPopup}
+                  src={assets.Close_2}
+                  alt="ปิด PopUp"
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+              <div className="text-[#DADADA]">
+                <hr />
+              </div>
+              <div className="p-8">
+                <p className="text-dark-brown font-medium">เหตุผลการยกเลิก</p>
               </div>
             </div>
           </div>
