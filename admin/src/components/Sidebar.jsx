@@ -161,10 +161,10 @@ const Sidebar = () => {
                     isActive ? "bg-brown-lawyerpic" : ""
                   }`
                 }
-                to={"/lawyer-profile"}
+                to={"/lawyer-case"}
               >
-                <img src={assets.Profile_Lawyer} alt="" className="w-6 h-6" />
-                <p>โปรไฟล์</p>
+                <img src={assets.Case_Lawyer} alt="" className="w-6 h-6" />
+                <p>ข้อมูลการว่าความ</p>
               </NavLink>
 
               <NavLink
@@ -173,10 +173,10 @@ const Sidebar = () => {
                     isActive ? "bg-brown-lawyerpic" : ""
                   }`
                 }
-                to={"/lawyer-case"}
+                to={"/lawyer-profile"}
               >
-                <img src={assets.Case_Lawyer} alt="" className="w-6 h-6" />
-                <p>ข้อมูลการว่าความ</p>
+                <img src={assets.Profile_Lawyer} alt="" className="w-6 h-6" />
+                <p>โปรไฟล์</p>
               </NavLink>
             </ul>
           </div>

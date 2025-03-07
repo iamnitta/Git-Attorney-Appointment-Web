@@ -222,10 +222,10 @@ const Case = () => {
                   หมวดหมู่
                 </th>
                 <th className="p-3 w-200 text-left text-dark-brown">
-                  ฝั่งลูกความ
+                  ฝั่งของลูกความ
                 </th>
                 <th className="p-3 w-200 text-left text-dark-brown">ผลคดี</th>
-                <th className="p-3 w-200 text-left text-dark-brown">
+                <th className="p-3 w-200 text-center text-dark-brown">
                   คำพิพากษา
                 </th>
               </tr>
@@ -248,11 +248,11 @@ const Case = () => {
                       <span
                         className={`px-4 rounded ${
                           data.courtLevel === "ศาลชั้นต้น"
-                            ? "text-primary bg-primary bg-opacity-20"
+                            ? "text-[#D47966] bg-[#D47966] bg-opacity-30"
                             : data.courtLevel === "ศาลอุทธรณ์"
-                            ? "text-[#6B4226] bg-[#6B4226] bg-opacity-15"
+                            ? "text-[#1975A4] bg-[#1975A4] bg-opacity-30"
                             : data.courtLevel === "ศาลฎีกา"
-                            ? "text-dark-brown bg-dark-brown bg-opacity-15"
+                            ? "text-[#7C3D5F] bg-[#7C3D5F] bg-opacity-30"
                             : ""
                         }`}
                       >
@@ -277,17 +277,17 @@ const Case = () => {
                         {data.caseOutcome}
                       </span>
                     </td>
-                    <td className="p-3">
-                      <button
+                    <td className="px-3 py-4 flex items-center justify-center">
+                      <img
                         onClick={() => {
                           console.log("caseDocument:", data.caseDocument);
                           setSelectedAppointment(data);
                           setShowPdfModal(true);
                         }}
-                        className="underline text-primary hover:text-dark-brown"
-                      >
-                        คลิก
-                      </button>
+                        src={assets.File_Icon}
+                        alt="ดูเอกสาร"
+                        className="w-7 h-7 cursor-pointer"
+                      />
                     </td>
                   </tr>
                 ))}
@@ -343,10 +343,10 @@ const Case = () => {
 
         {showPdfModal && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+            <div className="bg-white p-8 rounded-lg w-[850px] h-[90vh] overflow-y-auto">
               <div className="flex justify-between mb-4">
-                <h2 className="text-2xl font-medium text-dark-brown">
-                  คำพิพากษา
+                <h2 className="text-xl font-medium text-dark-brown">
+                  เอกสารคำพิพากษา
                 </h2>
                 <img
                   onClick={() => setShowPdfModal(false)}
@@ -356,24 +356,28 @@ const Case = () => {
                 />
               </div>
 
-              {selectedAppointment?.caseDocument ? ( // ใช้ caseDocument แทน documentUrl
-                <Document
-                  file={selectedAppointment.caseDocument}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  className="pdf-document"
-                >
-                  {Array.from(new Array(numPages), (el, index) => (
-                    <Page
-                      key={`page_${index + 1}`}
-                      ç
-                      pageNumber={index + 1}
-                      width={750}
-                    />
-                  ))}
-                </Document>
-              ) : (
-                <p className="text-center text-gray-500">ไม่พบเอกสาร</p>
-              )}
+              <div className="border border-[#D4C7BD] rounded-lg p-4 bg-[#F9F5F3] overflow-x-auto">
+                <div className="max-w-[750px] mx-auto">
+                  {selectedAppointment?.caseDocument ? ( // ใช้ caseDocument แทน documentUrl
+                    <Document
+                      file={selectedAppointment.caseDocument}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                      className="pdf-document"
+                    >
+                      {Array.from(new Array(numPages), (el, index) => (
+                        <Page
+                          key={`page_${index + 1}`}
+                          ç
+                          pageNumber={index + 1}
+                          width={750}
+                        />
+                      ))}
+                    </Document>
+                  ) : (
+                    <p className="text-center text-dark-brown">ไม่มีเอกสารคำพิพากษา</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}

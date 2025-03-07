@@ -235,7 +235,7 @@ const AddLawyer = () => {
           ลงทะเบียนทนายความ
         </h1>
       </div>
-      <div className="bg-[#F7F7F7] w-full max-w-7xl min-h-[800px] mt-2 mx-auto px-20 py-10 mb-10 rounded">
+      <div className="bg-[#F7F7F7] w-[1150px] max-w-7xl min-h-[800px] mt-2 mx-auto px-20 py-10 mb-10 rounded">
         <form onSubmit={onSubmitHandler} className="mt-5">
           <div className="flex items-start">
             {/* รูป*/}
@@ -274,7 +274,7 @@ const AddLawyer = () => {
             </div>
           </div>
 
-          {/* กล่องกรอกข้อมูลฟอร์ม*/}
+          {/* กล่องกรอกข้อมูลฟอร์ม */}
           <div className="w-full space-y-4">
             <div>
               <p className="text-dark-brown text-xl mb-5 mt-10">
@@ -367,7 +367,7 @@ const AddLawyer = () => {
             </div>
           </div>
 
-          {/* กล่องข้างล่าง*/}
+          {/* เลขที่ใบอนุญาตว่าความ, บัตรประชาชน */}
           <div>
             <p className="text-dark-brown text-xl mb-5 mt-10">ข้อมูลการทำงาน</p>
           </div>
@@ -395,6 +395,7 @@ const AddLawyer = () => {
             </div>
           </div>
 
+          {/* เวลาให้บริการ */}
           <div>
             <p className="text-dark-brown text-lg mb-2 mt-10">เวลาให้บริการ</p>
 
@@ -496,18 +497,20 @@ const AddLawyer = () => {
                   </div>
                 </div>
 
-                {/* แก้ไขเงื่อนไขการแสดงปุ่มลบ */}
-                <button
-                  type="button"
-                  onClick={() => handleDeleteSlot(index)}
-                  className="absolute -top-4 -right-4 flex items-center justify-center rounded-full text-white hover:scale-105 transition-transform duration-200"
-                >
-                  <img
-                    src={assets.Delete}
-                    alt="Delete Icon"
-                    className="w-6 h-6"
-                  />
-                </button>
+                {/* การแสดงปุ่มลบ */}
+                {index > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteSlot(index)}
+                    className="mt-2 rounded-full text-white hover:scale-105 transition-transform duration-200"
+                  >
+                    <img
+                      src={assets.Delete}
+                      alt="Delete Icon"
+                      className="w-6 h-6"
+                    />
+                  </button>
+                )}
               </div>
             ))}
 
@@ -522,6 +525,7 @@ const AddLawyer = () => {
             </div>
           </div>
 
+          {/* ความเชี่ยวชาญ */}
           <div>
             <p className="text-dark-brown text-lg mb-4 mt-10">ความเชี่ยวชาญ</p>
           </div>
@@ -642,6 +646,7 @@ const AddLawyer = () => {
             </label>
           </div>
 
+          {/* ประวัติการศึกษา */}
           <div>
             <p className="text-dark-brown text-lg mb-4 mt-10">
               ประวัติการศึกษา
@@ -721,7 +726,7 @@ const AddLawyer = () => {
               {index > 0 && (
                 <button
                   onClick={() => handleDeleteEducation(index)}
-                  className="absolute -top-4 -right-4 flex items-center justify-center rounded-full text-white hover:scale-105 transition-transform duration-200"
+                  className="mt-2 rounded-full text-white hover:scale-105 transition-transform duration-200"
                 >
                   <img
                     src={assets.Delete}
@@ -743,6 +748,7 @@ const AddLawyer = () => {
             </button>
           </div>
 
+          {/* ประวัติการทำงาน */}
           <div>
             <p className="text-dark-brown text-lg mb-4 mt-10">
               ประวัติการทำงาน
@@ -826,7 +832,7 @@ const AddLawyer = () => {
               {index > 0 && (
                 <button
                   onClick={() => handleDeleteWorkExperience(index)}
-                  className="absolute -top-4 -right-4 flex items-center justify-center rounded-full text-white hover:scale-105 transition-transform duration-200"
+                  className="mt-2 flex items-center justify-center rounded-full text-white hover:scale-105 transition-transform duration-200"
                 >
                   <img
                     src={assets.Delete}
@@ -881,7 +887,7 @@ const AddLawyer = () => {
             />
           </div>
 
-          {/* ปุ่มยืนยัน*/}
+          {/* ปุ่มยืนยัน */}
           <div className="flex justify-center mt-10">
             <button
               type="submit"

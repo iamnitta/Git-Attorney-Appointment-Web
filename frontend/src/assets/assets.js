@@ -50,6 +50,7 @@ import Close_1 from './Close_1.png'
 import Close_2 from './Close_2.png'
 import Upload_File from './Upload_File.png'
 import File from './File.png'
+import File_Icon from './File_Icon.png'
 
 export const assets = {
     HomePage,
@@ -103,7 +104,8 @@ export const assets = {
     Close_1,
     Close_2,
     Upload_File,
-    File
+    File,
+    File_Icon
 }
 
 export const specialityData = [

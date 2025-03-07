@@ -397,7 +397,7 @@ const LawyerAppointment = () => {
             </thead>
             <tbody>
               {currentAppointments.map((item, index) => (
-                <tr key={index} className="border-b border-[#D4C7BD]">
+                <tr key={index} className="border-b border-[#DADADA]">
                   <td className="p-4">
                     {(currentPage - 1) * rowsPerPage + index + 1}
                   </td>

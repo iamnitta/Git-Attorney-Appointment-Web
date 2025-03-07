@@ -32,6 +32,47 @@ const LawyerCase = () => {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
+
+  // จำนวนแถวต่อหน้า
+  const rowsPerPage = 7;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(cases.length / rowsPerPage);
+  const currentCases = cases.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber < 1) {
+      setCurrentPage(1);
+    } else if (pageNumber > totalPages) {
+      setCurrentPage(totalPages);
+    } else {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 mx-1 rounded ${
+            i === currentPage
+              ? "bg-[#D4C7BD] text-dark-brown"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
   // เพิ่มฟังก์ชันสำหรับจัดการเมื่อเลือกศาล
   const handleCourtSelect = (e) => {
     const selectedCourtName = e.target.value;
@@ -102,52 +143,151 @@ const LawyerCase = () => {
     }
   }, [lawyerToken]);
 
+  const totalCases = cases.length;
+  const wonCases = cases.filter(
+    (caseItem) => caseItem.caseOutcome === "ชนะ"
+  ).length;
+  const winPercentage = totalCases > 0 ? (wonCases / totalCases) * 100 : 0;
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl mb-4">ข้อมูลการว่าความ</h1>
-      <h2 className="text-xl mb-4">ทั้งหมด 5</h2>
-      <div className="bg-white shadow-md p-6">
-        <div className="flex justify-end items-center mb-4">
+    <div className="p-8 w-full">
+      <div className="flex items-start w-full">
+        <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
+          ข้อมูลการว่าความ
+        </h1>
+      </div>
+      <div className="">
+        <div className="flex flex-row items-center mb-4 gap-4">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="text-xl bg-dark-brown text-white px-4 py-2 rounded-full mb-4"
+            className="text-base bg-dark-brown text-white px-4 py-2 rounded-lg mb-2"
           >
             + เพิ่มบันทึกคดีความ
           </button>
+          <p className="text-dark-brown font-medium">
+            ทั้งหมด{" "}
+            <span className="bg-primary text-white px-4 rounded-full text-sm">
+              {totalCases}
+            </span>{" "}
+            คดี
+          </p>
+          <p className="text-dark-brown font-medium">
+            ชนะคิดเป็นร้อยละ{" "}
+            <span className="bg-primary text-white px-4 rounded-full text-sm">
+              {winPercentage.toFixed(2)}
+            </span>
+          </p>
         </div>
-        {/* Modal */}
+
+        <div className="flex flex-row justify-between items-end">
+          <div className="flex flex-row gap-2">
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
+                <option>ลำดับชั้นของศาล</option>
+                <option value="ศาลขั้นต้น">ศาลขั้นต้น</option>
+                <option value="ศาลอุทธรณ์">ศาลอุทธรณ์</option>
+                <option value="ศาลฎีกา">ศาลฎีกา</option>
+              </select>
+            </div>
+
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
+                <option>หมวดหมู่</option>
+                <option value="อาญา">อาญา</option>
+                <option value="แรงงาน">แรงงาน</option>
+                <option value="ยาเสพติด">ยาเสพติด</option>
+                <option value="แพ่ง">แพ่ง</option>
+                <option value="ทรัพย์สินทางปัญญา">ทรัพย์สินทางปัญญา</option>
+                <option value="ภาษี">ภาษี</option>
+                <option value="ผู้บริโภค">ผู้บริโภค</option>
+                <option value="ครอบครัวและมรดก">ครอบครัวและมรดก</option>
+                <option value="ล้มละลาย">ล้มละลาย</option>
+              </select>
+            </div>
+
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
+                <option>ฝั่งของลูกความ</option>
+                <option value="โจทก์">โจทก์</option>
+                <option value="จำเลย">จำเลย</option>
+                <option value="ผู้ร้อง">ผู้ร้อง</option>
+              </select>
+            </div>
+
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
+                <option>ผลคดี</option>
+                <option value="ชนะ">ชนะ</option>
+                <option value="แพ้">แพ้</option>
+                <option value="ยอมความ">ยอมความ</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <h1 className="text-sm text-dark-brown mb-4">พบ 1 จาก 7 คดีความ</h1>
+          </div>
+        </div>
+
+        {/* Popup เพิ่มบันทึกคดีความ */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg w-full max-w-3xl max-h-[90vh] flex flex-col">
+            <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] flex flex-col">
               <div className="relative p-6">
                 <div className="absolute right-8 top-1/2 -translate-y-1/2">
-                  <button
+                  <img
                     onClick={() => setIsModalOpen(false)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    ✕
-                  </button>
+                    src={assets.Close_2}
+                    alt="ปิด"
+                    className="w-7 h-7 cursor-pointer"
+                  />
                 </div>
-                <h2 className="text-2xl text-center">บันทึกการว่าความ</h2>
+                <h2 className="text-xl text-left text-dark-brown font-medium">
+                  บันทึกการว่าความ
+                </h2>
               </div>
 
-              <div className="p-8 pt-2 space-y-4 overflow-y-auto">
-                <div className="flex gap-4">
-                  <div className="w-1/4">
-                    <label className="block mb-2">หมายเลขคดี</label>
+              <div className="flex flex-row gap-2 px-12 mt-2 overflow-y-auto items-center">
+                <p className="text-dark-brown font-medium text-lg">
+                  รายละเอียดของคดีความ
+                </p>
+                <img src={assets.Case_Lawyer} alt="" className="w-5 h-5" />
+              </div>
+
+              <div className="mt-6 px-20 space-y-4 overflow-y-auto">
+                {/* หมายเลขคดี, เรื่อง */}
+                <div className="flex gap-6">
+                  <div className="w-1/2">
+                    <p className="block mb-1 text-dark-brown">หมายเลขคดี</p>
                     <input
                       type="text"
-                      className="w-full border rounded p-2"
-                      placeholder="หมายเลขคดี"
+                      className="w-full px-2 py-1.5 border border-[#EFEFEF] bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      placeholder="ประเภทคดี/เลขที่คดี/ปี พ.ศ. (เช่น อ./123/2567)"
                       value={caseNumber}
                       onChange={(e) => setCaseNumber(e.target.value)}
                     />
                   </div>
 
-                  <div className="w-2/4">
-                    <label className="block mb-2">ศาลที่พิจารณา</label>
+                  <div className="w-1/2">
+                    <label className="block mb-1 text-dark-brown">เรื่อง</label>
+                    <input
+                      type="text"
+                      className="w-full px-2 py-1.5 border border-[#EFEFEF] bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      placeholder="เรื่องของคดีความ (เช่น ลักทรัพย์)"
+                      value={caseTitle}
+                      onChange={(e) => setCaseTitle(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* ศาลที่พิจารณา, ลำดับชั้นของศาล */}
+                <div className="flex gap-6">
+                  <div className="w-1/2">
+                    <label className="block mb-1 text-dark-brown">
+                      ศาลที่พิจารณา
+                    </label>
                     <select
-                      className="w-full border rounded p-2"
+                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={courtName}
                       onChange={handleCourtSelect}
                     >
@@ -162,41 +302,27 @@ const LawyerCase = () => {
                     </select>
                   </div>
 
-                  <div className="w-1/4">
-                    <label className="block mb-2">ลำดับชั้นของศาล</label>
+                  <div className="w-1/2">
+                    <label className="block mb-1 text-dark-brown">
+                      ลำดับชั้นของศาล
+                    </label>
                     <input
                       type="text"
-                      className="w-full border rounded p-2 bg-gray-100"
+                      className="w-full px-2 py-1.5 bg-[#EFEFEF] border border-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={courtLevel}
                       readOnly
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-4">
-                  <div className="w-1/4">
-                    <label className="block mb-2">วันที่คดีเสร็จสิ้น</label>
-                    <input
-                      type="date"
-                      className="w-full border rounded p-2"
-                      value={caseCompletionDate}
-                      onChange={(e) => setCaseCompletionDate(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-2/4">
-                    <label className="block mb-2">เรื่อง</label>
-                    <input
-                      type="text"
-                      className="w-full border rounded p-2"
-                      placeholder="เรื่องของคดีความ"
-                      value={caseTitle}
-                      onChange={(e) => setCaseTitle(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-1/4">
-                    <label className="block mb-2">หมวดหมู่กฎหมาย</label>
+                {/* หมวดหมู่, ฝั่งของลูกความ, ผลคดี */}
+                <div className="flex gap-6">
+                  <div className="w-1/3">
+                    <label className="block mb-1 text-dark-brown">
+                      หมวดหมู่กฎหมาย
+                    </label>
                     <select
-                      className="w-full border rounded p-2"
+                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseCategory}
                       onChange={(e) => setCaseCategory(e.target.value)}
                     >
@@ -204,38 +330,41 @@ const LawyerCase = () => {
                         เลือกหมวดหมู่
                       </option>
                       <option value="อาญา">อาญา</option>
-                      <option value="แพ่ง">แพ่ง</option>
-                      <option value="ปกครอง">ปกครอง</option>
-                      <option value="ล้มละลาย">ล้มละลาย</option>
                       <option value="แรงงาน">แรงงาน</option>
-                      <option value="ภาษีอากร">ภาษีอากร</option>
+                      <option value="ยาเสพติด">ยาเสพติด</option>
+                      <option value="แพ่ง">แพ่ง</option>
                       <option value="ทรัพย์สินทางปัญญา">
                         ทรัพย์สินทางปัญญา
                       </option>
+                      <option value="ภาษี">ภาษี</option>
+                      <option value="ผู้บริโภค">ผู้บริโภค</option>
+                      <option value="ครอบครัวและมรดก">ครอบครัวและมรดก</option>
+                      <option value="ล้มละลาย">ล้มละลาย</option>
                     </select>
                   </div>
-                </div>
 
-                <div className="flex gap-4">
-                  <div className="w-1/4">
-                    <label className="block mb-2">ฝั่งของลูกความ</label>
+                  <div className="w-1/3">
+                    <label className="block mb-1 text-dark-brown">
+                      ฝั่งของลูกความ
+                    </label>
                     <select
-                      className="w-full border rounded p-2"
+                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseClientSide}
                       onChange={(e) => setCaseClientSide(e.target.value)}
                     >
                       <option value="" disabled>
                         เลือกฝั่งลูกความ
                       </option>
-                      <option value="โจทย์">โจทย์</option>
+                      <option value="โจทก์">โจทก์</option>
                       <option value="จำเลย">จำเลย</option>
                       <option value="ผู้ร้อง">ผู้ร้อง</option>
                     </select>
                   </div>
-                  <div className="w-1/4">
-                    <label className="block mb-2">ผลคดี</label>
+
+                  <div className="w-1/3">
+                    <label className="block mb-1 text-dark-brown">ผลคดี</label>
                     <select
-                      className="w-full border rounded p-2"
+                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseOutcome}
                       onChange={(e) => setCaseOutcome(e.target.value)}
                     >
@@ -244,28 +373,38 @@ const LawyerCase = () => {
                       </option>
                       <option value="ชนะ">ชนะ</option>
                       <option value="แพ้">แพ้</option>
-                      <option value="ประณีประณอม">ประณีประณอม</option>
+                      <option value="ยอมความ">ยอมความ</option>
                     </select>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block mb-2">เอกสารคำพิพากษา</label>
-                  <div className="w-full p-6 border-2 border-dashed border-[#DADADA] rounded-lg hover:border-dark-brown transition-colors">
+                {/* วันที่คดีเสร็จสิ้น */}
+                <div className="w-1/3">
+                  <div className="w-[229.34px]">
+                    <label className="block mb-1 text-dark-brown">
+                      วันที่คดีเสร็จสิ้น
+                    </label>
+                    <input
+                      type="date"
+                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      value={caseCompletionDate}
+                      onChange={(e) => setCaseCompletionDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* เอกสารคำพิพากษา */}
+                <div className="mb-4">
+                  <label className="block mb-2 text-dark-brown">
+                    เอกสารคำพิพากษา
+                  </label>
+                  <div className="w-full p-6 border border-[#EFEFEF] bg-[#EFEFEF] rounded-lg hover:border-primary transition-colors">
                     <div className="flex flex-col items-center justify-center space-y-3">
-                      <svg
-                        className="w-12 h-12 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
+                      <img
+                        src={assets.Upload_File}
+                        alt="Upload File"
+                        className="w-12 h-12 cursor-pointer"
+                      />
 
                       <label className="cursor-pointer">
                         <input
@@ -274,7 +413,7 @@ const LawyerCase = () => {
                           onChange={(e) => setFile(e.target.files[0])}
                           className="hidden"
                         />
-                        <span className="px-4 py-2 bg-dark-brown text-white rounded-full hover:bg-[#2C1810] transition-colors">
+                        <span className="px-2 py-1 text-dark-brown text-sm border border-dark-brown rounded hover:bg-dark-brown hover:text-white transition-colors">
                           เลือกไฟล์ PDF
                         </span>
                       </label>
@@ -285,99 +424,173 @@ const LawyerCase = () => {
                         </div>
                       )}
 
-                      <p className="text-xs text-gray-500">
-                        *รองรับไฟล์ PDF ขนาดไม่เกิน 5MB
+                      <p className="text-xs text-[#757575]">
+                        รองรับไฟล์ PDF ขนาดไม่เกิน 5MB
                       </p>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex justify-center mt-6">
-                  <button
-                    className="bg-dark-brown text-white px-6 py-2 rounded-full"
-                    onClick={onSubmitHandler}
-                  >
-                    บันทึกข้อมูล
-                  </button>
-                </div>
+              <div className="flex justify-center mb-8 mt-8">
+                <button
+                  className="bg-dark-brown text-white px-6 py-1 rounded"
+                  onClick={onSubmitHandler}
+                >
+                  บันทึกข้อมูล
+                </button>
               </div>
             </div>
           </div>
         )}
 
-        <table className="w-full border-collapse rounded overflow-hidden">
+        <table className="w-full bg-white border-collapse rounded overflow-hidden">
           <thead className="bg-[#D4C7BD]">
             <tr>
-              <th className="p-4 font-medium text-left"></th>
-              <th className="p-4 font-medium text-left">หมายเลขคดี</th>
-              <th className="p-4 font-medium text-left">วันที่เสร็จสิ้น</th>
-              <th className="p-4 font-medium text-left">ศาลที่พิจารณา</th>
-              <th className="p-4 font-medium text-left">ลำดับชั้นของศาล</th>
-              <th className="p-4 font-medium text-left">เรื่อง</th>
-              <th className="p-4 font-medium text-left">หมวดหมู่</th>
-              <th className="p-4 font-medium text-left">ฝั่งลูกความ</th>
-              <th className="p-4 font-medium text-left">ผลคดี</th>
-              <th className="p-4 font-medium text-left">คำพิพากษา</th>
+              <th className="px-3 py-4 font-medium text-left"></th>
+              <th className="px-3 py-4 font-medium text-left">หมายเลขคดี</th>
+              <th className="px-3 py-4 font-medium text-left">
+                วันที่เสร็จสิ้น
+              </th>
+              <th className="px-3 py-4 font-medium text-left">ศาลที่พิจารณา</th>
+              <th className="px-3 py-4 font-medium text-left">
+                ลำดับชั้นของศาล
+              </th>
+              <th className="px-3 py-4 font-medium text-left">เรื่อง</th>
+              <th className="px-3 py-4 font-medium text-left">หมวดหมู่</th>
+              <th className="px-3 py-4 font-medium text-left">
+                ฝั่งของลูกความ
+              </th>
+              <th className="px-3 py-4 font-medium text-left">ผลคดี</th>
+              <th className="px-3 py-4 font-medium text-left">คำพิพากษา</th>
+              <th className="px-3 py-4 font-medium text-left"></th>
             </tr>
           </thead>
           <tbody>
-            {cases.map((caseItem, index) => (
-              <tr key={caseItem._id} className="border-b border-[#D4C7BD]">
-                <td className="p-4">{index + 1}</td>
-                <td className="p-4">{caseItem.caseNumber}</td>
-                <td className="p-4">
+            {currentCases.map((caseItem, index) => (
+              <tr key={caseItem._id} className="border-b border-[#DADADA]">
+                <td className="px-3 py-4">
+                  {(currentPage - 1) * rowsPerPage + index + 1}
+                </td>
+                <td className="px-3 py-4">{caseItem.caseNumber}</td>
+                <td className="px-3 py-4">
                   {new Date(caseItem.caseCompletionDate).toLocaleDateString(
                     "th-TH"
                   )}
                 </td>
-                <td className="p-4">{caseItem.courtName}</td>
-                <td className="p-4">{caseItem.courtLevel}</td>
-                <td className="p-4">{caseItem.caseTitle}</td>
-                <td className="p-4">{caseItem.caseCategory}</td>
-                <td className="p-4">{caseItem.caseClientSide}</td>
-                <td className="p-4">
+                <td className="px-3 py-4">{caseItem.courtName}</td>
+                <td className="px-3 py-4">
                   <span
-                    className={`px-2 py-1 rounded ${
+                    className={`px-3 rounded ${
+                      caseItem.courtLevel === "ศาลขั้นต้น"
+                        ? "text-[#D47966] bg-[#D47966] bg-opacity-30"
+                        : caseItem.courtLevel === "ศาลอุทธรณ์"
+                        ? "text-[#1975A4] bg-[#1975A4] bg-opacity-30"
+                        : "text-[#7C3D5F] bg-[#7C3D5F] bg-opacity-30"
+                    }`}
+                  >
+                    {caseItem.courtLevel}
+                  </span>
+                </td>
+                <td className="px-3 py-4">{caseItem.caseTitle}</td>
+                <td className="px-3 py-4 text-primary">
+                  {caseItem.caseCategory}
+                </td>
+                <td className="px-3 py-4">{caseItem.caseClientSide}</td>
+                <td className="px-3 py-4">
+                  <span
+                    className={`px-6 rounded-full ${
                       caseItem.caseOutcome === "ชนะ"
-                        ? "bg-green-100"
+                        ? "text-[#008529] bg-[#008529] bg-opacity-20"
                         : caseItem.caseOutcome === "แพ้"
-                        ? "bg-red-100"
-                        : "bg-yellow-100"
+                        ? "text-[#C5211D] bg-[#C5211D] bg-opacity-20"
+                        : "text-[#007AFF] bg-[#007AFF] bg-opacity-20"
                     }`}
                   >
                     {caseItem.caseOutcome}
                   </span>
                 </td>
-                <td className="p-3">
-                  <button
+                <td className="px-3 py-4 flex items-center justify-center">
+                  <img
                     onClick={() => {
                       console.log("caseDocument:", caseItem.caseDocument);
                       setSelectedAppointment(caseItem);
                       setShowPdfModal(true);
                     }}
-                    className="underline text-primary hover:text-dark-brown"
-                  >
-                    คลิก
+                    src={assets.File_Lawyer_Icon}
+                    alt="ดูเอกสาร"
+                    className="w-7 h-7 cursor-pointer"
+                  />
+                </td>
+                <td className="px-3 py-4">
+                  <button className="flex items-center justify-center text-white hover:scale-105 transition-transform duration-200">
+                    <img
+                      src={assets.Delete_2}
+                      alt="Delete Icon"
+                      className="w-6 h-6"
+                    />
                   </button>
                 </td>
               </tr>
             ))}
+            {Array.from({ length: rowsPerPage - currentCases.length }).map(
+              (_, index) => (
+                <tr
+                  key={`empty-${index}`}
+                  className="border-b border-[#DADADA]"
+                  style={{ height: "65px" }}
+                >
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                  <td className="p-4">&nbsp;</td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
 
-        <div className="flex justify-center gap-2 mt-4">
-          <button className="px-3 py-1 border rounded">&lt;</button>
-          <button className="px-3 py-1 border rounded bg-gray-200">1</button>
-          <button className="px-3 py-1 border rounded">2</button>
-          <button className="px-3 py-1 border rounded">&gt;</button>
+        {/* Pagination */}
+        <div className="flex justify-end mt-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+              currentPage === 1
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {"<"}
+          </button>
+
+          {renderPageNumbers()}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+              currentPage === totalPages
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {">"}
+          </button>
         </div>
       </div>
       {showPdfModal && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+          <div className="bg-white p-8 rounded-lg w-[850px] h-[90vh] overflow-y-auto">
             <div className="flex justify-between mb-4">
-              <h2 className="text-2xl font-medium text-dark-brown">
-                คำพิพากษา
+              <h2 className="text-xl font-medium text-dark-brown">
+                เอกสารคำพิพากษา
               </h2>
               <img
                 onClick={() => setShowPdfModal(false)}
@@ -386,24 +599,30 @@ const LawyerCase = () => {
                 className="w-7 h-7 cursor-pointer"
               />
             </div>
-            {selectedAppointment?.caseDocument ? ( // ใช้ caseDocument แทน documentUrl
-              <Document
-                file={selectedAppointment.caseDocument}
-                onLoadSuccess={onDocumentLoadSuccess}
-                className="pdf-document"
-              >
-                {Array.from(new Array(numPages), (el, index) => (
-                  <Page
-                    key={`page_${index + 1}`}
-                    ç
-                    pageNumber={index + 1}
-                    width={750}
-                  />
-                ))}
-              </Document>
-            ) : (
-              <p className="text-center text-gray-500">ไม่พบเอกสาร</p>
-            )}
+            <div className="border border-[#D4C7BD] rounded-lg p-4 bg-[#F9F5F3] overflow-x-auto">
+              <div className="max-w-[750px] mx-auto">
+                {selectedAppointment?.caseDocument ? ( // ใช้ caseDocument แทน documentUrl
+                  <Document
+                    file={selectedAppointment.caseDocument}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    className="pdf-document"
+                  >
+                    {Array.from(new Array(numPages), (el, index) => (
+                      <Page
+                        key={`page_${index + 1}`}
+                        ç
+                        pageNumber={index + 1}
+                        width={750}
+                      />
+                    ))}
+                  </Document>
+                ) : (
+                  <p className="text-center text-dark-brown">
+                    ไม่มีเอกสารคำพิพากษา
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
