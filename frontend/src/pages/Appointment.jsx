@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { assets } from "../assets/assets"; 
+import { assets } from "../assets/assets";
 import th from "date-fns/locale/th";
 import Feedback from "../components/Feedback";
 import { toast } from "react-toastify";
@@ -22,6 +22,9 @@ const Appointment = () => {
     getCases,
     appointments,
     getAppoinetments,
+    reviews,
+    averageRating,
+    getLawyerReviews,
   } = useContext(AppContext);
   const [tab, setTab] = useState("about");
 
@@ -299,6 +302,12 @@ const Appointment = () => {
     }
   }, [lawId]);
 
+  useEffect(() => {
+    if (lawId) {
+      getLawyerReviews(lawId);
+    }
+  }, [lawId]);
+
   console.log(lawSlots);
 
   return (
@@ -344,6 +353,9 @@ const Appointment = () => {
                           ทนาย {lawInfo.firstName} {lawInfo.lastName}
                         </p>
                       </div>
+                      <p className="font-medium lg:text-2xl text-xl text-dark-brown">
+                        ดาว {averageRating}/5 ({reviews?.filter(review => review.isConfirm === true).length || 0})
+                      </p>
                       <p className="font-regular mt-5">
                         เลขที่ใบอนุญาตว่าความ {lawInfo.license_number}
                       </p>{" "}
@@ -773,7 +785,9 @@ const Appointment = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-gray-600">กำลังบันทึกข้อมูลการนัดหมาย...</p>
+              <p className="mt-4 text-gray-600">
+                กำลังบันทึกข้อมูลการนัดหมาย...
+              </p>
             </div>
           </div>
         )}

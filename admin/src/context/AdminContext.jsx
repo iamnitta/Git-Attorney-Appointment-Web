@@ -10,6 +10,7 @@ const AdminContextProvider = (props) => {
     const [aToken,setAToken] = useState(localStorage.getItem('aToken')?localStorage.getItem('aToken'):'')
     const [lawyers,setLawyers] = useState([])
     const [appointments, setAppointments] = useState([])
+    const [reviews, setReviews] = useState([])
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -47,12 +48,63 @@ const AdminContextProvider = (props) => {
         }
     }
 
+    const getAllReviews = async () => {
+        try {
+            const {data} = await axios.get(backendUrl + '/api/admin/all-review', {headers:{aToken}})
+
+            if(data.success) {
+                setReviews(data.reviews)
+                console.log(data.reviews)
+            }else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    const confirmReviews = async (reviewId) => {
+        try {
+            const {data} = await axios.post(backendUrl + '/api/admin/confirm-review', {reviewId}, {headers:{aToken}})
+
+            if (data.success) {
+                toast.success(data.message)
+                console.log(data.message)
+                getAllReviews()
+            }else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    
+    const cancelReviews = async (reviewId) => {
+        try {
+            const {data} = await axios.post(backendUrl + '/api/admin//cancel-review', {reviewId}, {headers:{aToken}})
+
+            if (data.success) {
+                toast.success(data.message)
+                console.log(data.message)
+                getAllReviews()
+            }else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
     const value = {
         aToken,setAToken,
         backendUrl,lawyers,
         getAllLawyers,
         appointments,setAppointments,
-        getAllAppointments
+        getAllAppointments,
+        reviews,setReviews,
+        getAllReviews,
+        confirmReviews,cancelReviews
     }
 
     return (

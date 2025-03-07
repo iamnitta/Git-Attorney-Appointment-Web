@@ -14,6 +14,8 @@ const AppContextProvider = (props) => {
     const [userData,setUserData] = useState(false)
     const [cases, setCases] = useState([])
     const [appointments, setAppointments] = useState([])
+    const [reviews, setReviews] = useState([])
+    const [averageRating, setAverageRating] = useState('')
 
     const months = [' ', 'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
 
@@ -65,7 +67,9 @@ const AppContextProvider = (props) => {
             if (data.success) {
                 setCases(data.cases)
                 console.log(data.cases)
-            } 
+            }else {
+                toast.error(data.message)
+            }
         } catch (error) {
             console.log(error)
             toast.error(error.message)
@@ -78,6 +82,60 @@ const AppContextProvider = (props) => {
             if (data.success) {
                 setAppointments(data.appointments)
                 console.log(data.appointments)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getLawyerReviews = async (lawId) => {
+        try {
+            const {data} = await axios.get(backendUrl + '/api/lawyer/comment-list', {params:{lawId}})
+
+            if(data.success) {
+                setReviews(data.reviews)
+                setAverageRating(data.averageRating)
+                console.log('รีวิวทั้งหมด:', data.reviews);
+                console.log('คะแนนเฉลี่ย:', data.averageRating);
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getAllReviews = async () => {
+        try {
+            const {data} = await axios.get(backendUrl + '/api/user/reviews-all')
+
+            if(data.success) {
+                setReviews(data.reviews)
+                setAverageRating(data.averageRating)
+                console.log('รีวิวทั้งหมด:', data.reviews);
+                console.log('คะแนนเฉลี่ย:', data.averageRating);
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getAllCases = async () => {
+        try {
+            const {data} = await axios.get(backendUrl + '/api/user/all-case')
+
+            if(data.success) {
+                setCases(data.cases)
+                console.log(data.cases)
+            }else {
+                toast.error(data.message)
             }
         } catch (error) {
             console.log(error)
@@ -93,7 +151,14 @@ const AppContextProvider = (props) => {
         loadUserProfileData,
         cases,getCases,
         slotDateFormat,
-        appointments,getAppoinetments
+        appointments,getAppoinetments,
+
+        reviews,setReviews,
+        getLawyerReviews,
+        averageRating,
+        getAllReviews,
+
+        getAllCases
     }
 
     useEffect(() => {

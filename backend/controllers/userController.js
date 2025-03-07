@@ -7,6 +7,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import lawyerModel from "../models/lawyerModel.js";
 import { supabase } from "../config/supabase.js";
 import reviewModel from "../models/review.js";
+import caseModel from "../models/caseModel.js";
 
 // API to register user
 const registerUser = async (req, res) => {
@@ -414,6 +415,42 @@ const addReview = async (req, res) => {
   }
 };
 
+// API to get lawyer reviews for user panel
+const getAllReviews = async (req, res) => {
+  try {
+
+    const reviews = await reviewModel.find({ isConfirm: true });
+
+    // คำนวณคะแนนเฉลี่ย
+    let averageRating = 0;
+    
+    if (reviews.length > 0) {
+      const totalRating = reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      averageRating = totalRating / reviews.length;
+    }
+
+    res.json({ success: true, reviews, averageRating });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+//API to get all cases from user panel
+const getallCases = async (req, res) => {
+  try {
+    const cases = await caseModel.find();
+
+    res.json({ success: true, cases });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export {
   registerUser,
   loginUser,
@@ -423,4 +460,6 @@ export {
   listAppointment,
   cancelAppointment,
   addReview,
+  getAllReviews,
+  getallCases
 };

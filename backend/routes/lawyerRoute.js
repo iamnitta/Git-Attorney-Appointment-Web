@@ -1,5 +1,5 @@
 import express from 'express'
-import { addCase, appointmentCancel, appointmentComplete, appointmentsLawyer, getAppointmentsLawyer, getCourts, getLawyerCases, lawyerCases, lawyerList, lawyerProfile, loginLawyer, updateFees, updateLawyerProfile } from '../controllers/lawyerController.js'
+import { addCase, appointmentCancel, appointmentComplete, appointmentsLawyer, getAppointmentsLawyer, getCourts, getLawyerCases, getLawyerReviews, lawyerCases, lawyerList, lawyerProfile, loginLawyer, updateFees, updateLawyerProfile } from '../controllers/lawyerController.js'
 import authLawyer from '../middlewares/authLawyer.js'
 import upload from '../middlewares/multer.js'
 import uploadPdf from '../middlewares/multerPdf.js'
@@ -20,5 +20,7 @@ lawyerRouter.get('/courts', authLawyer,getCourts)
 
 lawyerRouter.get('/cases-list',getLawyerCases)
 lawyerRouter.get('/appointments-list',getAppointmentsLawyer)
+
+lawyerRouter.get('/comment-list',getLawyerReviews)
 
 export default lawyerRouter

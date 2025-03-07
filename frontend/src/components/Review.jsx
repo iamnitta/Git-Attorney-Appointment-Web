@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { HiStar } from "react-icons/hi";
-import { reviews } from '../assets/assets'
+import { reviews } from "../assets/assets";
+import { AppContext } from "../context/AppContext";
+import { useParams } from "react-router-dom";
 
 const Review = () => {
+  const { reviews, averageRating, getAllReviews } = useContext(AppContext);
+
+  useEffect(() => {
+    getAllReviews();
+  }, []);
+
   return (
     <div className="bg-white px-4 lg:px-10">
       <div className="flex flex-col items-center gap-4 py-16 bg-white">
@@ -34,27 +42,35 @@ const Review = () => {
             spaceBetween: 10,
           },
         }}
-        
       >
-        {reviews.map((review) => (
-          <SwiperSlide key={review._id} className="hover:!scale-105 transition-transform duration-300">
+        {reviews
+        .filter((review) => review.rating === 5)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3)
+        .map((review) => (
+          <SwiperSlide
+            key={review._id}
+            className="hover:!scale-105 transition-transform duration-300"
+          >
             <div className="py-8 px-5 mx-8 mb-10 rounded-lg bg-light-brown flex flex-col justify-between min-h-[180px]">
               <div className="flex items-center gap-[13px]">
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={review.image}
+                  src={review.userData.image}
                   alt=""
                 />
                 <div>
                   <h4 className="leading-[30px] text-sm font-regular">
-                    {review.reviewer}
+                    {review.userData.firstName} {review.userData.lastName}
                   </h4>
                   <div className="flex items-center gap-[2px]">
                     {Array.from({ length: 5 }, (_, index) => (
                       <HiStar
                         key={index}
                         className={`w-[14px] h-5 ${
-                          index < review.rating ? "text-primary" : "text-stone-300"
+                          index < review.rating
+                            ? "text-primary"
+                            : "text-stone-300"
                         }`}
                       />
                     ))}

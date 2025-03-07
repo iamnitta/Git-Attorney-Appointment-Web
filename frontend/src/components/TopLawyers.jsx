@@ -1,11 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
 const TopLawyers = () => {
   const navigate = useNavigate();
-  const { lawyers } = useContext(AppContext);
+  const { lawyers, reviews, getAllReviews, getAllCases, cases} = useContext(AppContext);
 
+  // ฟังก์ชันคำนวณคะแนนเฉลี่ยของทนายแต่ละคน
+  const calculateAverageRating = (lawyerId) => {
+    const lawyerReviews = reviews.filter((review) => review.lawId === lawyerId);
+
+    if (lawyerReviews.length === 0) {
+      return 0; // ถ้าไม่มีรีวิว คืนค่า 0
+    }
+
+    const totalRating = lawyerReviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+    return (totalRating / lawyerReviews.length).toFixed(1); // คืนค่าทศนิยม 1 ตำแหน่ง
+  };
+
+  useEffect(() => {
+    getAllReviews();
+  }, []);
+
+  useEffect(() => {
+    getAllCases();
+  }, []);
   return (
     <div className="w-full bg-white">
       <div className="flex flex-col items-center gap-4 py-16 text-black md:mx-10">
@@ -37,7 +59,9 @@ const TopLawyers = () => {
                 </p>
 
                 <div className="flex gap-1 md:gap-2">
-                  <p className="font-prompt text-sm whitespace-nowrap">ความเชี่ยวชาญ</p>
+                  <p className="font-prompt text-sm whitespace-nowrap">
+                    ความเชี่ยวชาญ
+                  </p>
                   <div className="flex flex-wrap gap-1">
                     {item.speciality.slice(0, 2).map((spec, index) => (
                       <p
@@ -54,6 +78,24 @@ const TopLawyers = () => {
                     )}
                   </div>
                 </div>
+
+                <p className="font-prompt text-sm text-gray-600 flex items-center">
+                  <span className="text-yellow-500 mr-1">★</span>
+                  <span className="font-medium">
+                    {calculateAverageRating(item._id)}
+                  </span>
+                  <span className="mx-1">•</span>
+                  <span>
+                  ({reviews.filter((review) => review.lawId === item._id).length} รีวิว)
+                  </span>
+                </p>
+
+
+                <p className="font-prompt text-sm text-gray-600 flex items-center">
+                  <span>ว่าความมาแล้ว {cases.filter(caseItem => caseItem.lawId === item._id).length} คดี</span>
+                  <span>ชนะ {cases.filter(caseItem => caseItem.lawId === item._id && caseItem.caseOutcome === 'ชนะ').length} คดี</span>
+                </p>
+
               </div>
             </div>
           ))}

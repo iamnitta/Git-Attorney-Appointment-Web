@@ -8,8 +8,15 @@ const Lawyers = () => {
   const [filterLaw, setFilterLaw] = useState([]);
   const navigate = useNavigate();
 
-  const { lawyers } = useContext(AppContext);
+  const { lawyers, reviews, getAllReviews, getAllCases, cases } = useContext(AppContext);
 
+  useEffect(() => {
+    getAllReviews();
+  }, []);
+
+  useEffect(() => {
+    getAllCases();
+  }, []);
   const applyFilter = () => {
     if (speciality) {
       // กรองทนายที่มี speciality ตรงกับที่เลือก
@@ -20,6 +27,21 @@ const Lawyers = () => {
     } else {
       setFilterLaw(lawyers);
     }
+  };
+
+  // ฟังก์ชันคำนวณคะแนนเฉลี่ยของทนายแต่ละคน
+  const calculateAverageRating = (lawyerId) => {
+    const lawyerReviews = reviews.filter((review) => review.lawId === lawyerId);
+
+    if (lawyerReviews.length === 0) {
+      return 0; // ถ้าไม่มีรีวิว คืนค่า 0
+    }
+
+    const totalRating = lawyerReviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+    return (totalRating / lawyerReviews.length).toFixed(1); // คืนค่าทศนิยม 1 ตำแหน่ง
   };
 
   useEffect(() => {
@@ -277,6 +299,23 @@ const Lawyers = () => {
                         )}
                       </div>
                     </div>
+
+                    <div>
+                      <p className="font-prompt text-sm text-gray-600 flex items-center">
+                        <span className="text-yellow-500 mr-1">★</span>
+                        <span className="font-medium">{calculateAverageRating(item._id)}</span>
+                        <span className="mx-1">•</span>
+                        <span>({reviews.filter(review => review.lawId === item._id).length} รีวิว)</span>
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="font-prompt text-sm text-gray-600 flex items-center">
+                        <span>ว่าความมาแล้ว {cases.filter(caseItem => caseItem.lawId === item._id).length} คดี</span>
+                        <span>ชนะ {cases.filter(caseItem => caseItem.lawId === item._id && caseItem.caseOutcome === 'ชนะ').length} คดี</span>
+                      </p>
+                    </div>
+
                   </div>
                 </div>
               ))}
