@@ -315,7 +315,7 @@ const Appointment = () => {
       <div className="bg-white p-4 animate-fadeIn">
         <div className="mb-8 lg:w-[95%] mx-auto">
           <h1 className="text-2xl font-medium text-dark-brown">
-            นัดหมายทนายความ
+            ประวัติของทนายความ
           </h1>
         </div>
 
@@ -353,8 +353,12 @@ const Appointment = () => {
                           ทนาย {lawInfo.firstName} {lawInfo.lastName}
                         </p>
                       </div>
-                      <p className="font-medium lg:text-2xl text-xl text-dark-brown">
-                        ดาว {averageRating}/5 ({reviews?.filter(review => review.isConfirm === true).length || 0})
+                      <p className="font-medium text-[#757575]">
+                        <span className="text-yellow-500 mr-1 text-base">★</span>{" "}
+                        {averageRating.toFixed(1)}/5 (
+                        {reviews?.filter((review) => review.isConfirm === true)
+                          .length || 0}
+                        {" "}ความคิดเห็น)
                       </p>
                       <p className="font-regular mt-5">
                         เลขที่ใบอนุญาตว่าความ {lawInfo.license_number}
@@ -480,7 +484,7 @@ const Appointment = () => {
             href={`/case/${lawId}`}
             className="lg:px-8 px-6 mt-6 lg:mt-10 ml-4 mb-4 lg:text-base text-sm border text-dark-brown mr-4 rounded-full h-10 hover:bg-dark-brown hover:text-white flex items-center justify-center"
           >
-            ดูรายละเอียดการว่าความ
+            ดูข้อมูลการว่าความ
           </a>
         </div>
 

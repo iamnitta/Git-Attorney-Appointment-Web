@@ -127,9 +127,11 @@ const Case = () => {
   return (
     lawInfo && (
       <div className="p-4 animate-fadeIn">
-        <div className="mb-8 lg:w-[95%] mx-auto">
-          <h1 className="text-xl font-medium text-dark-brown">
-            รายละเอียดการว่าความ
+        <div className="mb-8 lg:w-[95%] mx-auto flex flex-row gap-2">
+          <button className="text-lg font-medium text-dark-brown text-opacity-70 hover:text-dark-brown">ประวัติของทนายความ</button>
+          <p className="text-lg font-medium text-dark-brown text-opacity-70"> {">"}</p>
+          <h1 className="text-lg font-medium text-dark-brown">
+            ข้อมูลการว่าความ
           </h1>
         </div>
 
@@ -200,7 +202,58 @@ const Case = () => {
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] rounded overflow-hidden lg:w-[95%] mx-auto mt-8">
+        {/* Filter */}
+        <div className="flex flex-row justify-between items-end lg:w-[95%] mx-auto mt-10">
+          <div className="flex flex-row gap-2">
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+                <option value="all">ลำดับชั้นของศาล</option>
+                <option value="ศาลขั้นต้น">ศาลขั้นต้น</option>
+                <option value="ศาลอุทธรณ์">ศาลอุทธรณ์</option>
+                <option value="ศาลฎีกา">ศาลฎีกา</option>
+              </select>
+            </div>
+
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+                <option value="all">หมวดหมู่</option>
+                <option value="อาญา">อาญา</option>
+                <option value="แรงงาน">แรงงาน</option>
+                <option value="ยาเสพติด">ยาเสพติด</option>
+                <option value="แพ่ง">แพ่ง</option>
+                <option value="ทรัพย์สินทางปัญญา">ทรัพย์สินทางปัญญา</option>
+                <option value="ภาษี">ภาษี</option>
+                <option value="ผู้บริโภค">ผู้บริโภค</option>
+                <option value="ครอบครัวและมรดก">ครอบครัวและมรดก</option>
+                <option value="ล้มละลาย">ล้มละลาย</option>
+              </select>
+            </div>
+
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+                <option value="all">ฝั่งของลูกความ</option>
+                <option value="โจทก์">โจทก์</option>
+                <option value="จำเลย">จำเลย</option>
+                <option value="ผู้ร้อง">ผู้ร้อง</option>
+              </select>
+            </div>
+
+            <div>
+              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+                <option value="all">ผลคดี</option>
+                <option value="ชนะ">ชนะ</option>
+                <option value="แพ้">แพ้</option>
+                <option value="ยอมความ">ยอมความ</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <h1 className="text-sm text-dark-brown mb-4">พบ 1 จาก 7 คดีความ</h1>
+          </div>
+        </div>
+
+        <div className="bg-[#FFFFFF] rounded overflow-hidden lg:w-[95%] mx-auto">
           <table className="w-full border-collapse">
             <thead className="bg-[#D4C7BD] border border-[#D4C7BD]">
               <tr>
@@ -374,7 +427,9 @@ const Case = () => {
                       ))}
                     </Document>
                   ) : (
-                    <p className="text-center text-dark-brown">ไม่มีเอกสารคำพิพากษา</p>
+                    <p className="text-center text-dark-brown">
+                      ไม่มีเอกสารคำพิพากษา
+                    </p>
                   )}
                 </div>
               </div>

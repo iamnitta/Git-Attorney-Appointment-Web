@@ -29,19 +29,18 @@ const LawyerCase = () => {
   const { backendUrl, lawyerToken, cases, getCases, courts, getCourts } =
     useContext(LawyerContext);
 
+  const [courtLevelFilter, setCourtLevelFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [clientSideFilter, setClientSideFilter] = useState("all");
+  const [caseOutcomeFilter, setCaseOutcomeFilter] = useState("all");
+
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
 
   // จำนวนแถวต่อหน้า
-  const rowsPerPage = 7;
+  const rowsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(cases.length / rowsPerPage);
-  const currentCases = cases.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber < 1) {
@@ -149,6 +148,24 @@ const LawyerCase = () => {
   ).length;
   const winPercentage = totalCases > 0 ? (wonCases / totalCases) * 100 : 0;
 
+  const filteredCases = cases.filter((caseItem) => {
+    return (
+      (courtLevelFilter === "all" ||
+        caseItem.courtLevel === courtLevelFilter) &&
+      (categoryFilter === "all" || caseItem.caseCategory === categoryFilter) &&
+      (clientSideFilter === "all" ||
+        caseItem.caseClientSide === clientSideFilter) &&
+      (caseOutcomeFilter === "all" ||
+        caseItem.caseOutcome === caseOutcomeFilter)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredCases.length / rowsPerPage);
+  const currentCases = filteredCases.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   return (
     <div className="p-8 w-full">
       <div className="flex items-start w-full">
@@ -157,7 +174,7 @@ const LawyerCase = () => {
         </h1>
       </div>
       <div className="">
-        <div className="flex flex-row items-center mb-4 gap-4">
+        <div className="flex flex-row items-center mb-4 gap-4 mt-4">
           <button
             onClick={() => setIsModalOpen(true)}
             className="text-base bg-dark-brown text-white px-4 py-2 rounded-lg mb-2"
@@ -179,11 +196,16 @@ const LawyerCase = () => {
           </p>
         </div>
 
-        <div className="flex flex-row justify-between items-end">
+        {/* Filter */}
+        <div className="flex flex-row justify-between items-end mt-10">
           <div className="flex flex-row gap-2">
             <div>
-              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
-                <option>ลำดับชั้นของศาล</option>
+              <select
+                className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4"
+                value={courtLevelFilter}
+                onChange={(e) => setCourtLevelFilter(e.target.value)}
+              >
+                <option value="all">ลำดับชั้นของศาล</option>
                 <option value="ศาลขั้นต้น">ศาลขั้นต้น</option>
                 <option value="ศาลอุทธรณ์">ศาลอุทธรณ์</option>
                 <option value="ศาลฎีกา">ศาลฎีกา</option>
@@ -191,8 +213,12 @@ const LawyerCase = () => {
             </div>
 
             <div>
-              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
-                <option>หมวดหมู่</option>
+              <select
+                className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                <option value="all">หมวดหมู่</option>
                 <option value="อาญา">อาญา</option>
                 <option value="แรงงาน">แรงงาน</option>
                 <option value="ยาเสพติด">ยาเสพติด</option>
@@ -206,8 +232,12 @@ const LawyerCase = () => {
             </div>
 
             <div>
-              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
-                <option>ฝั่งของลูกความ</option>
+              <select
+                className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4"
+                value={clientSideFilter}
+                onChange={(e) => setClientSideFilter(e.target.value)}
+              >
+                <option value="all">ฝั่งของลูกความ</option>
                 <option value="โจทก์">โจทก์</option>
                 <option value="จำเลย">จำเลย</option>
                 <option value="ผู้ร้อง">ผู้ร้อง</option>
@@ -215,8 +245,12 @@ const LawyerCase = () => {
             </div>
 
             <div>
-              <select className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4">
-                <option>ผลคดี</option>
+              <select
+                className="bg-white rounded-lg border-2 border-[#E7E7E7] px-4 py-2 mt-2 mb-4"
+                value={caseOutcomeFilter}
+                onChange={(e) => setCaseOutcomeFilter(e.target.value)}
+              >
+                <option value="all">ผลคดี</option>
                 <option value="ชนะ">ชนะ</option>
                 <option value="แพ้">แพ้</option>
                 <option value="ยอมความ">ยอมความ</option>
@@ -225,10 +259,11 @@ const LawyerCase = () => {
           </div>
 
           <div>
-            <h1 className="text-sm text-dark-brown mb-4">พบ 1 จาก 7 คดีความ</h1>
+            <h1 className="text-sm text-dark-brown mb-4">
+              พบ {filteredCases.length} จาก {totalCases} คดีความ
+            </h1>
           </div>
         </div>
-
         {/* Popup เพิ่มบันทึกคดีความ */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
