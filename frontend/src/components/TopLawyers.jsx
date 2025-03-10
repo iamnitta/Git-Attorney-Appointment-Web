@@ -4,7 +4,8 @@ import { AppContext } from "../context/AppContext";
 
 const TopLawyers = () => {
   const navigate = useNavigate();
-  const { lawyers, reviews, getAllReviews, getAllCases, cases} = useContext(AppContext);
+  const { lawyers, reviews, getAllReviews, getAllCases, cases } =
+    useContext(AppContext);
 
   // ฟังก์ชันคำนวณคะแนนเฉลี่ยของทนายแต่ละคน
   const calculateAverageRating = (lawyerId) => {
@@ -80,22 +81,50 @@ const TopLawyers = () => {
                 </div>
 
                 <p className="font-prompt text-sm text-gray-600 flex items-center">
-                  <span className="text-yellow-500 mr-1">★</span>
-                  <span className="font-medium">
-                    {calculateAverageRating(item._id)}
+                  <span className="text-yellow-500 mr-2">★</span>
+                  <span className="font-medium text-[#757575]">
+                    {Number(calculateAverageRating(item._id)).toFixed(1)}/5
                   </span>
-                  <span className="mx-1">•</span>
-                  <span>
-                  ({reviews.filter((review) => review.lawId === item._id).length} รีวิว)
+                  <span className="mx-1"></span>
+                  <span className="text-[#757575]">
+                    (
+                    {
+                      reviews.filter((review) => review.lawId === item._id)
+                        .length
+                    }
+                    )
                   </span>
                 </p>
 
+                <p className="font-prompt text-sm text-gray-600 flex items-center gap-2">
+                  <span className="text-sm text-[#757575]">
+                    ชนะคิดเป็นร้อยละ{" "}
+                  </span>
+                  <span className="border border-primary rounded-full px-2 text-primary bg-primary bg-opacity-20 text-xs">
+                    {(() => {
+                      const totalCases = cases.filter(
+                        (caseItem) => caseItem.lawId === item._id
+                      ).length;
+                      const wonCases = cases.filter(
+                        (caseItem) =>
+                          caseItem.lawId === item._id &&
+                          caseItem.caseOutcome === "ชนะ"
+                      ).length;
+                      const winPercentage =
+                        totalCases > 0 ? (wonCases / totalCases) * 100 : 0;
+                      return winPercentage.toFixed(2); // Display the percentage with 2 decimal places
+                    })()}{" "}
+                  </span>
 
-                <p className="font-prompt text-sm text-gray-600 flex items-center">
-                  <span>ว่าความมาแล้ว {cases.filter(caseItem => caseItem.lawId === item._id).length} คดี</span>
-                  <span>ชนะ {cases.filter(caseItem => caseItem.lawId === item._id && caseItem.caseOutcome === 'ชนะ').length} คดี</span>
+                  <span className="text-[#757575] text-sm">
+                    (
+                    {
+                      cases.filter((caseItem) => caseItem.lawId === item._id)
+                        .length
+                    }{" "}
+                    คดี)
+                  </span>
                 </p>
-
               </div>
             </div>
           ))}
