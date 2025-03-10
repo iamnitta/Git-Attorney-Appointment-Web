@@ -68,13 +68,15 @@ const AllAppointments = () => {
           return true;
         });
   };
-  
+
   // ฟังก์ชันสำหรับการคำนวณสถานะของนัดหมายที่กรองแล้ว
   const calculateFilteredStatusCount = (appointments) => {
     const completed = appointments.filter((item) => item.isCompleted).length;
-    const pending = appointments.filter((item) => !item.isCompleted && !item.cancelled).length;
+    const pending = appointments.filter(
+      (item) => !item.isCompleted && !item.cancelled
+    ).length;
     const cancelled = appointments.filter((item) => item.cancelled).length;
-  
+
     return {
       total: appointments.length,
       completed,
@@ -404,7 +406,9 @@ const AllAppointments = () => {
                       {item.isCompleted
                         ? "ปรึกษาเสร็จสิ้น"
                         : item.cancelled
-                        ? "ยกเลิก"
+                        ? item.cancelReason
+                          ? "ยกเลิกโดยทนาย"
+                          : "ยกเลิกโดยลูกค้า"
                         : "รอปรึกษา"}
                     </span>
                   </td>

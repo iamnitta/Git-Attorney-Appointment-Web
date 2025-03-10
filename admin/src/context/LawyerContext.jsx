@@ -64,10 +64,11 @@ const LawyerContextProvider = (props) => {
         }
     }
 
-    const cancelAppointment = async (appointmentId) => {
+    const cancelAppointment = async (appointmentId, cancelReason) => {
         try {
 
-            const {data} = await axios.post(backendUrl + '/api/lawyer/cancel-appointment',{appointmentId},{headers:{lawyerToken}})
+            console.log(cancelReason)
+            const {data} = await axios.post(backendUrl + '/api/lawyer/cancel-appointment',{appointmentId, cancelReason},{headers:{lawyerToken}})
             if (data.success) {
                 toast.success(data.message)
                 getAppointments()

@@ -79,13 +79,18 @@ const appointmentComplete = async (req, res) => {
 //API to cancel appointment for lawyer panel
 const appointmentCancel = async (req, res) => {
   try {
-    const { lawId, appointmentId } = req.body;
+    const { lawId, appointmentId, cancelReason } = req.body;
+
+    if (!cancelReason) {
+      return res.json({success : false, message: "กรุณาระบุเหตุผลการยกเลิก"})
+    }
 
     const appoinmentData = await appointmentModel.findById(appointmentId);
 
     if (appoinmentData && appoinmentData.lawId === lawId) {
       await appointmentModel.findByIdAndUpdate(appointmentId, {
         cancelled: true,
+        cancelReason: cancelReason
       });
       return res.json({ success: true, message: "ยกเลิกเสร็จสิ้น" });
     } else {
@@ -314,6 +319,26 @@ const getLawyerReviews = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+// // API to add cancel reacson for lawyer panel
+// const addCancelReason = async (req,res) => {
+//   try {
+//     const {lawId, appointmentId, cancelReason} = req.body
+
+    // if (!cancelReason) {
+    //   return res.json({success : false, message: "กรุณาระบุเหตุผลการยกเลิก"})
+    // }
+
+//     const appoinmentData = await appointmentModel.findById(appointmentId)
+
+//     if(appoinmentData && appoinmentData.lawId === lawId) {
+//       await appointmentModel.findByIdAndUpdate(appointmentId, {})
+//     }
+
+//   } catch (error) {
+    
+//   }
+// }
 
 export {
   lawyerList,

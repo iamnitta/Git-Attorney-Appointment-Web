@@ -34,7 +34,9 @@ const LawyerAppointment = () => {
   const [appointmentToCancel, setAppointmentToCancel] = useState(null); // สำหรับเก็บข้อมูลการนัดหมายที่ต้องการยกเลิก
   const [showCompletePopup, setShowCompletePopup] = useState(false); // สำหรับแสดง popup ยืนยันการเสร็จสิ้น
   const [showReasonPopup, setShowReasonPopup] = useState(false);
- 
+  const [cancelReason, setCancelReason] = useState(""); // รับค่า reason
+  const [otherReason, setOtherReason] = useState(false); // เอามาจัดการกับกล่องรับเหตุผลอื่นๆ
+  const [showReason, setShowReason] = useState(false);
 
   // จัดการ popup
   const handleOpenPopup = (appointment) => {
@@ -61,7 +63,8 @@ const LawyerAppointment = () => {
 
   const handleConfirmCancel = () => {
     if (appointmentToCancel) {
-      cancelAppointment(appointmentToCancel._id);
+      console.log(appointmentToCancel._id);
+      cancelAppointment(appointmentToCancel._id, cancelReason);
       handleCloseCancelPopup();
     }
   };
@@ -431,7 +434,9 @@ const LawyerAppointment = () => {
                       {item.isCompleted
                         ? "ปรึกษาเสร็จสิ้น"
                         : item.cancelled
-                        ? "ยกเลิก"
+                        ? item.cancelReason
+                          ? "ยกเลิกโดยทนาย"
+                          : "ยกเลิกโดยลูกค้า"
                         : "รอปรึกษา"}
                     </span>
                   </td>
@@ -462,9 +467,12 @@ const LawyerAppointment = () => {
                     ) : (
                       <button
                         className="underline text-primary hover:text-dark-brown"
-                        onClick={() => handleOpenReasonPopup(item.cancelReason)}
+                        onClick={() => {
+                          setSelectedAppointment(item);
+                          setShowReason(true);
+                        }}
                       >
-                        คลิกดูเหตุผล
+                        {item.cancelReason ? 'คลิกดูเหตุผล' : ''}
                       </button>
                     )}
                   </td>
@@ -551,22 +559,46 @@ const LawyerAppointment = () => {
                 </p>
                 <div className="mt-2 ml-4 mr-4">
                   <label className="flex items-center text-dark-brown text-sm mb-1">
-                    <input type="checkbox" name="reason1" className="mr-2" />
+                    <input
+                      type="radio"
+                      className="mr-2"
+                      name="cancelReason"
+                      onChange={() => {
+                        setCancelReason("ติดภารกิจศาลในเวลาดังกล่าว");
+                        setOtherReason(false);
+                      }}
+                    />
                     ติดภารกิจศาลในเวลาดังกล่าว
                   </label>
                   <label className="flex items-center text-dark-brown text-sm mb-1">
-                    <input type="checkbox" name="reason1" className="mr-2" />
+                    <input
+                      type="radio"
+                      className="mr-2"
+                      name="cancelReason"
+                      onChange={() => {
+                        setCancelReason("ติดภารกิจสำคัญในเวลาดังกล่าว");
+                        setOtherReason(false);
+                      }}
+                    />
                     ติดภารกิจสำคัญในเวลาดังกล่าว
                   </label>
                   <label className="flex items-center text-dark-brown text-sm mb-1">
-                    <input type="checkbox" name="reason1" className="mr-2" />
+                    <input
+                      type="radio"
+                      className="mr-2"
+                      name="cancelReason"
+                      onChange={() => setOtherReason(true)}
+                    />
                     อื่น ๆ
                   </label>
-                  <input
-                    className="p-2 border border-[#DADADA] w-3/4 rounded text-sm ml-5"
-                    placeholder="กรุณาระบุเหตุผลอื่น ๆ"
-                    type="text"
-                  />
+                  {otherReason && (
+                    <input
+                      className="p-2 border border-[#DADADA] w-3/4 rounded text-sm ml-5"
+                      placeholder="กรุณาระบุเหตุผลอื่น ๆ"
+                      type="text"
+                      onChange={(e) => setCancelReason(e.target.value)}
+                    />
+                  )}
                 </div>
               </div>
               {/* ปุ่มปิดและยืนยันการยกเลิก */}
@@ -758,8 +790,12 @@ const LawyerAppointment = () => {
                   />
                   <p className="ml-4 text-dark-brown">บาท</p>
                 </div>
-                <p className="text-[#757575] text-sm mt-4">*หักค่าธรรมเนียมของสำนักงาน 10% จากค่าบริการที่ได้รับ</p>
-                <p className="text-dark-brown mt-2">ค่าบริการคงเหลือที่ได้รับ</p>
+                <p className="text-[#757575] text-sm mt-4">
+                  *หักค่าธรรมเนียมของสำนักงาน 10% จากค่าบริการที่ได้รับ
+                </p>
+                <p className="text-dark-brown mt-2">
+                  ค่าบริการคงเหลือที่ได้รับ
+                </p>
               </div>
 
               {/* ปุ่ม confirm */}
@@ -875,7 +911,7 @@ const LawyerAppointment = () => {
         )}
 
         {/*  Popup สำหรับเหตุผลที่ยกเลิก */}
-        {showReasonPopup && (
+        {showReason && selectedAppointment && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
             <div className="bg-white p-8 rounded-lg w-[500px]">
               <div className="flex flex-row justify-between mb-4">
@@ -883,7 +919,7 @@ const LawyerAppointment = () => {
                   เหตุผลการยกเลิก
                 </h2>
                 <img
-                  onClick={handleCloseReasonPopup}
+                  onClick={() => setShowReason(false)}
                   src={assets.Close_2}
                   alt="ปิด PopUp"
                   className="w-7 h-7 cursor-pointer"
@@ -893,7 +929,9 @@ const LawyerAppointment = () => {
                 <hr />
               </div>
               <div className="p-8">
-                <p className="text-dark-brown font-medium">เหตุผลการยกเลิก</p>
+                <p className="text-dark-brown font-medium">
+                  {selectedAppointment.cancelReason}
+                </p>
               </div>
             </div>
           </div>

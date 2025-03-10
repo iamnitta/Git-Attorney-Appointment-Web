@@ -82,7 +82,7 @@ const AdminContextProvider = (props) => {
     
     const cancelReviews = async (reviewId) => {
         try {
-            const {data} = await axios.post(backendUrl + '/api/admin//cancel-review', {reviewId}, {headers:{aToken}})
+            const {data} = await axios.post(backendUrl + '/api/admin/cancel-review', {reviewId}, {headers:{aToken}})
 
             if (data.success) {
                 toast.success(data.message)

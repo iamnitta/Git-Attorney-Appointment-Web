@@ -7,6 +7,7 @@ import { AiFillStar } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
+import { useNavigate } from "react-router-dom";
 
 // ตั้งค่า worker โดยใช้ CDN ที่ถูกต้อง
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
@@ -16,7 +17,7 @@ const MyAppointments = () => {
   const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
   const [status, setStatus] = useState("scheduled");
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState("");
   const [appointments, setAppointments] = useState([]);
   const months = [
     " ",
@@ -33,7 +34,7 @@ const MyAppointments = () => {
     "พฤศจิกายน",
     "ธันวาคม",
   ];
-
+  const navigate = useNavigate();
 
   //จัดการไฟล์
   const [showPdfModal, setShowPdfModal] = useState(false);
@@ -42,30 +43,39 @@ const MyAppointments = () => {
 
   //ฟังก์ชันเปิดปิด Pop Up
   const openPopup = (appointment) => {
-    setSelectedAppointment(appointment)
-    setShowPopup(true)
+    setSelectedAppointment(appointment);
+    setShowPopup(true);
   };
   const closePopup = () => {
-    setShowPopup(false)
-    setRating(0)
+    setShowPopup(false);
+    setRating(0);
   };
 
   const submitReview = async () => {
     try {
-      const {data} = await axios.post(backendUrl + '/api/user/add-review', {appointmentId: selectedAppointment._id, lawId: selectedAppointment.lawyerData._id, rating, comment},{headers: {token}})
+      const { data } = await axios.post(
+        backendUrl + "/api/user/add-review",
+        {
+          appointmentId: selectedAppointment._id,
+          lawId: selectedAppointment.lawyerData._id,
+          rating,
+          comment,
+        },
+        { headers: { token } }
+      );
 
       if (data.success) {
-        toast.success(data.message)
-        closePopup()
-        getUserAppointments()
-      }else {
+        toast.success(data.message);
+        closePopup();
+        getUserAppointments();
+      } else {
         toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
       toast.error(error);
     }
-  }
+  };
 
   //ฟังก์ชันให้คะแนน
   const handleRating = (rate) => {
@@ -163,14 +173,26 @@ const MyAppointments = () => {
         >
           ปรึกษาเสร็จสิ้น
         </button>
+
+        <button
+          onClick={() => setStatus("cancel")}
+          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-1/3 w-full ${
+            status === "cancel"
+              ? "bg-dark-brown rounded-full px-8 py-1 text-white"
+              : ""
+          }`}
+        >
+          ยกเลิก
+        </button>
       </div>
 
       <div className="space-y-4 mb-10">
         {appointments
-          .filter(
-            (item) =>
-              !item.cancelled &&
-              (status === "completed" ? item.isCompleted : !item.isCompleted)
+          .filter((item) =>
+            status === "cancel"
+              ? item.cancelled
+              : !item.cancelled &&
+                (status === "completed" ? item.isCompleted : !item.isCompleted)
           )
           .map((item, index) => (
             <div
@@ -179,11 +201,28 @@ const MyAppointments = () => {
             >
               <div
                 className={`absolute top-6 right-6 px-3 py-1 text-base rounded-full font-medium ${
-                  status === "scheduled" ? " text-primary" : " text-green-800"
+                  status === "scheduled"
+                    ? " text-primary"
+                    : status === "cancel"
+                    ? " text-red-600"
+                    : " text-green-800"
                 }`}
               >
-                {status === "scheduled" ? "รอปรึกษา" : "ปรึกษาเสร็จสิ้น"}
+                {status === "scheduled"
+                  ? "รอปรึกษา"
+                  : status === "cancel"
+                  ? item.cancelReason
+                    ? "ยกเลิกโดยทนาย"
+                    : "ยกเลิกโดยลูกค้า"
+                  : "ปรึกษาเสร็จสิ้น"}
               </div>
+
+              {/* เพิ่มส่วนแสดงเหตุผลการยกเลิก */}
+              {status === "cancel" && item.cancelReason && (
+                <div className="absolute top-14 right-6 mt-2 text-base font-medium text-red-500">
+                  ขออภัยเนื่องจากทนาย {item.cancelReason} กรุณานัดหมายใหม่
+                </div>
+              )}
 
               <div className="bg-brown-lawyerpic rounded-full w-20 lg:w-32 h-20 lg:h-32 mx-0 lg:mx-0 ">
                 <img
@@ -276,17 +315,36 @@ const MyAppointments = () => {
                     ยกเลิกการนัดหมาย
                   </button>
                 )}
-                <button
-                  className={`h-10 px-4 py-2 text-white text-sm rounded w-48 ${
-                    status === "scheduled" || item.isReviewed
-                      ? "bg-[#DADADA] cursor-not-allowed"
-                      : "bg-[#A17F6B] hover:bg-[#8B6B59] transition"
-                  }`}
-                  onClick={status === "scheduled" || item.isReviewed ? null : () => openPopup(item)}
-                  disabled={status === "scheduled" || item.isReviewed}
-                >
-                  {item.isReviewed ? "แสดงความคิดเห็นแล้ว" : "แสดงความคิดเห็น"}
-                </button>
+
+                {status === "cancel" && (
+                  <button
+                    onClick={() =>
+                      navigate(`/appointment/${item.lawyerData._id}`)
+                    }
+                    className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
+                  >
+                    นัดหมายเวลาใหม่
+                  </button>
+                )}
+                {status !== "cancel" && (
+                  <button
+                    className={`h-10 px-4 py-2 text-white text-sm rounded w-48 ${
+                      status === "scheduled" || item.isReviewed
+                        ? "bg-[#DADADA] cursor-not-allowed"
+                        : "bg-[#A17F6B] hover:bg-[#8B6B59] transition"
+                    }`}
+                    onClick={
+                      status === "scheduled" || item.isReviewed
+                        ? null
+                        : () => openPopup(item)
+                    }
+                    disabled={status === "scheduled" || item.isReviewed}
+                  >
+                    {item.isReviewed
+                      ? "แสดงความคิดเห็นแล้ว"
+                      : "แสดงความคิดเห็น"}
+                  </button>
+                )}
               </div>
             </div>
           ))}
@@ -378,7 +436,8 @@ const MyAppointments = () => {
                 <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 justify-between">
                   <div className="flex flex-col gap-1">
                     <p className="font-medium text-dark-brown">
-                       ทนาย {selectedAppointment.lawyerData.firstName} {selectedAppointment.lawyerData.lastName} 
+                      ทนาย {selectedAppointment.lawyerData.firstName}{" "}
+                      {selectedAppointment.lawyerData.lastName}
                     </p>
                     <div className="flex gap-2 items-center mt-1 lg:mt-0">
                       <div className="flex flex-col lg:flex-row gap-1">
@@ -386,14 +445,16 @@ const MyAppointments = () => {
                           ความเชี่ยวชาญ
                         </p>
                         <div className="flex flex-wrap gap-1">
-                           {selectedAppointment.lawyerData.speciality.map((spec, idx) => (
+                          {selectedAppointment.lawyerData.speciality.map(
+                            (spec, idx) => (
                               <span
                                 key={idx}
                                 className="bg-gradient-to-r from-primary to-dark-brown text-white px-2 py-0.5 rounded-full text-xs"
                               >
                                 {spec}
                               </span>
-                            ))} 
+                            )
+                          )}
                         </div>
                       </div>
                     </div>
@@ -403,7 +464,8 @@ const MyAppointments = () => {
                       ค่าบริการ
                     </p>
                     <p className="text-primary text-sm">
-                      ขั้นต่ำ {selectedAppointment.lawyerData.fees_detail} บาท ต่อ 30 นาที
+                      ขั้นต่ำ {selectedAppointment.lawyerData.fees_detail} บาท
+                      ต่อ 30 นาที
                     </p>
                     {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
                   </div>
@@ -448,7 +510,6 @@ const MyAppointments = () => {
           </div>
         </div>
       )}
-      
     </div>
   );
 };
