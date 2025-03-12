@@ -6,6 +6,7 @@ import caseModel from "../models/caseModel.js";
 import courtModel from "../models/court.js";
 import { supabase } from "../config/supabase.js";
 import reviewModel from "../models/review.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const lawyerList = async (req, res) => {
   try {
@@ -82,7 +83,7 @@ const appointmentCancel = async (req, res) => {
     const { lawId, appointmentId, cancelReason } = req.body;
 
     if (!cancelReason) {
-      return res.json({success : false, message: "กรุณาระบุเหตุผลการยกเลิก"})
+      return res.json({ success: false, message: "กรุณาระบุเหตุผลการยกเลิก" });
     }
 
     const appoinmentData = await appointmentModel.findById(appointmentId);
@@ -90,7 +91,7 @@ const appointmentCancel = async (req, res) => {
     if (appoinmentData && appoinmentData.lawId === lawId) {
       await appointmentModel.findByIdAndUpdate(appointmentId, {
         cancelled: true,
-        cancelReason: cancelReason
+        cancelReason: cancelReason,
       });
       return res.json({ success: true, message: "ยกเลิกเสร็จสิ้น" });
     } else {
@@ -139,9 +140,48 @@ const lawyerProfile = async (req, res) => {
 //API to update lawyer profile data from lawyer panel
 const updateLawyerProfile = async (req, res) => {
   try {
-    const { lawId, fees_detail, bio } = req.body;
+    const {
+      lawId,
+      fees_detail,
+      bio,
+      firstName,
+      lastName,
+      phone,
+      gender,
+      dob,
+      speciality,
+      is_thaibar,
+      work_experience,
+      education,
+      available_slots,
+    } = req.body;
 
-    await lawyerModel.findByIdAndUpdate(lawId, { fees_detail, bio });
+    const imageFile = req.file;
+
+    await lawyerModel.findByIdAndUpdate(lawId, {
+      fees_detail,
+      bio,
+      firstName,
+      lastName,
+      phone,
+      gender,
+      dob,
+      speciality: JSON.parse(speciality),
+      is_thaibar,
+      work_experience: JSON.parse(work_experience),
+      education: JSON.parse(education),
+      available_slots: JSON.parse(available_slots),
+    });
+
+    if (imageFile) {
+      // upload image to cloudinary
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+        resource_type: "image",
+      });
+      const imageURL = imageUpload.secure_url;
+
+      await lawyerModel.findByIdAndUpdate(lawId, { image: imageURL });
+    }
 
     res.json({ success: true, message: "อัพเดทเสร็จสิ้น" });
   } catch (error) {
@@ -304,7 +344,7 @@ const getLawyerReviews = async (req, res) => {
 
     // คำนวณคะแนนเฉลี่ย
     let averageRating = 0;
-    
+
     if (reviews.length > 0) {
       const totalRating = reviews.reduce(
         (sum, review) => sum + review.rating,
@@ -320,26 +360,40 @@ const getLawyerReviews = async (req, res) => {
   }
 };
 
-// // API to add cancel reacson for lawyer panel
-// const addCancelReason = async (req,res) => {
-//   try {
-//     const {lawId, appointmentId, cancelReason} = req.body
+//API to delete case from lawyer panel
+const deleteCase = async (req, res) => {
+  try {
+    const { lawId, caseId } = req.body;
 
-    // if (!cancelReason) {
-    //   return res.json({success : false, message: "กรุณาระบุเหตุผลการยกเลิก"})
-    // }
+    const caseData = await caseModel.findById(caseId);
 
-//     const appoinmentData = await appointmentModel.findById(appointmentId)
+    if (caseData.lawId !== lawId) {
+      return res.json({ success: false, message: "ไม่มีสิทธิ์ลบคดี" });
+    }
 
-//     if(appoinmentData && appoinmentData.lawId === lawId) {
-//       await appointmentModel.findByIdAndUpdate(appointmentId, {})
-//     }
+    // ลบเอกสารจาก Supabase ถ้ามี
+    if (caseData.caseDocument) {
+      const fileName = caseData.caseDocument.split("/").pop().split("?")[0];
+      const { error } = await supabase.storage
+        .from("document")
+        .remove([fileName]);
 
-//   } catch (error) {
-    
-//   }
-// }
+      if (error) {
+        console.error("Supabase delete error:", error);
+      }
+    }
 
+    //ลบ case ออกจาก database
+    await caseModel.findByIdAndDelete(caseId);
+
+    res.json({ success: true, message: "ลบคดีเสร็จสิ้น" });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+
+  }
+};
 export {
   lawyerList,
   loginLawyer,
@@ -355,4 +409,5 @@ export {
   getLawyerCases,
   getAppointmentsLawyer,
   getLawyerReviews,
+  deleteCase
 };

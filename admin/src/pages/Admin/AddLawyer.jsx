@@ -10,6 +10,7 @@ const AddLawyer = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
@@ -155,6 +156,10 @@ const AddLawyer = () => {
         return toast.error("กรุณากรอกเบอร์โทรให้ครบ 10 หลัก");
       }
 
+      if (password != confirmPassword) {
+        return toast.error('รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน')
+      }
+
       const formData = new FormData();
 
       formData.append("image", lawImg);
@@ -229,7 +234,7 @@ const AddLawyer = () => {
   };
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full animate-fadeIn">
       <div className="flex items-start w-full">
         <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
           ลงทะเบียนทนายความ
@@ -362,6 +367,17 @@ const AddLawyer = () => {
                 value={password}
                 type="password"
                 placeholder="รหัสผ่าน"
+                className="w-full border border-[#DADADA] rounded p-2"
+              />
+            </div>
+
+            <div className="flex flex-col w-full">
+              <label className="mb-2">ยืนยันรหัสผ่าน</label>
+              <input
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={password}
+                type="password"
+                placeholder="ยืนยันรหัสผ่าน"
                 className="w-full border border-[#DADADA] rounded p-2"
               />
             </div>

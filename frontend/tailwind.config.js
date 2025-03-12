@@ -66,6 +66,16 @@ export default {
             transform: 'translateY(0)',
             opacity: '1'
           }
+        },
+        popupCenter: {  // animation ใหม่สำหรับ popup ที่ขึ้นจากกลางหน้าจอ
+          '0%': { 
+            opacity: '0',
+            transform: 'translate(-50%, -50%) scale(0.8)' 
+          },
+          '100%': { 
+            opacity: '1',
+            transform: 'translate(-50%, -50%) scale(1)' 
+          }
         }
       },
       animation: {
@@ -73,6 +83,7 @@ export default {
         fadeIn: 'fadeIn 0.5s ease-out',
         slideDown: 'slideDown 0.3s ease-out',
         popupClose: 'popupClose 0.5s ease-out ',
+        popupCenter: 'popupCenter 0.5s ease-out'
       }
     },
   },

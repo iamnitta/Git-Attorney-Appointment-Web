@@ -21,13 +21,14 @@ const LawyerCase = () => {
   const [caseClientSide, setCaseClientSide] = useState("");
   const [caseOutcome, setCaseOutcome] = useState("");
   const [file, setFile] = useState(""); // จัดการไฟล์
+  const [isLoading, setIsLoading] = useState(false)
 
   //จัดการไฟล์
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [numPages, setNumPages] = useState(null);
 
-  const { backendUrl, lawyerToken, cases, getCases, courts, getCourts } =
+  const { backendUrl, lawyerToken, cases, getCases, courts, getCourts, deleteCase } =
     useContext(LawyerContext);
 
   const [courtLevelFilter, setCourtLevelFilter] = useState("all");
@@ -96,6 +97,9 @@ const LawyerCase = () => {
   //ฟังก์ชั่นสำหรับส่งข้อมูลไป backend
   const onSubmitHandler = async (event) => {
     try {
+
+      setIsLoading(true)
+
       // สร้าง FormData object
       const formData = new FormData();
 
@@ -134,6 +138,7 @@ const LawyerCase = () => {
         setCaseClientSide("");
         setCaseOutcome("");
         setIsModalOpen(false);
+        setFile("")
         getCases();
       } else {
         toast.error(data.message);
@@ -141,6 +146,8 @@ const LawyerCase = () => {
     } catch (error) {
       toast.error(error);
       console.log(error);
+    }finally {
+      setIsLoading(false)
     }
   };
 
@@ -176,7 +183,7 @@ const LawyerCase = () => {
   );
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full animate-fadeIn">
       <div className="flex items-start w-full">
         <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
           ข้อมูลการว่าความ
@@ -276,7 +283,7 @@ const LawyerCase = () => {
         {/* Popup เพิ่มบันทึกคดีความ */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] flex flex-col">
+            <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] flex flex-col animate-popupCenter">
               <div className="relative p-6">
                 <div className="absolute right-8 top-1/2 -translate-y-1/2">
                   <img
@@ -564,7 +571,10 @@ const LawyerCase = () => {
                   />
                 </td>
                 <td className="px-3 py-4">
-                  <button className="flex items-center justify-center text-white hover:scale-105 transition-transform duration-200">
+                  <button 
+                  className="flex items-center justify-center text-white hover:scale-105 transition-transform duration-200"
+                  onClick={() => deleteCase(caseItem._id)}
+                  >
                     <img
                       src={assets.Delete_2}
                       alt="Delete Icon"
@@ -628,7 +638,7 @@ const LawyerCase = () => {
       </div>
       {showPdfModal && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-[850px] h-[90vh] overflow-y-auto">
+          <div className="bg-white p-8 rounded-lg w-[850px] h-[90vh] overflow-y-auto animate-popupCenter">
             <div className="flex justify-between mb-4">
               <h2 className="text-xl font-medium text-dark-brown">
                 เอกสารคำพิพากษา
@@ -664,6 +674,16 @@ const LawyerCase = () => {
                 )}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-gray-600">กำลังบันทึกข้อมูล...</p>
           </div>
         </div>
       )}

@@ -106,3 +106,10 @@
   width: 100% !important;
   height: 272.8px !important;
 }
+
+.animate-popupCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

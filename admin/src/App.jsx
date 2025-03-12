@@ -14,6 +14,7 @@ import { LawyerContext } from './context/LawyerContext';
 import LawyerAppointment from './pages/Lawyer/LawyerAppointment';
 import LawyerProfile from './pages/Lawyer/LawyerProfile';
 import LawyerCase from './pages/Lawyer/LawyerCase';
+import AboutLawyer from './pages/Admin/AboutLawyer';
 
 const App = () => {
   
@@ -35,6 +36,7 @@ const App = () => {
           <Route path='/add-lawyer' element={<AddLawyer/>} />
           <Route path='/finance-lawyer' element={<Finance/>} />
           <Route path='/comment-approval' element={<CommentApproval/>} />
+          <Route path='/about-lawyer/:lawId' element={<AboutLawyer/>} />
 
           { /* Lawyer route*/}
           <Route path='/lawyer-appointment' element={<LawyerAppointment/>} />

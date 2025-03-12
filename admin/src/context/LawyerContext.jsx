@@ -11,7 +11,7 @@ const LawyerContextProvider = (props) => {
 
     const [lawyerToken, setLawyerToken] = useState(localStorage.getItem('lawyerToken')?localStorage.getItem('lawyerToken'):'')
     const [appointments, setAppointments] = useState([])
-    const [profileData, setProfileData] = useState(false)
+    const [profileData, setProfileData] = useState({})
     const [cases,setCases] = useState([])
     const [courts, setCourts] = useState([])
 
@@ -126,6 +126,22 @@ const LawyerContextProvider = (props) => {
         }
     }
 
+    const deleteCase = async (caseId) => {
+        try {
+            const {data} = await axios.delete(backendUrl + '/api/lawyer/delete-case',{headers:{lawyerToken}, data:{caseId}})
+
+            if (data.success) {
+                toast.success(data.message)
+                getCases();
+            }else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
+    }
+
     const value = {
         lawyerToken,setLawyerToken,
         backendUrl,
@@ -138,7 +154,8 @@ const LawyerContextProvider = (props) => {
         getProfileData,
         cases,setCases,
         getCases,
-        courts,getCourts
+        courts,getCourts,
+        deleteCase
     }
 
     return (

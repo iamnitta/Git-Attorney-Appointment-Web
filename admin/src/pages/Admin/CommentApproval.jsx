@@ -106,7 +106,7 @@ const CommentApproval = () => {
   }, []);
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full animate-fadeIn">
       <div className="flex items-start w-full">
         <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
           อนุมัติความคิดเห็น
@@ -315,7 +315,7 @@ const CommentApproval = () => {
       {/* Popup ยืนยันอนุมัติความคิดเห็น */}
       {showApprovePopup && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-[500px]">
+          <div className="bg-white p-8 rounded-lg w-[500px] animate-popupCenter">
             <div className="flex flex-col items-center gap-4">
               <img
                 src={assets.Caution_Icon}
@@ -349,7 +349,7 @@ const CommentApproval = () => {
       {/* Popup ยืนยันไม่อนุมัติความคิดเห็น */}
       {showDisapprovePopup && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-[500px]">
+          <div className="bg-white p-8 rounded-lg w-[500px] animate-popupCenter">
             <div className="flex flex-col items-center gap-4">
               <img
                 src={assets.Caution_Icon}

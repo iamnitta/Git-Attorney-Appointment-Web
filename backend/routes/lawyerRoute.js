@@ -1,5 +1,5 @@
 import express from 'express'
-import { addCase, appointmentCancel, appointmentComplete, appointmentsLawyer, getAppointmentsLawyer, getCourts, getLawyerCases, getLawyerReviews, lawyerCases, lawyerList, lawyerProfile, loginLawyer, updateFees, updateLawyerProfile } from '../controllers/lawyerController.js'
+import { addCase, appointmentCancel, appointmentComplete, appointmentsLawyer, deleteCase, getAppointmentsLawyer, getCourts, getLawyerCases, getLawyerReviews, lawyerCases, lawyerList, lawyerProfile, loginLawyer, updateFees, updateLawyerProfile } from '../controllers/lawyerController.js'
 import authLawyer from '../middlewares/authLawyer.js'
 import upload from '../middlewares/multer.js'
 import uploadPdf from '../middlewares/multerPdf.js'
@@ -12,7 +12,7 @@ lawyerRouter.get('/appointments', authLawyer, appointmentsLawyer)
 lawyerRouter.post('/complete-appointment',authLawyer,appointmentComplete)
 lawyerRouter.post('/update-fees',authLawyer,updateFees)
 lawyerRouter.get('/profile',authLawyer,lawyerProfile)
-lawyerRouter.post('/update-profile', authLawyer, updateLawyerProfile)
+lawyerRouter.post('/update-profile',upload.single('image'), authLawyer, updateLawyerProfile)
 lawyerRouter.post('/cancel-appointment',authLawyer,appointmentCancel)
 lawyerRouter.post('/add-case',uploadPdf.single('file'), authLawyer,addCase)
 lawyerRouter.get('/cases', authLawyer,lawyerCases)
@@ -20,6 +20,7 @@ lawyerRouter.get('/courts', authLawyer,getCourts)
 
 lawyerRouter.get('/cases-list',getLawyerCases)
 lawyerRouter.get('/appointments-list',getAppointmentsLawyer)
+lawyerRouter.delete('/delete-case',authLawyer,deleteCase)
 
 lawyerRouter.get('/comment-list',getLawyerReviews)
 

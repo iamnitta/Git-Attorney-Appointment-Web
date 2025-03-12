@@ -249,7 +249,7 @@ const LawyerAppointment = () => {
   }, [lawyerToken]);
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full animate-fadeIn">
       <div className="flex items-start w-full">
         <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
           การนัดหมายทั้งหมด
@@ -458,7 +458,7 @@ const LawyerAppointment = () => {
                           เสร็จสิ้น
                         </button>
                       </div>
-                    ) : !item.cancelled ? (
+                    ) : !item.cancelled && Number(item.fees) === 0 ? (
                       <button
                         onClick={() => handleOpenPopup(item)}
                         className="bg-dark-brown text-white px-4 py-1 rounded-full hover:bg-[#2C1810]"
@@ -503,7 +503,7 @@ const LawyerAppointment = () => {
         {/*  Popup ยืนยันยกเลิกการนัดหมาย */}
         {showCancelPopup && selectedAppointment && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[550px]">
+            <div className="bg-white p-8 rounded-lg w-[550px] animate-popupCenter">
               <div className="flex flex-row justify-between mb-4">
                 <h2 className="text-xl font-medium text-dark-brown">
                   ยกเลิกการนัดหมาย
@@ -624,7 +624,7 @@ const LawyerAppointment = () => {
         {/*  Popup ยืนยันว่าการนัดหมายเสร็จสิ้น */}
         {showCompletePopup && selectedAppointment && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[550px]">
+            <div className="bg-white p-8 rounded-lg w-[550px] animate-popupCenter">
               <div className="flex flex-row justify-between mb-4">
                 <h2 className="text-xl font-medium text-dark-brown">
                   ยืนยันว่าการนัดหมายเสร็จสิ้น
@@ -694,7 +694,7 @@ const LawyerAppointment = () => {
         {/*  Popup สำหรับใส่ค่าบริการ */}
         {showPopup && selectedAppointment && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[500px]">
+            <div className="bg-white p-8 rounded-lg w-[500px] animate-popupCenter">
               <div className="flex flex-row justify-between mb-4">
                 <h2 className="text-2xl font-medium text-dark-brown">
                   บันทึกค่าบริการ
@@ -795,14 +795,14 @@ const LawyerAppointment = () => {
                   *หักค่าธรรมเนียมของสำนักงาน 10% จากค่าบริการที่ได้รับ
                 </p>
                 <p className="text-dark-brown mt-2">
-                  ค่าบริการคงเหลือที่ได้รับ
+                  ค่าบริการคงเหลือที่ได้รับ {(fees * 0.9).toFixed(2)}
                 </p>
               </div>
 
               {/* ปุ่ม confirm */}
               <button
                 onClick={() => {
-                  updateAppointmentFees(selectedAppointment._id, fees);
+                  updateAppointmentFees(selectedAppointment._id, Number((fees * 0.9).toFixed(2)));
                   setShowPopup(false);
                   console.log(fees);
                 }}
@@ -817,7 +817,7 @@ const LawyerAppointment = () => {
         {/* เพิ่ม Modal PDF ตรงนี้ */}
         {showPdfModal && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+            <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto animate-popupCenter">
               <div className="flex justify-between mb-8">
                 <h2 className="text-xl font-medium text-dark-brown">
                   รายละเอียดการนัดหมาย
@@ -913,8 +913,8 @@ const LawyerAppointment = () => {
 
         {/*  Popup สำหรับเหตุผลที่ยกเลิก */}
         {showReason && selectedAppointment && (
-          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[500px]">
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 ">
+            <div className="bg-white p-8 rounded-lg w-[500px] animate-popupCenter">
               <div className="flex flex-row justify-between mb-4">
                 <h2 className="text-xl font-medium text-dark-brown">
                   เหตุผลการยกเลิก
@@ -965,6 +965,7 @@ const LawyerAppointment = () => {
             {">"}
           </button>
         </div>
+
       </div>
     </div>
   );
