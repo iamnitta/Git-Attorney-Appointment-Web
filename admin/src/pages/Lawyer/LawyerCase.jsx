@@ -6,6 +6,7 @@ import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการ�
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { assets } from "../../assets/assets";
+import Select from "react-select";
 // ตั้งค่า worker โดยใช้ CDN ที่ถูกต้อง
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
@@ -59,7 +60,7 @@ const LawyerCase = () => {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 mx-1 rounded ${
+          className={`px-4 py-1 mx-1 rounded-full ${
             i === currentPage
               ? "bg-[#D4C7BD] text-dark-brown"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -72,15 +73,23 @@ const LawyerCase = () => {
     return pageNumbers;
   };
 
+  const courtOptions = courts.map((court) => ({
+    value: court.courtName,
+    label: court.courtName,
+  }));
+
   // เพิ่มฟังก์ชันสำหรับจัดการเมื่อเลือกศาล
-  const handleCourtSelect = (e) => {
-    const selectedCourtName = e.target.value;
+  const handleCourtSelect = (selectedOption) => {
+    const selectedCourtName = selectedOption ? selectedOption.value : "";
     const selectedCourt = courts.find(
       (court) => court.courtName === selectedCourtName
     );
     if (selectedCourt) {
       setCourtName(selectedCourt.courtName);
       setCourtLevel(selectedCourt.courtLevel);
+    } else {
+      setCourtName("");
+      setCourtLevel("");
     }
   };
 
@@ -206,7 +215,7 @@ const LawyerCase = () => {
                 onChange={(e) => setCourtLevelFilter(e.target.value)}
               >
                 <option value="all">ลำดับชั้นของศาล</option>
-                <option value="ศาลขั้นต้น">ศาลขั้นต้น</option>
+                <option value="ศาลชั้นต้น">ศาลชั้นต้น</option>
                 <option value="ศาลอุทธรณ์">ศาลอุทธรณ์</option>
                 <option value="ศาลฎีกา">ศาลฎีกา</option>
               </select>
@@ -296,7 +305,7 @@ const LawyerCase = () => {
                     <p className="block mb-1 text-dark-brown">หมายเลขคดี</p>
                     <input
                       type="text"
-                      className="w-full px-2 py-1.5 border border-[#EFEFEF] bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
                       placeholder="ประเภทคดี/เลขที่คดี/ปี พ.ศ. (เช่น อ./123/2567)"
                       value={caseNumber}
                       onChange={(e) => setCaseNumber(e.target.value)}
@@ -307,7 +316,7 @@ const LawyerCase = () => {
                     <label className="block mb-1 text-dark-brown">เรื่อง</label>
                     <input
                       type="text"
-                      className="w-full px-2 py-1.5 border border-[#EFEFEF] bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
                       placeholder="เรื่องของคดีความ (เช่น ลักทรัพย์)"
                       value={caseTitle}
                       onChange={(e) => setCaseTitle(e.target.value)}
@@ -321,32 +330,28 @@ const LawyerCase = () => {
                     <label className="block mb-1 text-dark-brown">
                       ศาลที่พิจารณา
                     </label>
-                    <select
-                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
-                      value={courtName}
+                    <Select
+                      className="w-full rounded-md focus:outline-none focus:border-[#A17666]"
+                      value={courtOptions.find(
+                        (option) => option.value === courtName
+                      )}
                       onChange={handleCourtSelect}
-                    >
-                      <option value="" disabled>
-                        เลือกศาล
-                      </option>
-                      {courts.map((court) => (
-                        <option key={court._id} value={court.courtName}>
-                          {court.courtName}
-                        </option>
-                      ))}
-                    </select>
+                      options={courtOptions}
+                      placeholder="เลือกศาลที่พิจารณา"
+                      isClearable
+                    />
                   </div>
 
                   <div className="w-1/2">
                     <label className="block mb-1 text-dark-brown">
                       ลำดับชั้นของศาล
                     </label>
-                    <input
-                      type="text"
-                      className="w-full px-2 py-1.5 bg-[#EFEFEF] border border-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
-                      value={courtLevel}
-                      readOnly
-                    />
+                    <p
+                      className="w-full py-1.5
+                      rounded-md focus:outline-none focus:border-[#A17666] text-primary"
+                    >
+                      {courtLevel ? courtLevel : "เลือกศาลที่พิจารณา"}
+                    </p>
                   </div>
                 </div>
 
@@ -357,7 +362,7 @@ const LawyerCase = () => {
                       หมวดหมู่กฎหมาย
                     </label>
                     <select
-                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseCategory}
                       onChange={(e) => setCaseCategory(e.target.value)}
                     >
@@ -383,7 +388,7 @@ const LawyerCase = () => {
                       ฝั่งของลูกความ
                     </label>
                     <select
-                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseClientSide}
                       onChange={(e) => setCaseClientSide(e.target.value)}
                     >
@@ -399,7 +404,7 @@ const LawyerCase = () => {
                   <div className="w-1/3">
                     <label className="block mb-1 text-dark-brown">ผลคดี</label>
                     <select
-                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseOutcome}
                       onChange={(e) => setCaseOutcome(e.target.value)}
                     >
@@ -421,7 +426,7 @@ const LawyerCase = () => {
                     </label>
                     <input
                       type="date"
-                      className="w-full px-2 py-1.5 bg-[#EFEFEF] rounded-md focus:outline-none focus:border-[#A17666]"
+                      className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
                       value={caseCompletionDate}
                       onChange={(e) => setCaseCompletionDate(e.target.value)}
                     />
@@ -433,7 +438,7 @@ const LawyerCase = () => {
                   <label className="block mb-2 text-dark-brown">
                     เอกสารคำพิพากษา
                   </label>
-                  <div className="w-full p-6 border border-[#EFEFEF] bg-[#EFEFEF] rounded-lg hover:border-primary transition-colors">
+                  <div className="w-full p-6 border border-[#DADADA] rounded-lg hover:border-primary transition-colors">
                     <div className="flex flex-col items-center justify-center space-y-3">
                       <img
                         src={assets.Upload_File}
@@ -503,7 +508,8 @@ const LawyerCase = () => {
           </thead>
           <tbody>
             {currentCases.map((caseItem, index) => (
-              <tr key={caseItem._id} className="border-b border-[#DADADA]">
+              <tr key={caseItem._id} className="border-b border-[#DADADA]"
+              style={{ height: "65px" }}>
                 <td className="px-3 py-4">
                   {(currentPage - 1) * rowsPerPage + index + 1}
                 </td>
@@ -517,7 +523,7 @@ const LawyerCase = () => {
                 <td className="px-3 py-4">
                   <span
                     className={`px-3 rounded ${
-                      caseItem.courtLevel === "ศาลขั้นต้น"
+                      caseItem.courtLevel === "ศาลชั้นต้น"
                         ? "text-[#D47966] bg-[#D47966] bg-opacity-30"
                         : caseItem.courtLevel === "ศาลอุทธรณ์"
                         ? "text-[#1975A4] bg-[#1975A4] bg-opacity-30"
@@ -596,7 +602,7 @@ const LawyerCase = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+            className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
               currentPage === 1
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-gray-200 hover:bg-gray-300"
@@ -610,7 +616,7 @@ const LawyerCase = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+            className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
               currentPage === totalPages
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-gray-200 hover:bg-gray-300"

@@ -17,13 +17,11 @@ const Feedback = () => {
     <div className="w-[95%] mx-auto animate-fadeIn">
       <div className="ml-4 mt-10 mb-10">
         <p className="font-medium text-dark-brown">
-          ความคิดเห็น{" "}
+        {reviews?.filter((review) => review.isConfirm === true).length ||
+                0} ความคิดเห็น{" "}
           <span className="rounded-full px-3 bg-primary">
             <span className="text-white text-sm">
-              {averageRating.toFixed(1)}/5 (
-              {reviews?.filter((review) => review.isConfirm === true).length ||
-                0}
-              )
+              คะแนน {averageRating}/5
             </span>
           </span>
         </p>

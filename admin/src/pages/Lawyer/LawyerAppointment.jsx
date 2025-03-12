@@ -213,7 +213,7 @@ const LawyerAppointment = () => {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 mx-1 rounded ${
+          className={`px-4 py-1 mx-1 rounded-full ${
             i === currentPage
               ? "bg-[#D4C7BD] text-dark-brown"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -400,7 +400,8 @@ const LawyerAppointment = () => {
             </thead>
             <tbody>
               {currentAppointments.map((item, index) => (
-                <tr key={index} className="border-b border-[#DADADA]">
+                <tr key={index} className="border-b border-[#DADADA]"
+                style={{ height: "65px" }}>
                   <td className="p-4">
                     {(currentPage - 1) * rowsPerPage + index + 1}
                   </td>
@@ -941,7 +942,7 @@ const LawyerAppointment = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+            className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
               currentPage === 1
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-gray-200 hover:bg-gray-300"
@@ -955,7 +956,7 @@ const LawyerAppointment = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+            className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
               currentPage === totalPages
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-gray-200 hover:bg-gray-300"

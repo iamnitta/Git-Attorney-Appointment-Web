@@ -21,6 +21,8 @@ import Caution_Icon from './Caution_Icon.png'
 import Upload_File from './Upload_File.png'
 import File_Lawyer_Icon from './File_Lawyer_Icon.png'
 import Delete_2 from './Delete_2.png'
+import More_Icon from './More_Icon.png'
+import MoreFlip_Icon from './MoreFlip_Icon.png'
 
 export const assets = {
     Myprofile,
@@ -44,7 +46,9 @@ export const assets = {
     Caution_Icon,
     Upload_File,
     File_Lawyer_Icon,
-    Delete_2
+    Delete_2,
+    More_Icon,
+    MoreFlip_Icon
 }
 
 export const lawyers = [

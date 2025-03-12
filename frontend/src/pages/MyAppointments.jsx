@@ -15,6 +15,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pd
 const MyAppointments = () => {
   const { backendUrl, token, getLawyersData } = useContext(AppContext);
   const [showPopup, setShowPopup] = useState(false); //จัดการ Pop Up
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [status, setStatus] = useState("scheduled");
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -35,6 +37,25 @@ const MyAppointments = () => {
     "ธันวาคม",
   ];
   const navigate = useNavigate();
+
+  //Popup ยืนยันยกเลิกการนัดหมาย
+  const handleCancelClick = (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setShowCancelPopup(true);
+  };
+
+  const handleConfirmCancel = () => {
+    if (selectedAppointmentId) {
+      cancelAppointment(selectedAppointmentId);
+      setShowCancelPopup(false);
+      setSelectedAppointmentId(null);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setShowCancelPopup(false);
+    setSelectedAppointmentId(null);
+  };
 
   //จัดการไฟล์
   const [showPdfModal, setShowPdfModal] = useState(false);
@@ -148,16 +169,16 @@ const MyAppointments = () => {
 
   return (
     <div className="bg-white p-4 md:p-6 animate-fadeIn">
-      <p className="flex justify-center items-center text-center bg-dark-brown bg-clip-text text-transparent text-2xl md:text-2xl font-medium mb-10">
+      <p className="flex bg-dark-brown bg-clip-text text-transparent text-2xl md:text-2xl font-medium mb-6">
         การนัดหมายของฉัน
       </p>
 
-      <div className="flex items-center lg:justify-start justify-center gap-2 pb-2 mb-4 md:w-2/4 w-full">
+      <div className="flex items-center lg:justify-start justify-center gap-2 pb-2 mb-4 w-full">
         <button
           onClick={() => setStatus("scheduled")}
-          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-1/3 w-full ${
+          className={`text-dark-brown rounded-full px-4 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-fit w-fit ${
             status === "scheduled"
-              ? "bg-dark-brown rounded-full px-8 py-1 text-white"
+              ? "bg-dark-brown rounded-full px-4 py-1 text-white"
               : ""
           }`}
         >
@@ -165,9 +186,9 @@ const MyAppointments = () => {
         </button>
         <button
           onClick={() => setStatus("completed")}
-          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-1/3 w-full ${
+          className={`text-dark-brown rounded-full px-4 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-fit w-fit ${
             status === "completed"
-              ? "bg-dark-brown rounded-full px-8 py-1 text-white"
+              ? "bg-dark-brown rounded-full px-4 py-1 text-white"
               : ""
           }`}
         >
@@ -176,9 +197,9 @@ const MyAppointments = () => {
 
         <button
           onClick={() => setStatus("cancel")}
-          className={`text-dark-brown rounded-full px-8 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-1/3 w-full ${
+          className={`text-dark-brown rounded-full px-4 py-1 border border-dark-brown font-medium text-lg hover:bg-dark-brown hover:text-white md:w-fit w-fit ${
             status === "cancel"
-              ? "bg-dark-brown rounded-full px-8 py-1 text-white"
+              ? "bg-dark-brown rounded-full px-4 py-1 text-white"
               : ""
           }`}
         >
@@ -197,154 +218,177 @@ const MyAppointments = () => {
           .map((item, index) => (
             <div
               key={`${item._id}-${index}`} // ใช้ key ที่ไม่ซ้ำกัน
-              className="bg-light-brown rounded-lg p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 relative animate-fadeIn"
+              className="bg-white border-2 border-[#E6E6E6] rounded-lg p-4 md:p-6 flex flex-col md:flex-col gap-4 md:gap-6 relative animate-fadeIn"
             >
-              <div
-                className={`absolute top-6 right-6 px-3 py-1 text-base rounded-full font-medium ${
-                  status === "scheduled"
-                    ? " text-primary"
+              {/* สถานะ, เหตุผล */}
+              <div className="flex flex-row gap-4 md:justify-start justify-end">
+                <div
+                  className={`px-4 rounded-full font-medium w-fit ${
+                    status === "scheduled"
+                      ? "text-primary bg-primary bg-opacity-10 border border-primary"
+                      : status === "cancel"
+                      ? "text-[#C5211D] bg-[#C5211D] bg-opacity-10 border border-[#C5211D]"
+                      : "text-[#008529] bg-[#008529] bg-opacity-10 border border-[#008529]"
+                  }`}
+                >
+                  {status === "scheduled"
+                    ? "รอปรึกษา"
                     : status === "cancel"
-                    ? " text-red-600"
-                    : " text-green-800"
-                }`}
-              >
-                {status === "scheduled"
-                  ? "รอปรึกษา"
-                  : status === "cancel"
-                  ? item.cancelReason
-                    ? "ยกเลิกโดยทนาย"
-                    : "ยกเลิกโดยลูกค้า"
-                  : "ปรึกษาเสร็จสิ้น"}
-              </div>
-
-              {/* เพิ่มส่วนแสดงเหตุผลการยกเลิก */}
-              {status === "cancel" && item.cancelReason && (
-                <div className="absolute top-14 right-6 mt-2 text-base font-medium text-red-500">
-                  ขออภัยเนื่องจากทนาย {item.cancelReason} กรุณานัดหมายใหม่
+                    ? item.cancelReason
+                      ? "ยกเลิกโดยทนาย"
+                      : "ยกเลิกโดยลูกค้า"
+                    : "ปรึกษาเสร็จสิ้น"}
                 </div>
-              )}
 
-              <div className="bg-brown-lawyerpic rounded-full w-20 lg:w-32 h-20 lg:h-32 mx-0 lg:mx-0 ">
-                <img
-                  src={item.lawyerData.image}
-                  alt=""
-                  className="w-full h-full rounded-full object-cover bg-gray-200"
-                />
+                {/* เพิ่มส่วนแสดงเหตุผลการยกเลิก */}
+                {/* {status === "cancel" && item.cancelReason && (
+                  <div className="text-base font-medium text-[#757575]">
+                    ขออภัยเนื่องจากทนาย {item.cancelReason} กรุณานัดหมายใหม่
+                  </div>
+                )} */}
               </div>
 
-              <div className="flex-1 w-full md:w-auto">
-                <div className="flex flex-col gap-2 lg:flex-row lg:gap-2 items-start lg:items-center mb-2">
-                  <p className="text-lg font-medium text-dark-brown">
-                    ทนาย {item.lawyerData.firstName} {item.lawyerData.lastName}
+              {/* รูป, ข้อมูล */}
+              <div className="flex md:flex-row flex-col md:gap-10 gap-2">
+                <div className="bg-brown-lawyerpic rounded-full w-20 lg:w-32 h-20 lg:h-32 mx-0 lg:mx-0">
+                  <img
+                    src={item.lawyerData.image}
+                    alt=""
+                    className="w-full h-full rounded-full object-cover bg-gray-200"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex flex-col gap-2 lg:flex-row lg:gap-2 items-start lg:items-center mb-2">
+                    <p className="text-lg font-medium text-dark-brown">
+                      ทนาย {item.lawyerData.firstName}{" "}
+                      {item.lawyerData.lastName}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {item.lawyerData.speciality.map((spec, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-3 py-1 text-sm"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-gray-600 mt-4">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={assets.Calendar}
+                        alt="calendar icon"
+                        className="w-5 h-5"
+                      />
+
+                      <p className="text-dark-brown font-medium">
+                        {slotDateFormat(item.slotDate)}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={assets.Time}
+                        alt="clock icon"
+                        className="w-5 h-5"
+                      />
+
+                      <p className="text-dark-brown font-medium">
+                        {slotTimeFormat(item.slotTime)} น.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={assets.Location}
+                        alt="location icon"
+                        className="w-5 h-5"
+                      />
+
+                      <p className="text-dark-brown font-medium">
+                        สำนักงานกฎหมายทนายนอร์ท
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 md:ml-20 md:mt-0 mt-4">
+                  <p className="text-base md:text-lg font-medium text-dark-brown">
+                    รายละเอียด
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {item.lawyerData.speciality.map((spec, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-gradient-to-r from-primary to-dark-brown text-white rounded-full px-3 py-1 text-sm"
-                      >
-                        {spec}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2 text-gray-600 mt-4">
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={assets.Calendar}
-                      alt="calendar icon"
-                      className="w-5 h-5"
-                    />
+                  <p className="text-sm md:text-base font-legular text-dark-brown">
+                    หัวข้อที่ต้องการปรึกษา{" "}
+                    <span className="font-medium">{item.user_topic}</span>
+                  </p>
 
-                    <p className="text-dark-brown font-medium">
-                      {slotDateFormat(item.slotDate)}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={assets.Time}
-                      alt="clock icon"
-                      className="w-5 h-5"
-                    />
-
-                    <p className="text-dark-brown font-medium">
-                      {slotTimeFormat(item.slotTime)} น.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={assets.Location}
-                      alt="location icon"
-                      className="w-5 h-5"
-                    />
-
-                    <p className="text-dark-brown font-medium">
-                      สำนักงานกฎหมายทนายนอร์ท
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <p className="text-base md:text-lg font-medium mt-6 text-dark-brown">
-                      รายละเอียด
-                    </p>
-                    <p className="text-sm md:text-base font-legular">
-                      {item.user_topic}
-                    </p>
-
-                    <button
-                      onClick={() => {
-                        console.log("documentUrl:", item.documentUrl);
-                        setSelectedAppointment(item);
-                        setShowPdfModal(true);
-                      }}
-                      className="underline text-primary hover:text-dark-brown text-left"
-                    >
-                      เอกสารเบื้องต้น
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => {
+                      console.log("documentUrl:", item.documentUrl);
+                      setSelectedAppointment(item);
+                      setShowPdfModal(true);
+                    }}
+                    className="underline text-primary hover:text-dark-brown text-left"
+                  >
+                    เอกสารเบื้องต้น
+                  </button>
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-auto justify-end">
-                {status === "scheduled" && (
-                  <button
-                    onClick={() => cancelAppointment(item._id)}
-                    className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
-                  >
-                    ยกเลิกการนัดหมาย
-                  </button>
+              <div>
+                <hr className="text-[#E6E6E6] mt-4"></hr>
+              </div>
+
+              <div className="flex md:flex-row flex-col justify-between md:gap-0 gap-4">
+                {/* เพิ่มส่วนแสดงเหตุผลการยกเลิก */}
+                {status === "cancel" && item.cancelReason ? (
+                  <div className="text-base font-medium text-[#757575] flex-grow">
+                    ขออภัยเนื่องจากทนาย {item.cancelReason} กรุณานัดหมายใหม่
+                  </div>
+                ) : (
+                  <div className="flex-grow"></div>
                 )}
 
-                {status === "cancel" && (
-                  <button
-                    onClick={() =>
-                      navigate(`/appointment/${item.lawyerData._id}`)
-                    }
-                    className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
-                  >
-                    นัดหมายเวลาใหม่
-                  </button>
-                )}
-                {status !== "cancel" && (
-                  <button
-                    className={`h-10 px-4 py-2 text-white text-sm rounded w-48 ${
-                      status === "scheduled" || item.isReviewed
-                        ? "bg-[#DADADA] cursor-not-allowed"
-                        : "bg-[#A17F6B] hover:bg-[#8B6B59] transition"
-                    }`}
-                    onClick={
-                      status === "scheduled" || item.isReviewed
-                        ? null
-                        : () => openPopup(item)
-                    }
-                    disabled={status === "scheduled" || item.isReviewed}
-                  >
-                    {item.isReviewed
-                      ? "แสดงความคิดเห็นแล้ว"
-                      : "แสดงความคิดเห็น"}
-                  </button>
-                )}
+                <div className="flex gap-2 mt-auto justify-end">
+                  {status === "scheduled" && (
+                    <button
+                      onClick={() => handleCancelClick(item._id)}
+                      className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
+                    >
+                      ยกเลิกการนัดหมาย
+                    </button>
+                  )}
+
+                  {status === "cancel" && (
+                    <button
+                      onClick={() =>
+                        navigate(`/appointment/${item.lawyerData._id}`)
+                      }
+                      className="h-10 px-4 py-2 bg-[#A17F6B] text-white text-sm rounded hover:bg-[#8B6B59] transition w-40"
+                    >
+                      นัดหมายเวลาใหม่
+                    </button>
+                  )}
+                  {status !== "cancel" && status !== "scheduled" && (
+                    <button
+                      className={`h-10 px-4 py-2 text-white text-sm rounded w-48 ${
+                        status === "scheduled" || item.isReviewed
+                          ? "bg-[#DADADA] cursor-not-allowed"
+                          : "bg-[#A17F6B] hover:bg-[#8B6B59] transition"
+                      }`}
+                      onClick={
+                        status === "scheduled" || item.isReviewed
+                          ? null
+                          : () => openPopup(item)
+                      }
+                      disabled={status === "scheduled" || item.isReviewed}
+                    >
+                      {item.isReviewed
+                        ? "แสดงความคิดเห็นแล้ว"
+                        : "แสดงความคิดเห็น"}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -353,10 +397,10 @@ const MyAppointments = () => {
       {/* เพิ่ม Modal PDF ตรงนี้ */}
       {showPdfModal && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-[800px] h-[90vh] overflow-y-auto">
+          <div className="bg-white p-8 rounded-lg lg:w-[800px] w-[380px] h-[90vh] overflow-y-auto">
             <div className="flex justify-between mb-8">
-              <h2 className="text-3xl font-medium text-dark-brown">
-                รายละเอียดการปรึกษา
+              <h2 className="text-xl font-medium text-dark-brown">
+                เอกสารเบื้องต้น
               </h2>
               <img
                 onClick={() => setShowPdfModal(false)}
@@ -365,16 +409,8 @@ const MyAppointments = () => {
                 className="w-7 h-7 cursor-pointer"
               />
             </div>
-            {/* เพิ่มส่วนแสดงเรื่องที่ต้องการปรึกษา */}
-            <div className="mb-6">
-              <h3 className="text-xl mb-4">เรื่องที่ต้องการปรึกษา</h3>
-              <div className="bg-[#F9F5F3] p-6 rounded border border-[#D4C7BD]">
-                <p>{selectedAppointment?.user_topic || "ไม่มีรายละเอียด"}</p>
-              </div>
-            </div>
 
             <div className="mb-6">
-              <h3 className="text-xl mb-4">เอกสารเบื้องต้น</h3>
               <div className="border border-[#D4C7BD] rounded-lg p-4 bg-[#F9F5F3] overflow-x-auto">
                 <div className="max-w-[750px] mx-auto">
                   {selectedAppointment?.documentUrl ? (
@@ -399,6 +435,41 @@ const MyAppointments = () => {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pop Up สำหรับยืนยันยกเลิกการนัดหมาย */}
+      {showCancelPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg lg:w-[500px] w-[380px]">
+            <div className="flex flex-col items-center gap-4">
+              <img
+                src={assets.Caution_Icon}
+                alt="Caution Icon"
+                className="w-10 h-10 cursor-pointer"
+              />
+              <p className="text-dark-brown font-medium">
+                ยืนยัน{" "}
+                <span className="text-[#C5211D] text-xl">ยกเลิก</span>{" "}
+                การนัดหมายนี้
+              </p>
+            </div>
+
+            <div className="flex flex-row justify-center mt-8 gap-2">
+              <button
+                onClick={handleClosePopup}
+                className="px-8 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white"
+              >
+                ปิด
+              </button>
+              <button
+                onClick={handleConfirmCancel}
+                className="px-6 py-1 bg-primary text-white rounded-full hover:bg-[#927663]"
+              >
+                ยืนยัน
+              </button>
             </div>
           </div>
         </div>

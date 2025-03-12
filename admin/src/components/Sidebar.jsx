@@ -51,7 +51,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/all-appointments"}
@@ -63,7 +63,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/comment-approval"}
@@ -75,7 +75,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/lawyer-list"}
@@ -87,7 +87,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/add-lawyer"}
@@ -99,7 +99,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/finance-lawyer"}
@@ -110,7 +110,7 @@ const Sidebar = () => {
             </ul>
           </div>
 
-          <div className="mt-auto">
+          <div className="mt-auto hover:bg-[#F1F1F1]">
             <NavLink
               onClick={logout}
               className="flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer"
@@ -146,7 +146,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/lawyer-appointment"}
@@ -158,7 +158,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/lawyer-case"}
@@ -170,7 +170,7 @@ const Sidebar = () => {
               <NavLink
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                    isActive ? "bg-brown-lawyerpic" : ""
+                    isActive ? "bg-brown-lawyerpic" : "hover:bg-[#F1F1F1]"
                   }`
                 }
                 to={"/lawyer-profile"}
@@ -181,7 +181,7 @@ const Sidebar = () => {
             </ul>
           </div>
 
-          <div className="mt-auto">
+          <div className="mt-auto hover:bg-[#F1F1F1]">
             <NavLink
               onClick={logout}
               className="flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer"

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const courtSchema = new mongoose.Schema({
     courtName: { type: String, required: true},
-    courtLevel: { type: String, required: true, enum: ['ศาลชั้นต้น','ศาลอุธรณ์','ศาลฎีกา']},
+    courtLevel: { type: String, required: true, enum: ['ศาลชั้นต้น','ศาลอุทธรณ์','ศาลฎีกา']},
     courtProvince: { type: String, required: true},
 })
 

@@ -354,11 +354,13 @@ const Appointment = () => {
                         </p>
                       </div>
                       <p className="font-medium text-[#757575]">
-                        <span className="text-yellow-500 mr-1 text-base">★</span>{" "}
-                        {averageRating.toFixed(1)}/5 (
+                        <span className="text-yellow-500 mr-1 text-base">
+                          ★
+                        </span>{" "}
+                        {averageRating}/5 (
                         {reviews?.filter((review) => review.isConfirm === true)
-                          .length || 0}
-                        {" "}ความคิดเห็น)
+                          .length || 0}{" "}
+                        ความคิดเห็น)
                       </p>
                       <p className="font-regular mt-5">
                         เลขที่ใบอนุญาตว่าความ {lawInfo.license_number}

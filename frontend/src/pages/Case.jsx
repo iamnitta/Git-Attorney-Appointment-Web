@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
@@ -11,12 +11,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pd
 
 const Case = () => {
   const rowsPerPage = 6; // จำนวนแถวที่ต้องการแสดงในแต่ละหน้า
-  const [currentData, setCurrentData] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(currentData.length / rowsPerPage);
   const [lawInfo, setLawInfo] = useState(null);
   const { lawId } = useParams();
+  const navigate = useNavigate();
+
+  const [courtLevelFilter, setCourtLevelFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [clientSideFilter, setClientSideFilter] = useState("all");
+  const [caseOutcomeFilter, setCaseOutcomeFilter] = useState("all");
 
   //จัดการไฟล์
   const [showPdfModal, setShowPdfModal] = useState(false);
@@ -58,50 +61,8 @@ const Case = () => {
     }
   }, [lawId]);
 
-  useEffect(() => {
-    // ตัวอย่างข้อมูลที่จะแสดงในตาราง
-    const data = [
-      {
-        case_number: "อ.1219/2567",
-        case_completion_date: "29/10/2567",
-        court_name: "ศาลจังหวัดพัทยา",
-        court_level: "ศาลชั้นต้น",
-        case_title: "ลักทรัพย์",
-        case_category: "อาญา",
-        case_client_side: "โจทก์",
-        case_outcome: "ชนะ",
-        case_document: "",
-      },
-      {
-        case_number: "อ.1219/2567",
-        case_completion_date: "29/10/2567",
-        court_name: "ศาลจังหวัดพัทยา",
-        court_level: "ศาลอุทธรณ์",
-        case_title: "ลักทรัพย์",
-        case_category: "อาญา",
-        case_client_side: "โจทก์",
-        case_outcome: "แพ้",
-        case_document: "",
-      },
-      {
-        case_number: "อ.1219/2567",
-        case_completion_date: "29/10/2567",
-        court_name: "ศาลจังหวัดพัทยา",
-        court_level: "ศาลฎีกา",
-        case_title: "ลักทรัพย์",
-        case_category: "อาญา",
-        case_client_side: "โจทก์",
-        case_outcome: "ยอมความ",
-        case_document: "",
-      },
-    ];
-
-    setCurrentData(data);
-  }, []);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    setStartIndex((page - 1) * rowsPerPage);
   };
 
   const renderPageNumbers = () => {
@@ -111,7 +72,7 @@ const Case = () => {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+          className={`px-4 py-1 mx-1 rounded-full ${
             currentPage === i
               ? "bg-[#D4C7BD] text-dark-brown"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -124,12 +85,38 @@ const Case = () => {
     return pageNumbers;
   };
 
+  const filteredCases = cases.filter((caseItem) => {
+    return (
+      (courtLevelFilter === "all" ||
+        caseItem.courtLevel === courtLevelFilter) &&
+      (categoryFilter === "all" || caseItem.caseCategory === categoryFilter) &&
+      (clientSideFilter === "all" ||
+        caseItem.caseClientSide === clientSideFilter) &&
+      (caseOutcomeFilter === "all" ||
+        caseItem.caseOutcome === caseOutcomeFilter)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredCases.length / rowsPerPage);
+  const currentCases = filteredCases.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   return (
     lawInfo && (
       <div className="p-4 animate-fadeIn">
         <div className="mb-8 lg:w-[95%] mx-auto flex flex-row gap-2">
-          <button className="text-lg font-medium text-dark-brown text-opacity-70 hover:text-dark-brown">ประวัติของทนายความ</button>
-          <p className="text-lg font-medium text-dark-brown text-opacity-70"> {">"}</p>
+          <button
+            className="text-lg font-medium text-dark-brown text-opacity-70 hover:text-dark-brown"
+            onClick={() => navigate(`/appointment/${lawId}`)}
+          >
+            ประวัติของทนายความ
+          </button>
+          <p className="text-lg font-medium text-dark-brown text-opacity-70">
+            {" "}
+            {">"}
+          </p>
           <h1 className="text-lg font-medium text-dark-brown">
             ข้อมูลการว่าความ
           </h1>
@@ -203,19 +190,27 @@ const Case = () => {
         </div>
 
         {/* Filter */}
-        <div className="flex flex-row justify-between items-end lg:w-[95%] mx-auto mt-10">
+        <div className="flex lg:flex-row flex-col justify-between lg:w-[95%] mx-auto mt-10">
           <div className="flex flex-row gap-2">
-            <div>
-              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+            <div className="hidden md:block">
+              <select
+                className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4"
+                value={courtLevelFilter}
+                onChange={(e) => setCourtLevelFilter(e.target.value)}
+              >
                 <option value="all">ลำดับชั้นของศาล</option>
-                <option value="ศาลขั้นต้น">ศาลขั้นต้น</option>
+                <option value="ศาลชั้นต้น">ศาลชั้นต้น</option>
                 <option value="ศาลอุทธรณ์">ศาลอุทธรณ์</option>
                 <option value="ศาลฎีกา">ศาลฎีกา</option>
               </select>
             </div>
 
             <div>
-              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+              <select
+                className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
                 <option value="all">หมวดหมู่</option>
                 <option value="อาญา">อาญา</option>
                 <option value="แรงงาน">แรงงาน</option>
@@ -229,8 +224,12 @@ const Case = () => {
               </select>
             </div>
 
-            <div>
-              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+            <div className="hidden md:block">
+              <select
+                className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4"
+                value={clientSideFilter}
+                onChange={(e) => setClientSideFilter(e.target.value)}
+              >
                 <option value="all">ฝั่งของลูกความ</option>
                 <option value="โจทก์">โจทก์</option>
                 <option value="จำเลย">จำเลย</option>
@@ -239,7 +238,11 @@ const Case = () => {
             </div>
 
             <div>
-              <select className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4">
+              <select
+                className="bg-white rounded-lg border-2 border-[#D4C7BD] px-4 py-2 mt-2 mb-4"
+                value={caseOutcomeFilter}
+                onChange={(e) => setCaseOutcomeFilter(e.target.value)}
+              >
                 <option value="all">ผลคดี</option>
                 <option value="ชนะ">ชนะ</option>
                 <option value="แพ้">แพ้</option>
@@ -248,8 +251,10 @@ const Case = () => {
             </div>
           </div>
 
-          <div>
-            <h1 className="text-sm text-dark-brown mb-4">พบ 1 จาก 7 คดีความ</h1>
+          <div className="flex lg:items-end justify-end">
+            <h1 className="text-sm text-dark-brown lg:mb-4 mb-2">
+              พบ {filteredCases.length} จาก {cases.length} คดีความ
+            </h1>
           </div>
         </div>
 
@@ -257,24 +262,24 @@ const Case = () => {
           <table className="w-full border-collapse">
             <thead className="bg-[#D4C7BD] border border-[#D4C7BD]">
               <tr>
-                <th className="p-3 w-100 text-left text-dark-brown"></th>
-                <th className="p-3 w-200 text-left text-dark-brown">
+                <th className="p-3 w-100 text-left text-dark-brown hidden md:table-cell"></th>
+                <th className="p-3 w-200 text-left text-dark-brown hidden md:table-cell">
                   หมายเลขคดี
                 </th>
-                <th className="p-3 w-200 text-left text-dark-brown">
+                <th className="p-3 w-200 text-left text-dark-brown hidden md:table-cell">
                   วันที่เสร็จสิ้น
                 </th>
-                <th className="p-3 w-200 text-left text-dark-brown">
+                <th className="p-3 w-200 text-left text-dark-brown hidden md:table-cell">
                   ศาลที่พิจารณา
                 </th>
-                <th className="p-3 w-200 text-left text-dark-brown">
+                <th className="p-3 w-200 text-left text-dark-brown hidden md:table-cell">
                   ลำดับชั้นของศาล
                 </th>
                 <th className="p-3 w-200 text-left text-dark-brown">เรื่อง</th>
                 <th className="p-3 w-200 text-left text-dark-brown">
                   หมวดหมู่
                 </th>
-                <th className="p-3 w-200 text-left text-dark-brown">
+                <th className="p-3 w-200 text-left text-dark-brown hidden md:table-cell">
                   ฝั่งของลูกความ
                 </th>
                 <th className="p-3 w-200 text-left text-dark-brown">ผลคดี</th>
@@ -284,83 +289,88 @@ const Case = () => {
               </tr>
             </thead>
             <tbody>
-              {cases &&
-                cases.map((data, index) => (
-                  <tr
-                    key={index}
-                    className="bg-[#FFFFFF] border-b border-l border-r border-[#DADADA] hover:bg-gray-100"
-                    style={{ height: "65px" }}
-                  >
-                    <td className="p-3">{startIndex + index + 1}</td>
-                    <td className="p-3">{data.caseNumber}</td>
-                    <td className="p-3">
-                      {slotDateFormat(data.caseCompletionDate)}
-                    </td>
-                    <td className="p-3">{data.courtName}</td>
-                    <td className="p-3">
-                      <span
-                        className={`px-4 rounded ${
-                          data.courtLevel === "ศาลชั้นต้น"
-                            ? "text-[#D47966] bg-[#D47966] bg-opacity-30"
-                            : data.courtLevel === "ศาลอุทธรณ์"
-                            ? "text-[#1975A4] bg-[#1975A4] bg-opacity-30"
-                            : data.courtLevel === "ศาลฎีกา"
-                            ? "text-[#7C3D5F] bg-[#7C3D5F] bg-opacity-30"
-                            : ""
-                        }`}
-                      >
-                        {data.courtLevel}
-                      </span>
-                    </td>
-                    <td className="p-3">{data.caseTitle}</td>
-                    <td className="p-3 text-primary">{data.caseCategory}</td>
-                    <td className="p-3">{data.caseClientSide}</td>
-                    <td className="p-3">
-                      <span
-                        className={`px-6 rounded-full ${
-                          data.caseOutcome === "ชนะ"
-                            ? "text-[#008529] bg-[#008529] bg-opacity-20"
-                            : data.caseOutcome === "แพ้"
-                            ? "text-[#C5211D] bg-[#C5211D] bg-opacity-20"
-                            : data.caseOutcome === "ยอมความ"
-                            ? "text-[#007AFF] bg-[#007AFF] bg-opacity-20"
-                            : ""
-                        }`}
-                      >
-                        {data.caseOutcome}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4 flex items-center justify-center">
-                      <img
-                        onClick={() => {
-                          console.log("caseDocument:", data.caseDocument);
-                          setSelectedAppointment(data);
-                          setShowPdfModal(true);
-                        }}
-                        src={assets.File_Icon}
-                        alt="ดูเอกสาร"
-                        className="w-7 h-7 cursor-pointer"
-                      />
-                    </td>
-                  </tr>
-                ))}
+              {currentCases.map((data, index) => (
+                <tr
+                  key={index}
+                  className="bg-[#FFFFFF] border-b border-l border-r border-[#DADADA] hover:bg-gray-100"
+                  style={{ height: "65px" }}
+                >
+                  <td className="p-3 hidden md:table-cell">
+                    {(currentPage - 1) * rowsPerPage + index + 1}
+                  </td>
+                  <td className="p-3 hidden md:table-cell">{data.caseNumber}</td>
+                  <td className="p-3 hidden md:table-cell">
+                    {slotDateFormat(data.caseCompletionDate)}
+                  </td>
+                  <td className="p-3 hidden md:table-cell">{data.courtName}</td>
+                  <td className="p-3 hidden md:table-cell">
+                    <span
+                      className={`px-4 rounded ${
+                        data.courtLevel === "ศาลชั้นต้น"
+                          ? "text-[#D47966] bg-[#D47966] bg-opacity-30"
+                          : data.courtLevel === "ศาลอุทธรณ์"
+                          ? "text-[#1975A4] bg-[#1975A4] bg-opacity-30"
+                          : data.courtLevel === "ศาลฎีกา"
+                          ? "text-[#7C3D5F] bg-[#7C3D5F] bg-opacity-30"
+                          : ""
+                      }`}
+                    >
+                      {data.courtLevel}
+                    </span>
+                  </td>
+                  <td className="p-3">{data.caseTitle}</td>
+                  <td className="p-3 text-primary">{data.caseCategory}</td>
+                  <td className="p-3 hidden md:table-cell">{data.caseClientSide}</td>
+                  <td className="p-3">
+                    <span
+                      className={`px-6 rounded-full ${
+                        data.caseOutcome === "ชนะ"
+                          ? "text-[#008529] bg-[#008529] bg-opacity-20"
+                          : data.caseOutcome === "แพ้"
+                          ? "text-[#C5211D] bg-[#C5211D] bg-opacity-20"
+                          : data.caseOutcome === "ยอมความ"
+                          ? "text-[#007AFF] bg-[#007AFF] bg-opacity-20"
+                          : ""
+                      }`}
+                    >
+                      {data.caseOutcome}
+                    </span>
+                  </td>
+                  <td className="px-3 py-4 flex items-center justify-center">
+                    <img
+                      onClick={() => {
+                        console.log("caseDocument:", data.caseDocument);
+                        setSelectedAppointment(data);
+                        setShowPdfModal(true);
+                      }}
+                      src={assets.File_Icon}
+                      alt="ดูเอกสาร"
+                      className="w-7 h-7 cursor-pointer"
+                    />
+                  </td>
+                </tr>
+              ))}
 
-              {/* เติมแถวเปล่าให้ครบ 6 แถว
-              {Array.from({ length: rowsPerPage - currentData.length }).map(
+              {Array.from({ length: rowsPerPage - currentCases.length }).map(
                 (_, index) => (
                   <tr
                     key={`empty-${index}`}
                     className="bg-[#FFFFFF] border-b border-l border-r border-[#DADADA]"
                     style={{ height: "65px" }}
                   >
+                    <td className="p-3 hidden md:table-cell">&nbsp;</td>
+                    <td className="p-3 hidden md:table-cell">&nbsp;</td>
+                    <td className="p-3 hidden md:table-cell">&nbsp;</td>
+                    <td className="p-3 hidden md:table-cell">&nbsp;</td>
+                    <td className="p-3 hidden md:table-cell">&nbsp;</td>
                     <td className="p-3">&nbsp;</td>
                     <td className="p-3">&nbsp;</td>
-                    <td className="p-3">&nbsp;</td>
+                    <td className="p-3 hidden md:table-cell">&nbsp;</td>
                     <td className="p-3">&nbsp;</td>
                     <td className="p-3">&nbsp;</td>
                   </tr>
                 )
-              )} */}
+              )}
             </tbody>
           </table>
         </div>
@@ -370,7 +380,7 @@ const Case = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+            className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
               currentPage === 1
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-gray-200 hover:bg-gray-300"
@@ -384,7 +394,7 @@ const Case = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-4 py-2 mx-1 rounded text-dark-brown ${
+            className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
               currentPage === totalPages
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-gray-200 hover:bg-gray-300"
@@ -396,7 +406,7 @@ const Case = () => {
 
         {showPdfModal && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[850px] h-[90vh] overflow-y-auto">
+            <div className="bg-white p-8 rounded-lg lg:w-[850px] w-[380px] h-[90vh] overflow-y-auto">
               <div className="flex justify-between mb-4">
                 <h2 className="text-xl font-medium text-dark-brown">
                   เอกสารคำพิพากษา

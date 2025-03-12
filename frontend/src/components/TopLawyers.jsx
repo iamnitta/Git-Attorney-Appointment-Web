@@ -83,7 +83,7 @@ const TopLawyers = () => {
                 <p className="font-prompt text-sm text-gray-600 flex items-center">
                   <span className="text-yellow-500 mr-2">★</span>
                   <span className="font-medium text-[#757575]">
-                    {Number(calculateAverageRating(item._id)).toFixed(1)}/5
+                    {Number(calculateAverageRating(item._id))}/5
                   </span>
                   <span className="mx-1"></span>
                   <span className="text-[#757575]">
@@ -92,7 +92,7 @@ const TopLawyers = () => {
                       reviews.filter((review) => review.lawId === item._id)
                         .length
                     }
-                    )
+                    {" "}ความคิดเห็น)
                   </span>
                 </p>
 
