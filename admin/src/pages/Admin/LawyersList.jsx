@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { assets } from "../../assets/assets";
+import { useNavigate } from "react-router-dom";
 
 const LawyersList = () => {
   const { lawyers, aToken, getAllLawyers } = useContext(AdminContext);
@@ -21,6 +22,7 @@ const LawyersList = () => {
   const allSpecialities = Array.from(
     new Set(lawyers.flatMap((lawyer) => lawyer.speciality))
   );
+  const navigate = useNavigate()
 
   //จัดรูปแบบเบอร์โทร
   const formatPhoneNumber = (phone) => {
@@ -102,7 +104,7 @@ const LawyersList = () => {
   }, [searchTerm, totalPages, currentPage]);
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full animate-fadeIn">
       <div className="flex justify-center w-full">
         <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
           ทนายความทั้งหมด
@@ -235,7 +237,10 @@ const LawyersList = () => {
                 </td>
                 <td className="p-3">
                   <div className="flex items-center gap-6">
-                    <button className="text-nowrap px-4 py-1 border border-dark-brown text-dark-brown rounded-full hover:bg-dark-brown hover:text-white flex items-center">
+                    <button 
+                    className="text-nowrap px-4 py-1 border border-dark-brown text-dark-brown rounded-full hover:bg-dark-brown hover:text-white flex items-center"
+                    onClick = {() => navigate(`/about-lawyer/${lawyer._id}`)}
+                    >
                       ดูเพิ่มเติม
                     </button>
 

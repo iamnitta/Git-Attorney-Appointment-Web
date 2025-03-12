@@ -218,7 +218,7 @@ const AllAppointments = () => {
   };
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full animate-fadeIn">
       <div className="flex items-start w-full">
         <h1 className="rounded text-dark-brown text-2xl font-medium mb-6">
           การนัดหมายทั้งหมด
