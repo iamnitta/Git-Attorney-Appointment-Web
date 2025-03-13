@@ -443,7 +443,7 @@ const MyAppointments = () => {
       {/* Pop Up สำหรับยืนยันยกเลิกการนัดหมาย */}
       {showCancelPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg lg:w-[500px] w-[380px]">
+          <div className="bg-white p-8 rounded-lg lg:w-[500px] w-[380px] animate-popupCenter">
             <div className="flex flex-col items-center gap-4">
               <img
                 src={assets.Caution_Icon}
@@ -478,7 +478,7 @@ const MyAppointments = () => {
       {/* Pop Up สำหรับแสดงความคิดเห็นการนัดหมาย */}
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-white pl-4 pr-4 pb-4 rounded-lg max-w-[600px] w-full h-auto md:h-auto overflow-y-auto animate-popupCenter mx-2">
+          <div className="bg-white pl-4 pr-4 pb-4 rounded-lg lg:max-w-[600px] lg:w-full w-[380px] h-auto md:h-auto overflow-y-auto animate-popupCenter">
             <div className="sticky top-0 bg-white z-10 pt-4 flex flex-row justify-between">
               <h2 className="text-lg font-medium text-dark-brown mb-4">
                 แสดงความคิดเห็น

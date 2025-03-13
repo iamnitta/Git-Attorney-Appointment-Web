@@ -23,6 +23,12 @@ import File_Lawyer_Icon from './File_Lawyer_Icon.png'
 import Delete_2 from './Delete_2.png'
 import More_Icon from './More_Icon.png'
 import MoreFlip_Icon from './MoreFlip_Icon.png'
+import Salary_Icon from './Salary_Icon.png'
+import Office_Icon from './Office_Icon.png'
+import Office_Icon2 from './Office_Icon2.png'
+import Customer_Icon from './Customer_Icon.png'
+import Appointment_Icon from './Appointment_Icon.png'
+import Lawyer_Icon from './Lawyer_Icon.png'
 
 export const assets = {
     Myprofile,
@@ -48,7 +54,13 @@ export const assets = {
     File_Lawyer_Icon,
     Delete_2,
     More_Icon,
-    MoreFlip_Icon
+    MoreFlip_Icon,
+    Salary_Icon,
+    Office_Icon,
+    Office_Icon2,
+    Customer_Icon,
+    Appointment_Icon,
+    Lawyer_Icon
 }
 
 export const lawyers = [

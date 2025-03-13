@@ -795,7 +795,7 @@ const LawyerAppointment = () => {
                   *หักค่าธรรมเนียมของสำนักงาน 10% จากค่าบริการที่ได้รับ
                 </p>
                 <p className="text-dark-brown mt-2">
-                  ค่าบริการคงเหลือที่ได้รับ {(fees * 0.9).toFixed(2)}
+                  ค่าบริการคงเหลือที่ได้รับ {(fees * 0.9).toFixed(2)} บาท
                 </p>
               </div>
 

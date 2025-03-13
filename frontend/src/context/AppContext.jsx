@@ -15,7 +15,7 @@ const AppContextProvider = (props) => {
     const [cases, setCases] = useState([])
     const [appointments, setAppointments] = useState([])
     const [reviews, setReviews] = useState([])
-    const [averageRating, setAverageRating] = useState('')
+    const [averageRating, setAverageRating] = useState(0)
 
     const months = [' ', 'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
 

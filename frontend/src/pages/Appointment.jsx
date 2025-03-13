@@ -357,7 +357,7 @@ const Appointment = () => {
                         <span className="text-yellow-500 mr-1 text-base">
                           ★
                         </span>{" "}
-                        {averageRating}/5 (
+                        {averageRating.toFixed(1)}/5 (
                         {reviews?.filter((review) => review.isConfirm === true)
                           .length || 0}{" "}
                         ความคิดเห็น)
@@ -568,7 +568,7 @@ const Appointment = () => {
         {/* Pop Up สำหรับจองเวลานัดหมาย */}
         {showPopup && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="bg-white pl-4 pr-4 pb-4 rounded-lg max-w-[600px] w-full h-[80%] md:h-[800px] overflow-y-auto animate-popupCenter mx-2">
+            <div className="bg-white pl-4 pr-4 pb-4 rounded-lg lg:max-w-[600px] lg:w-full w-[380px]  h-[80%] md:h-[800px] overflow-y-auto animate-popupCenter">
               <div className="sticky top-0 bg-white z-10 pt-4 flex flex-row justify-between">
                 <h2 className="text-lg font-medium text-dark-brown mb-4">
                   จองเวลานัดหมาย

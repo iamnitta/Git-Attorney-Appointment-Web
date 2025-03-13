@@ -63,7 +63,7 @@ const Login = () => {
      {/* ลบ bg-light-brown ออกจากตรงนี้ */}
      <div className="w-[95%] max-w-[800px] min-h-[500px] p-8 bg-light-gray rounded-lg shadow-md">
        <p className="text-2xl font-medium text-center mb-8 bg-gradient-to-l from-dark-brown to-primary bg-clip-text text-transparent">
-         เข้าสู่ระบบสำหรับ <span>{state}</span>
+         เข้าสู่ระบบสำหรับ <span className="text-2xl text-primary">{state}</span>
        </p>
        {/* อีเมล รหัสผ่าน*/}
        <div className="flex justify-center">

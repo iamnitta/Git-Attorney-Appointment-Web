@@ -406,7 +406,7 @@ const Case = () => {
 
         {showPdfModal && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg w-[850px] h-[90vh] overflow-y-auto animate-popupCenter">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg lg:w-[850px] w-[380px] h-[90vh] overflow-y-auto animate-popupCenter">
               <div className="flex justify-between mb-4">
                 <h2 className="text-xl font-medium text-dark-brown">
                   เอกสารคำพิพากษา

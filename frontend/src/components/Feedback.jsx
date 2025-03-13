@@ -15,32 +15,27 @@ const Feedback = () => {
   }, [lawId]);
   return (
     <div className="w-[95%] mx-auto animate-fadeIn">
-      <div className="ml-4 mt-10 mb-10">
+      <div className="mt-10 mb-10">
         <p className="font-medium text-dark-brown">
-        {reviews?.filter((review) => review.isConfirm === true).length ||
-                0} ความคิดเห็น{" "}
+          {reviews?.filter((review) => review.isConfirm === true).length || 0}{" "}
+          ความคิดเห็น{" "}
           <span className="rounded-full px-3 bg-primary">
-            <span className="text-white text-sm">
-              คะแนน {averageRating}/5
-            </span>
+            <span className="text-white text-sm">คะแนน {averageRating.toFixed(1)}/5</span>
           </span>
         </p>
         {reviews && reviews.length > 0 ? (
           reviews
             .filter((review) => review.isConfirm === true)
             .map((reviews, index) => (
-              <div
-                key={index}
-                className="flex justify-between gap-10 mb-30 mt-5"
-              >
-                <div className="flex gap-2">
-                  <img
-                    className="w-8 h-8 mr-4 rounded-full object-cover"
-                    src={reviews.userData.image}
-                    alt=""
-                  />
+              <div key={index} className="flex gap-10 mb-30 mt-5 w-full">
+                <div className="flex gap-2 justify-between lg:w-1/3 w-full">
+                  <div className="flex flex-row gap-2">
+                    <img
+                      className="w-8 h-8 mr-4 rounded-full object-cover"
+                      src={reviews.userData.image}
+                      alt=""
+                    />
 
-                  <div className="flex lg:gap-40 gap-10">
                     <div>
                       <p className="text-dark-brown font-medium gap-16">
                         {reviews.userData.firstName} {reviews.userData.lastName}
@@ -56,8 +51,10 @@ const Feedback = () => {
                       </p>
                       <p className="text-dark-brown mt-4">{reviews.comment}</p>
                     </div>
+                  </div>
 
-                    <div className="flex gap-1">
+                  <div>
+                    <div className="flex">
                       {[...Array(5).keys()].map((_, starIndex) => (
                         <AiFillStar
                           key={starIndex}

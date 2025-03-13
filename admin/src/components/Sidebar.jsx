@@ -105,7 +105,7 @@ const Sidebar = () => {
                 to={"/finance-lawyer"}
               >
                 <img src={assets.Finance_Admin} alt="" className="w-6 h-6" />
-                <p>ข้อมูลการเงิน</p>
+                <p>สรุปผลข้อมูล</p>
               </NavLink>
             </ul>
           </div>
