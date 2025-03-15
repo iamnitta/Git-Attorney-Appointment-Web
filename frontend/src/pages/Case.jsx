@@ -176,7 +176,8 @@ const Case = () => {
                         ? Math.round(
                             (cases.filter((c) => c.caseOutcome === "ชนะ")
                               .length /
-                              cases.length) *
+                              cases.filter((c) => c.caseOutcome !== "ยอมความ")
+                                .length) *
                               100
                           )
                         : 0}
@@ -298,7 +299,9 @@ const Case = () => {
                   <td className="p-3 hidden md:table-cell">
                     {(currentPage - 1) * rowsPerPage + index + 1}
                   </td>
-                  <td className="p-3 hidden md:table-cell">{data.caseNumber}</td>
+                  <td className="p-3 hidden md:table-cell">
+                    {data.caseNumber}
+                  </td>
                   <td className="p-3 hidden md:table-cell">
                     {slotDateFormat(data.caseCompletionDate)}
                   </td>
@@ -320,7 +323,9 @@ const Case = () => {
                   </td>
                   <td className="p-3">{data.caseTitle}</td>
                   <td className="p-3 text-primary">{data.caseCategory}</td>
-                  <td className="p-3 hidden md:table-cell">{data.caseClientSide}</td>
+                  <td className="p-3 hidden md:table-cell">
+                    {data.caseClientSide}
+                  </td>
                   <td className="p-3">
                     <span
                       className={`px-6 rounded-full ${

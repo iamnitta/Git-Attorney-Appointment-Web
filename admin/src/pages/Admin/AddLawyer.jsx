@@ -10,7 +10,7 @@ const AddLawyer = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
@@ -157,7 +157,7 @@ const AddLawyer = () => {
       }
 
       if (password != confirmPassword) {
-        return toast.error('รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน')
+        return toast.error("รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง");
       }
 
       const formData = new FormData();
@@ -167,11 +167,11 @@ const AddLawyer = () => {
       formData.append("lastName", lastName);
       formData.append("email", email);
       formData.append("password", password);
-      formData.append("phone", phone);
+      formData.append("phone", phone.replace(/-/g, ""));
       formData.append("dob", dob);
       formData.append("gender", gender);
       formData.append("license_number", license_number);
-      formData.append("lawyerNationalId", lawyerNationalId);
+      formData.append("lawyerNationalId", lawyerNationalId.replace(/-/g, ""));
       formData.append("speciality", JSON.stringify(speciality));
       formData.append("is_thaibar", is_thaibar);
       formData.append("education", JSON.stringify(education));
@@ -341,9 +341,17 @@ const AddLawyer = () => {
             <div className="flex flex-col w-full">
               <label className="mb-2">เบอร์โทร</label>
               <input
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, ""); // กรองให้เหลือแค่ตัวเลข
+                  const formattedValue = value
+                    .replace(/^(\d{3})(?=\d)/, "$1-") // จับ 3 ตัวแรก
+                    .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-"); // จับ 3 ตัวถัดไป
+                  setPhone(formattedValue);
+                }}
                 value={phone}
                 type="text"
+                maxLength={12}
+                inputMode="numeric"
                 placeholder="เบอร์โทรศัพท์ 10 หลัก"
                 className="w-full border border-[#DADADA] rounded p-2"
               />
@@ -402,10 +410,20 @@ const AddLawyer = () => {
             <div className="flex flex-col w-full">
               <label className="mb-2">บัตรประชาชน</label>
               <input
-                onChange={(e) => setLawyerNationalId(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, ""); // กรองให้เหลือแค่ตัวเลข
+                  const formattedValue = value
+                    .replace(/^(\d{1})(?=\d)/, "$1-")
+                    .replace(/^(\d{1}-\d{4})(?=\d)/, "$1-")
+                    .replace(/^(\d{1}-\d{4}-\d{5})(?=\d)/, "$1-")
+                    .replace(/^(\d{1}-\d{4}-\d{5}-\d{2})(?=\d)/, "$1-");
+                  setLawyerNationalId(formattedValue);
+                }}
                 value={lawyerNationalId}
                 type="text"
-                placeholder="บัตรประชาชน"
+                maxLength={17}
+                inputMode="numeric"
+                placeholder="เลขบัตรประชาชน 13 หลัก"
                 className="w-full border border-[#DADADA] rounded p-2"
               />
             </div>
@@ -883,7 +901,7 @@ const AddLawyer = () => {
             <input
               onChange={(e) => setFees_detail(e.target.value)}
               value={fees_detail}
-              type="text"
+              type="number"
               placeholder="ค่าบริการขั้นต่ำ"
               className="w-[200px] border border-[#DADADA] rounded p-2 mx-4"
             />

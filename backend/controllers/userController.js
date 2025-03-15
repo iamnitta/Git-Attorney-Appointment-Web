@@ -33,14 +33,14 @@ const registerUser = async (req, res) => {
       !gender ||
       !nationalId
     ) {
-      return res.json({ success: false, message: "ข้อมูลไม่ครบถ้วน" });
+      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
     }
 
     // validating phone number format
     if (!validator.isMobilePhone(phone, "th-TH")) {
       return res.json({
         success: false,
-        message: "กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง",
+        message: "กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง",
       });
     }
 
@@ -57,13 +57,13 @@ const registerUser = async (req, res) => {
     if (existingNationalId) {
       return res.json({
         success: false,
-        message: "เลขบัตรประชาชนนี้เคยใช้สมัครแล้ว",
+        message: "เลขบัตรประชาชนนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขบัตรประชาชนอื่น",
       });
     }
 
     // validating email format
     if (!validator.isEmail(email)) {
-      return res.json({ success: false, message: "กรุณาใส่อีเมลที่ถูกต้อง" });
+      return res.json({ success: false, message: "กรุณากรอกอีเมลที่ถูกต้อง" });
     }
 
     // ตรวจสอบอีเมลซ้ำ
@@ -79,7 +79,7 @@ const registerUser = async (req, res) => {
     if (password.length < 8) {
       return res.json({
         success: false,
-        message: "กรุณาใส่รหัสผ่านไม่น้อยกว่า 8 ตัว",
+        message: "กรุณากรอกรหัสผ่านที่ไม่น้อยกว่า 8 ตัวอักษร",
       });
     }
 
@@ -99,7 +99,7 @@ const registerUser = async (req, res) => {
     if (age < 18) {
       return res.json({
         success: false,
-        message: "ต้องมีอายุอย่างน้อย 18 ปี เพื่อใช้งานบริการนี้",
+        message: "ต้องมีอายุอย่างน้อย 18 ปี เพื่อเข้าใช้งานระบบ",
       });
     }
 
@@ -238,6 +238,14 @@ const bookAppointment = async (req, res) => {
     const { userId, lawId, slotDate, slotTime, user_topic } = req.body;
     const file = req.file; // รับไฟล์จาก multer
 
+    if (
+      !slotDate ||
+      !slotTime ||
+      !user_topic 
+    ) {
+      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
+    }
+
     const lawyerData = await lawyerModel.findById(lawId).select("-password");
 
     let slots_booked = lawyerData.slots_booked;
@@ -372,8 +380,8 @@ const addReview = async (req, res) => {
       comment,
     });
 
-    if (!userId || !lawId || !appointmentId || !rating || !comment) {
-      return res.json({ success: false, message: "ข้อมูลไม่ครบถ้วน" });
+    if (!userId || !lawId || !appointmentId || !rating) {
+      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
     }
 
     // ตรวจสอบว่าการนัดหมายนี้เป็นของผู้ใช้นี้จริงหรือไม่

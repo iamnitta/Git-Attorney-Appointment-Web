@@ -45,7 +45,12 @@ const Appointment = () => {
 
   //ฟังก์ชันเปิดปิด Pop Up
   const openPopup = () => setShowPopup(true);
-  const closePopup = () => setShowPopup(false);
+  const closePopup = () => {
+    setShowPopup(false);
+    setSlotTimes("");
+    setUser_topic("");
+    setfile("");
+  };
 
   const fetchLawInfo = async () => {
     const lawInfo = lawyers.find((law) => law._id === lawId);
@@ -230,9 +235,11 @@ const Appointment = () => {
       } else {
         toast.error(data.message);
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
       toast.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -264,9 +271,14 @@ const Appointment = () => {
       (caseItem) => caseItem.caseOutcome === "ชนะ"
     ).length;
 
+    // นับจำนวนคดีทั้งหมดที่ไม่ใช่ยอมความ
+    const validCases = cases.filter(
+      (caseItem) => caseItem.caseOutcome !== "ยอมความ"
+    ).length;
+
     // คำนวณอัตราการชนะเป็นเปอร์เซ็นต์
     const winRate =
-      totalCases > 0 ? Math.round((wonCases / totalCases) * 100) : 0;
+      totalCases > 0 ? Math.round((wonCases / validCases) * 100) : 0;
 
     return { totalCases, winRate };
   };

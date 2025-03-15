@@ -67,7 +67,7 @@ const appointmentComplete = async (req, res) => {
       await appointmentModel.findByIdAndUpdate(appointmentId, {
         isCompleted: true,
       });
-      return res.json({ success: true, message: "ปรึกษาเสร็จสิ้น" });
+      return res.json({ success: true, message: "ปรึกษาเสร็จสิ้นแล้ว" });
     } else {
       return res.json({ success: false, message: "มีข้อผิดพลาด" });
     }
@@ -93,7 +93,7 @@ const appointmentCancel = async (req, res) => {
         cancelled: true,
         cancelReason: cancelReason,
       });
-      return res.json({ success: true, message: "ยกเลิกเสร็จสิ้น" });
+      return res.json({ success: true, message: "ยกเลิกการนัดหมายสำเร็จ" });
     } else {
       return res.json({ success: false, message: "มีข้อผิดพลาด" });
     }
@@ -114,7 +114,7 @@ const updateFees = async (req, res) => {
 
     if (appoinmentData && appoinmentData.lawId === lawId) {
       await appointmentModel.findByIdAndUpdate(appointmentId, { fees });
-      return res.json({ success: true, message: "บันทึกค่าบริการเสร็จสิ้น" });
+      return res.json({ success: true, message: "บันทึกค่าบริการสำเร็จ" });
     } else {
       return res.json({ success: false, message: "มีข้อผิดพลาด" });
     }
@@ -278,7 +278,7 @@ const addCase = async (req, res) => {
     const newCase = new caseModel(caseData);
     await newCase.save();
 
-    res.json({ success: true, message: "บันทึกข้อมูลสำเร็จ" });
+    res.json({ success: true, message: "บันทึกข้อมูลคดีความสำเร็จ" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });

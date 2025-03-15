@@ -65,6 +65,7 @@ const LawyerAppointment = () => {
     if (appointmentToCancel) {
       console.log(appointmentToCancel._id);
       cancelAppointment(appointmentToCancel._id, cancelReason);
+      setCancelReason('')
       handleCloseCancelPopup();
     }
   };

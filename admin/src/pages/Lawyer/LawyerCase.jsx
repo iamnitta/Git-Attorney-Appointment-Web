@@ -21,15 +21,22 @@ const LawyerCase = () => {
   const [caseClientSide, setCaseClientSide] = useState("");
   const [caseOutcome, setCaseOutcome] = useState("");
   const [file, setFile] = useState(""); // จัดการไฟล์
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   //จัดการไฟล์
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [numPages, setNumPages] = useState(null);
 
-  const { backendUrl, lawyerToken, cases, getCases, courts, getCourts, deleteCase } =
-    useContext(LawyerContext);
+  const {
+    backendUrl,
+    lawyerToken,
+    cases,
+    getCases,
+    courts,
+    getCourts,
+    deleteCase,
+  } = useContext(LawyerContext);
 
   const [courtLevelFilter, setCourtLevelFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -97,8 +104,7 @@ const LawyerCase = () => {
   //ฟังก์ชั่นสำหรับส่งข้อมูลไป backend
   const onSubmitHandler = async (event) => {
     try {
-
-      setIsLoading(true)
+      setIsLoading(true);
 
       // สร้าง FormData object
       const formData = new FormData();
@@ -138,7 +144,7 @@ const LawyerCase = () => {
         setCaseClientSide("");
         setCaseOutcome("");
         setIsModalOpen(false);
-        setFile("")
+        setFile("");
         getCases();
       } else {
         toast.error(data.message);
@@ -146,8 +152,8 @@ const LawyerCase = () => {
     } catch (error) {
       toast.error(error);
       console.log(error);
-    }finally {
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -162,7 +168,10 @@ const LawyerCase = () => {
   const wonCases = cases.filter(
     (caseItem) => caseItem.caseOutcome === "ชนะ"
   ).length;
-  const winPercentage = totalCases > 0 ? (wonCases / totalCases) * 100 : 0;
+  const validCases = cases.filter(
+    (caseItem) => caseItem.caseOutcome !== "ยอมความ"
+  ).length;
+  const winPercentage = totalCases > 0 ? (wonCases / validCases) * 100 : 0;
 
   const filteredCases = cases.filter((caseItem) => {
     return (
@@ -515,8 +524,11 @@ const LawyerCase = () => {
           </thead>
           <tbody>
             {currentCases.map((caseItem, index) => (
-              <tr key={caseItem._id} className="border-b border-[#DADADA]"
-              style={{ height: "65px" }}>
+              <tr
+                key={caseItem._id}
+                className="border-b border-[#DADADA]"
+                style={{ height: "65px" }}
+              >
                 <td className="px-3 py-4">
                   {(currentPage - 1) * rowsPerPage + index + 1}
                 </td>
@@ -571,9 +583,9 @@ const LawyerCase = () => {
                   />
                 </td>
                 <td className="px-3 py-4">
-                  <button 
-                  className="flex items-center justify-center text-white hover:scale-105 transition-transform duration-200"
-                  onClick={() => deleteCase(caseItem._id)}
+                  <button
+                    className="flex items-center justify-center text-white hover:scale-105 transition-transform duration-200"
+                    onClick={() => deleteCase(caseItem._id)}
                   >
                     <img
                       src={assets.Delete_2}
