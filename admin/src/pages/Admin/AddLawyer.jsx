@@ -142,23 +142,7 @@ const AddLawyer = () => {
     setIsLoading(true); // เริ่ม loading
 
     try {
-      if (!lawImg) {
-        return toast.error("กรุณาเลือกรูปภาพ");
-      }
-
       //ตรวจสอบรูปแบบและความยาวของเบอร์โทร
-
-      if (!/^\d+$/.test(phone)) {
-        return toast.error("กรุณากรอกเบอร์โทรเป็นตัวเลขเท่านั้น");
-      }
-
-      if (phone.length !== 10) {
-        return toast.error("กรุณากรอกเบอร์โทรให้ครบ 10 หลัก");
-      }
-
-      if (password != confirmPassword) {
-        return toast.error("รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง");
-      }
 
       const formData = new FormData();
 
@@ -167,6 +151,7 @@ const AddLawyer = () => {
       formData.append("lastName", lastName);
       formData.append("email", email);
       formData.append("password", password);
+      formData.append("confirmPassword", confirmPassword)
       formData.append("phone", phone.replace(/-/g, ""));
       formData.append("dob", dob);
       formData.append("gender", gender);
@@ -383,7 +368,7 @@ const AddLawyer = () => {
               <label className="mb-2">ยืนยันรหัสผ่าน</label>
               <input
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                value={password}
+                value={confirmPassword}
                 type="password"
                 placeholder="ยืนยันรหัสผ่าน"
                 className="w-full border border-[#DADADA] rounded p-2"

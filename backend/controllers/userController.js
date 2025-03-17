@@ -17,6 +17,7 @@ const registerUser = async (req, res) => {
       lastName,
       email,
       password,
+      confirmPassword,
       dob,
       phone,
       gender,
@@ -28,12 +29,33 @@ const registerUser = async (req, res) => {
       !lastName ||
       !email ||
       !password ||
+      !confirmPassword ||
       !dob ||
       !phone ||
       !gender ||
       !nationalId
     ) {
       return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
+    }
+
+    // ตรวจสอบอายุ
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    if (age < 18) {
+      return res.json({
+        success: false,
+        message: "ต้องมีอายุอย่างน้อย 18 ปี เพื่อเข้าใช้งานระบบ",
+      });
     }
 
     // validating phone number format
@@ -57,7 +79,8 @@ const registerUser = async (req, res) => {
     if (existingNationalId) {
       return res.json({
         success: false,
-        message: "เลขบัตรประชาชนนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขบัตรประชาชนอื่น",
+        message:
+          "เลขบัตรประชาชนนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขบัตรประชาชนอื่น",
       });
     }
 
@@ -83,24 +106,8 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // ตรวจสอบอายุ
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-
-    if (age < 18) {
-      return res.json({
-        success: false,
-        message: "ต้องมีอายุอย่างน้อย 18 ปี เพื่อเข้าใช้งานระบบ",
-      });
+    if (password !== confirmPassword) {
+      return res.json({ success: false, message: "รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง"})
     }
 
     // hashing user password
@@ -238,11 +245,7 @@ const bookAppointment = async (req, res) => {
     const { userId, lawId, slotDate, slotTime, user_topic } = req.body;
     const file = req.file; // รับไฟล์จาก multer
 
-    if (
-      !slotDate ||
-      !slotTime ||
-      !user_topic 
-    ) {
+    if (!slotDate || !slotTime || !user_topic) {
       return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
     }
 
@@ -381,7 +384,7 @@ const addReview = async (req, res) => {
     });
 
     if (!userId || !lawId || !appointmentId || !rating) {
-      return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
+      return res.json({ success: false, message: "กรุณาให้คะแนนความคิดเห็น" });
     }
 
     // ตรวจสอบว่าการนัดหมายนี้เป็นของผู้ใช้นี้จริงหรือไม่
@@ -395,11 +398,13 @@ const addReview = async (req, res) => {
     }
 
     // อัปเดตสถานะ isReviewed ของการนัดหมาย
-    await appointmentModel.findByIdAndUpdate(appointmentId, { isReviewed: true });
+    await appointmentModel.findByIdAndUpdate(appointmentId, {
+      isReviewed: true,
+    });
 
     // ดึงข้อมูล user และ lawyer มาเก็บไว้
-    const userData = await userModel.findById(userId).select("-password")
-    const lawyerData = await lawyerModel.findById(lawId).select("-password")
+    const userData = await userModel.findById(userId).select("-password");
+    const lawyerData = await lawyerModel.findById(lawId).select("-password");
 
     const reviewData = {
       rating,
@@ -426,12 +431,11 @@ const addReview = async (req, res) => {
 // API to get lawyer reviews for user panel
 const getAllReviews = async (req, res) => {
   try {
-
     const reviews = await reviewModel.find({ isConfirm: true });
 
     // คำนวณคะแนนเฉลี่ย
     let averageRating = 0;
-    
+
     if (reviews.length > 0) {
       const totalRating = reviews.reduce(
         (sum, review) => sum + review.rating,
@@ -469,5 +473,5 @@ export {
   cancelAppointment,
   addReview,
   getAllReviews,
-  getallCases
+  getallCases,
 };

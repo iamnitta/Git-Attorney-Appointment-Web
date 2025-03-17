@@ -43,6 +43,10 @@ const LawyerCase = () => {
   const [clientSideFilter, setClientSideFilter] = useState("all");
   const [caseOutcomeFilter, setCaseOutcomeFilter] = useState("all");
 
+  // เพิ่ม state สำหรับจัดการ popup
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [caseToDelete, setCaseToDelete] = useState(null);
+
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
@@ -155,6 +159,25 @@ const LawyerCase = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // แก้ไขฟังก์ชันการลบ
+  const handleDeleteClick = (caseId) => {
+    setCaseToDelete(caseId);
+    setShowDeleteConfirm(true);
+  };
+
+  // ฟังก์ชันยืนยันการลบ
+  const confirmDelete = () => {
+    deleteCase(caseToDelete);
+    setShowDeleteConfirm(false);
+    setCaseToDelete(null);
+  };
+
+  // ฟังก์ชันยกเลิกการลบ
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setCaseToDelete(null);
   };
 
   useEffect(() => {
@@ -585,7 +608,7 @@ const LawyerCase = () => {
                 <td className="px-3 py-4">
                   <button
                     className="flex items-center justify-center text-white hover:scale-105 transition-transform duration-200"
-                    onClick={() => deleteCase(caseItem._id)}
+                    onClick={() => handleDeleteClick(caseItem._id)}
                   >
                     <img
                       src={assets.Delete_2}
@@ -685,6 +708,41 @@ const LawyerCase = () => {
                   </p>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg w-[500px] animate-popupCenter">
+            <div className="flex flex-col items-center gap-4">
+              <img
+                src={assets.Caution_Icon}
+                alt="Caution Icon"
+                className="w-10 h-10 cursor-pointer"
+              />
+              <p className="text-dark-brown font-medium">
+                ยืนยัน{" "}
+                <span className="text-[#C5211D] text-xl">ลบ</span>{" "}
+                ข้อมูลคดีความนี้
+              </p>
+            </div>
+
+            <div className="flex flex-row justify-center mt-8 gap-2">
+              <button
+                onClick={cancelDelete}
+                className="px-8 py-1 border border-primary text-primary rounded-full hover:bg-primary hover:text-white"
+              >
+                ปิด
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-6 py-1 bg-primary text-white rounded-full hover:bg-[#927663]"
+              >
+                ยืนยัน
+              </button>
             </div>
           </div>
         </div>

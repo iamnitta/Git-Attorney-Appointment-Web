@@ -516,7 +516,7 @@ const Finance = () => {
 
             {/* <div className="flex flex-row gap-2 justify-between mt-4"> */}
             {/* ลูกค้าทั้งหมด */}
-            <div className="bg-white w-full h-full rounded-lg p-4 shadow-sm">
+            {/* <div className="bg-white w-full h-full rounded-lg p-4 shadow-sm">
               <div className="flex flex-row justify-between mb-8">
                 <div className="flex flex-col">
                   <p className="text-dark-brown text-lg text-left mt-1 font-medium">
@@ -535,7 +535,7 @@ const Finance = () => {
                   {getTotalCustomers().toLocaleString()}
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {/* การนัดหมายทั้งหมด */}
             <div className="bg-white w-full h-full rounded-lg p-4 shadow-sm">

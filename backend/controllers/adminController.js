@@ -15,6 +15,7 @@ const addLawyer = async (req, res) => {
       firstName,
       lastName,
       password,
+      confirmPassword,
       phone,
       dob,
       gender,
@@ -36,6 +37,7 @@ const addLawyer = async (req, res) => {
         firstName,
         lastName,
         password,
+        confirmPassword,
         phone,
         dob,
         gender,
@@ -58,6 +60,7 @@ const addLawyer = async (req, res) => {
       !firstName ||
       !lastName ||
       !password ||
+      !confirmPassword ||
       !phone ||
       !dob ||
       !gender ||
@@ -67,67 +70,10 @@ const addLawyer = async (req, res) => {
       !education ||
       !work_experience ||
       !fees_detail ||
-      !available_slots
+      !available_slots ||
+      !imageFile
     ) {
       return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
-    }
-
-    //validating email format
-    if (!validator.isEmail(email)) {
-      return res.json({ success: false, message: "กรุณากรอกอีเมลที่ถูกต้อง" });
-    }
-
-    // ตรวจสอบอีเมลซ้ำ
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      return res.json({
-        success: false,
-        message: "อีเมลนี้ถูกใช้งานในระบบแล้ว กรุณาใช้อีเมลอื่น",
-      });
-    }
-
-    //validating lawyer password
-    if (password.length < 8) {
-      return res.json({
-        success: false,
-        message: "กรุณากรอกรหัสผ่านที่ไม่น้อยกว่า 8 ตัวอักษร",
-      });
-    }
-
-    // validating phone number format
-    if (!validator.isMobilePhone(phone, "th-TH")) {
-      return res.json({
-        success: false,
-        message: "กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง",
-      });
-    }
-
-    // เช็คเลขบัตรประชาชน 13 หลัก
-    if (lawyerNationalId.length !== 13) {
-      return res.json({
-        success: false,
-        message: "กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก",
-      });
-    }
-
-    // ตรวจสอบเลขบัตรประชาชนซ้ำ
-    const existingNationalId = await userModel.findOne({ lawyerNationalId });
-    if (existingNationalId) {
-      return res.json({
-        success: false,
-        message:
-          "เลขบัตรประชาชนนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขบัตรประชาชนอื่น",
-      });
-    }
-
-    // ตรวจสอบเลขใบอนุญาติว่าความว่าซ้ำไหม
-    const license_numberId = await userModel.findOne({ license_number });
-    if (license_numberId) {
-      return res.json({
-        success: false,
-        message:
-          "เลขที่ใบอนุญาตว่าความนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขที่ใบอนุญาตว่าความอื่น",
-      });
     }
 
     // ตรวจสอบอายุ
@@ -147,6 +93,72 @@ const addLawyer = async (req, res) => {
       return res.json({
         success: false,
         message: "ต้องมีอายุอย่างน้อย 18 ปี เพื่อเข้าใช้งานระบบ",
+      });
+    }
+
+    // validating phone number format
+    if (!validator.isMobilePhone(phone, "th-TH")) {
+      return res.json({
+        success: false,
+        message: "กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง",
+      });
+    }
+
+    //validating email format
+    if (!validator.isEmail(email)) {
+      return res.json({ success: false, message: "กรุณากรอกอีเมลที่ถูกต้อง" });
+    }
+
+    // ตรวจสอบอีเมลซ้ำ
+    const existingUser = await lawyerModel.findOne({ email });
+    if (existingUser) {
+      return res.json({
+        success: false,
+        message: "อีเมลนี้ถูกใช้งานในระบบแล้ว กรุณาใช้อีเมลอื่น",
+      });
+    }
+
+    //validating lawyer password
+    if (password.length < 8) {
+      return res.json({
+        success: false,
+        message: "กรุณากรอกรหัสผ่านที่ไม่น้อยกว่า 8 ตัวอักษร",
+      });
+    }
+
+    // ตรวจรหัสผ่านตรงกับยืนยันรหัสผ่านไหม
+    if (password != confirmPassword) {
+      return res.json({
+        success: false,
+        message: "รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง",
+      });
+    }
+
+    // ตรวจสอบเลขใบอนุญาติว่าความว่าซ้ำไหม
+    const license_numberId = await lawyerModel.findOne({ license_number });
+    if (license_numberId) {
+      return res.json({
+        success: false,
+        message:
+          "เลขที่ใบอนุญาตว่าความนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขที่ใบอนุญาตว่าความอื่น",
+      });
+    }
+
+    // เช็คเลขบัตรประชาชน 13 หลัก
+    if (lawyerNationalId.length !== 13) {
+      return res.json({
+        success: false,
+        message: "กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก",
+      });
+    }
+
+    // ตรวจสอบเลขบัตรประชาชนซ้ำ
+    const existingNationalId = await lawyerModel.findOne({ lawyerNationalId });
+    if (existingNationalId) {
+      return res.json({
+        success: false,
+        message:
+          "เลขบัตรประชาชนนี้ถูกใช้งานในระบบแล้ว กรุณาใช้เลขบัตรประชาชนอื่น",
       });
     }
 
@@ -183,7 +195,7 @@ const addLawyer = async (req, res) => {
     const newLawyer = new lawyerModel(lawyerData);
     await newLawyer.save();
 
-    res.json({ success: true, message: "เพิ่มทนายสำเร็จ" });
+    res.json({ success: true, message: "ลงทะเบียนสำเร็จ" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });

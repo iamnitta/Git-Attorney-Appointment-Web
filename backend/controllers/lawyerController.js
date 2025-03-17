@@ -110,6 +110,10 @@ const updateFees = async (req, res) => {
 
     console.log("fees:", fees);
 
+    if (!fees || fees <= 0) {
+      return res.json({success: false, message: 'กรุณาระบุค่าบริการ'})
+    }
+
     const appoinmentData = await appointmentModel.findById(appointmentId);
 
     if (appoinmentData && appoinmentData.lawId === lawId) {
@@ -226,7 +230,8 @@ const addCase = async (req, res) => {
       !caseTitle ||
       !caseCategory ||
       !caseClientSide ||
-      !caseOutcome
+      !caseOutcome ||
+      !file
     ) {
       return res.json({ success: false, message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
     }

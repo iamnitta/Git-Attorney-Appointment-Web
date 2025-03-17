@@ -29,17 +29,12 @@ const Login = () => {
 
       if (state === "ลงทะเบียน") {
 
-        if (password !== confirmPassword) {
-          toast.error("รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง")
-          return
-        }
-
-
         const { data } = await axios.post(backendUrl + "/api/user/register", {
           firstName,
           lastName,
           email,
           password,
+          confirmPassword,
           dob,
           phone: phone.replace(/-/g, ""), // ลบขีดออกก่อนส่งข้อมูล
           gender,
@@ -98,7 +93,6 @@ const Login = () => {
                 placeholder="ชื่อจริง"
                 onChange={(e) => setFirstName(e.target.value)}
                 value={firstName}
-                required
               />
             </div>
 
@@ -110,7 +104,6 @@ const Login = () => {
                 placeholder="นามสกุล"
                 onChange={(e) => setLastName(e.target.value)}
                 value={lastName}
-                required
               />
             </div>
           </div>
@@ -126,7 +119,6 @@ const Login = () => {
                 type="date"
                 onChange={(e) => setDob(e.target.value)}
                 value={dob}
-                required
               />
             </div>
 
@@ -137,7 +129,6 @@ const Login = () => {
                 type="text"
                 onChange={(e) => setGender(e.target.value)}
                 value={gender}
-                required
               >
                 <option value="" disabled>
                   เลือกเพศ
@@ -169,7 +160,6 @@ const Login = () => {
                     setPhone(formattedValue); // ใช้ setPhone เก็บค่าที่กรองแล้ว
                   }}
                   value={phone}
-                  required
                 />
               </div>
             </div>
@@ -192,7 +182,6 @@ const Login = () => {
                     setNationalId(formattedValue);
                   }}
                   value={nationalId}
-                  required
                 />
               </div>
             </div>
@@ -209,7 +198,6 @@ const Login = () => {
               className="w-full px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              required
             />
           </div>
         </div>
@@ -222,7 +210,6 @@ const Login = () => {
               className="w-full px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              required
             />
           </div>
         </div>
@@ -235,7 +222,6 @@ const Login = () => {
               className="w-full px-2 py-1.5 border-[0.5px] border-slate-300 rounded-md focus:outline-none focus:border-[#A17666]"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
-              required
             />
           </div>
         </div>
