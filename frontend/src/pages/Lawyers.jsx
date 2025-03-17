@@ -330,13 +330,16 @@ const Lawyers = () => {
                           const totalCases = cases.filter(
                             (caseItem) => caseItem.lawId === item._id
                           ).length;
+                          const validCases = cases.filter(
+                            (caseItem) => caseItem.lawId === item._id && caseItem.caseOutcome !== "ยอมความ"
+                          ).length;
                           const wonCases = cases.filter(
                             (caseItem) =>
                               caseItem.lawId === item._id &&
                               caseItem.caseOutcome === "ชนะ"
                           ).length;
                           const winPercentage =
-                            totalCases > 0 ? (wonCases / totalCases) * 100 : 0;
+                            totalCases > 0 ? (wonCases / validCases) * 100 : 0;
                           return winPercentage.toFixed(2); // Display the percentage with 2 decimal places
                         })()}{" "}
                       </span>

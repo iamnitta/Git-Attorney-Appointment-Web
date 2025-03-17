@@ -18,7 +18,7 @@ const Review = () => {
   return (
     <div className="bg-white px-4 lg:px-10">
       <div className="flex flex-col items-center gap-4 py-16 bg-white">
-        <h1 className="text-2xl font-medium font-prompt">รีวิวของเรา</h1>
+        <h1 className="text-2xl font-medium font-prompt">ความคิดเห็นต่อเรา</h1>
         <p className="sm:w-2/3 text-center text-sm font-prompt text-dark-brown font-medium md:text-xl">
           ยืนยันความเชื่อมั่นในบริการคุณภาพ
         </p>
