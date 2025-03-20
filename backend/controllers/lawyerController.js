@@ -26,7 +26,7 @@ const loginLawyer = async (req, res) => {
     const lawyer = await lawyerModel.findOne({ email });
 
     if (!lawyer) {
-      return res.json({ success: false, message: "ไม่พบบัญชีทนายในระบบ" });
+      return res.json({ success: false, message: "ไม่พบบัญชีผู้ใช้งานในระบบ" });
     }
 
     const isMatch = await bcrypt.compare(password, lawyer.password);
@@ -106,17 +106,24 @@ const appointmentCancel = async (req, res) => {
 //API to update fees for lawyer panel
 const updateFees = async (req, res) => {
   try {
-    const { lawId, appointmentId, fees } = req.body;
+    const { lawId, appointmentId, fees, originalFees } = req.body;
 
     console.log("fees:", fees);
 
     if (!fees || fees <= 0) {
-      return res.json({success: false, message: 'กรุณาระบุค่าบริการ'})
+      return res.json({success: false, message: 'กรุณากรอกค่าบริการ'})
     }
 
     const appoinmentData = await appointmentModel.findById(appointmentId);
 
+    const profileData = await lawyerModel.findById(lawId).select("-password");
+
+    if (originalFees < Number(profileData.fees_detail)) {
+      return res.json({success: false, message: 'กรุณากรอกค่าบริการให้เท่ากับหรือมากกว่าค่าบริการขั้นต่ำ'})
+    }
+
     if (appoinmentData && appoinmentData.lawId === lawId) {
+
       await appointmentModel.findByIdAndUpdate(appointmentId, { fees });
       return res.json({ success: true, message: "บันทึกค่าบริการสำเร็จ" });
     } else {

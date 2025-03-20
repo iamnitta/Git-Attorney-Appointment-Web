@@ -82,10 +82,10 @@ const LawyerContextProvider = (props) => {
         }
     }
 
-    const updateAppointmentFees = async (appointmentId,fees) => {
+    const updateAppointmentFees = async (appointmentId,fees ,originalFees ) => {
         try {
 
-            const {data} = await axios.post(backendUrl + '/api/lawyer/update-fees', {appointmentId,fees}, {headers:{lawyerToken}})
+            const {data} = await axios.post(backendUrl + '/api/lawyer/update-fees', {appointmentId,fees, originalFees}, {headers:{lawyerToken}})
             if (data.success) {
                 toast.success(data.message)
                 getAppointments()

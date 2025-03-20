@@ -882,7 +882,7 @@ const AddLawyer = () => {
           {/* ส่วนของค่าบริการ */}
           <div className="flex items-center gap-2 w-full">
             <label className="whitespace-nowrap w-[210px]">ค่าบริการ</label>
-            <label className="whitespace-nowrap">เริ่มต้น</label>
+            <label className="whitespace-nowrap">ขั้นต่ำ</label>
             <input
               onChange={(e) => setFees_detail(e.target.value)}
               value={fees_detail}

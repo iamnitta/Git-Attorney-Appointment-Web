@@ -207,7 +207,7 @@ const MyAppointments = () => {
         </button>
       </div>
 
-      <div className="space-y-4 mb-10">
+      <div className="space-y-4 mb-10 min-h-[400px]">
         {appointments
           .filter((item) =>
             status === "cancel"

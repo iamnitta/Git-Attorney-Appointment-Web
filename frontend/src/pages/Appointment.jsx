@@ -408,7 +408,9 @@ const Appointment = () => {
                   <p className="text-left font-medium ml-4 mt-4 text-dark-brown">
                     ค่าบริการ
                   </p>
-                  <p className="mt-2 ml-4 text-sm">{lawInfo.fees_detail}</p>{" "}
+                  <p className="mt-2 ml-4 text-sm">
+                    ขั้นต่ำ {lawInfo.fees_detail} บาท ต่อ 30 นาที
+                  </p>{" "}
                   {/* วันเวลาของทนาย */}
                   <p className="text-left font-medium ml-4 mt-8 text-dark-brown">
                     เวลาให้บริการ
@@ -630,9 +632,8 @@ const Appointment = () => {
                         ค่าบริการ
                       </p>
                       <p className="text-primary text-sm">
-                        ขั้นต่ำ 500 บาท ต่อ 30 นาที
+                        ขั้นต่ำ {lawInfo.fees_detail} บาท ต่อ 30 นาที
                       </p>
-                      {/* <p className="text-primary">ขั้นต่ำ {lawInfo.fees_detail} บาท/ชั่วโมง</p> */}
                     </div>
                   </div>
                 </div>

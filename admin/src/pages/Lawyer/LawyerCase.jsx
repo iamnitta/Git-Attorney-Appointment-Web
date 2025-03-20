@@ -345,7 +345,7 @@ const LawyerCase = () => {
                     <input
                       type="text"
                       className="w-full px-2 py-1.5 border border-[#DADADA] rounded-md focus:outline-none focus:border-[#A17666]"
-                      placeholder="ประเภทคดี/เลขที่คดี/ปี พ.ศ. (เช่น อ./123/2567)"
+                      placeholder="ประเภทคดี เลขที่คดี/ปี พ.ศ. (เช่น อ123/2567)"
                       value={caseNumber}
                       onChange={(e) => setCaseNumber(e.target.value)}
                     />

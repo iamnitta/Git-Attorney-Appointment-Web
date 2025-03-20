@@ -934,7 +934,7 @@ const LawyerProfile = () => {
               <div className="flex flex-col">
                 <label className="mb-2 text-dark-brown">ค่าบริการ</label>
                 <div className="flex flex-row items-center gap-2">
-                  <p className="text-lg">เริ่มต้น</p>
+                  <p className="text-lg">ขั้นต่ำ</p>
                   <p className="text-lg">
                     {isEdit ? (
                       <input

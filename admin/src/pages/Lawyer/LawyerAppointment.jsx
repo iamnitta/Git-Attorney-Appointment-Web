@@ -803,7 +803,7 @@ const LawyerAppointment = () => {
               {/* ปุ่ม confirm */}
               <button
                 onClick={() => {
-                  updateAppointmentFees(selectedAppointment._id, Number((fees * 0.9).toFixed(2)));
+                  updateAppointmentFees(selectedAppointment._id, Number((fees * 0.9).toFixed(2)), fees);
                   setShowPopup(false);
                   console.log(fees);
                 }}
