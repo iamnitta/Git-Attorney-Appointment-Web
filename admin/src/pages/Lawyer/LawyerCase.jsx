@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { LawyerContext } from "../../context/LawyerContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
+import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { assets } from "../../assets/assets";

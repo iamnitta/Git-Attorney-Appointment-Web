@@ -140,22 +140,6 @@ const LawyerAppointment = () => {
     };
   };
 
-  // // ฟังก์ชันสำหรับ filter appointments ตาม status
-  // const getFilteredAppointments = () => {
-  //   const nonCancelledAppointments = appointments.filter(
-  //     (item) => !item.cancelled
-  //   );
-
-  //   switch (sortStatus) {
-  //     case "pending":
-  //       return nonCancelledAppointments.filter((item) => !item.isCompleted);
-  //     case "completed":
-  //       return nonCancelledAppointments.filter((item) => item.isCompleted);
-  //     default:
-  //       return nonCancelledAppointments;
-  //   }
-  // };
-
   const getFilteredAppointments = () => {
     const filteredByStatus = appointments.filter((item) => {
       switch (sortStatus) {

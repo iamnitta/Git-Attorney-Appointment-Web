@@ -290,7 +290,7 @@ const bookAppointment = async (req, res) => {
       // สร้าง URL แบบใหม่
       const { data: urlData } = await supabase.storage
         .from("document")
-        .createSignedUrl(fileName, 60 * 60 * 24 * 365); // URL หมดอายุใน 7 วัน
+        .createSignedUrl(fileName, 60 * 60 * 24 * 365);
 
       documentUrl = urlData.signedUrl;
     }

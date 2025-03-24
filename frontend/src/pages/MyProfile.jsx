@@ -43,20 +43,7 @@ const MyProfile = () => {
       toast.error(error.message);
     }
   };
-  //ใช้ prev เพื่อนำค่าเก่าที่อยู่ใน state ทั้งหมดมาใช้ในการอัพเดท
-
-  //ตัวอย่าง
-  // {
-  //   image: assets.profile_pic,    // ยังอยู่
-  //   firstName: "ค่าใหม่",        // อัพเดทแค่ตรงนี้
-  //   lastName: "ลีวงศ์เจริญ",     // ยังอยู่
-  //   email: "Chanitta.l@ku.th",   // ยังอยู่
-  //   phone: "000-000-0000",       // ยังอยู่
-  //   dob: "2001-03-21",          // ยังอยู่
-  //   gender: "female"            // ยังอยู่
-  // }
-
-  //value={userData.firstName} ทำให้ค่าแสดงตอนเริ่มต้น
+  
   return (
     userData && (
       <div className="flex justify-center items-center min-h-screen bg-white px-4 animate-fadeIn">
@@ -182,18 +169,6 @@ const MyProfile = () => {
                       .replace(/^(\d{3}-\d{3})(?=\d)/, "$1-")}
                   </p>
                 )}
-
-                {/* <p className="font-semibold h-9 flex items-center">บัตรประชาชน</p>
-            {isEdit ? (
-              <input 
-                type="text" 
-                value={userData.nationalId}
-                onChange={e => setUserData(prev => ({...prev, nationalId: e.target.value}))}
-                className="border rounded px-2 h-9 w-full"
-              />
-            ) : (
-              <p className="h-9 flex items-center">{userData.nationalId}</p>
-            )} */}
 
                 <p className="font-semibold h-9 flex items-center text-dark-brown">
                   วันเกิด

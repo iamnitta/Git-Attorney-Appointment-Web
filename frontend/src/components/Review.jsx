@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { HiStar } from "react-icons/hi";
-import { reviews } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import { useParams } from "react-router-dom";
 

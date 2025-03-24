@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
-import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
+import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 

@@ -56,7 +56,7 @@ const appointmentsLawyer = async (req, res) => {
   }
 };
 
-//API to mark appointment completed for lawyer panel
+// API to mark appointment completed for lawyer panel
 const appointmentComplete = async (req, res) => {
   try {
     const { lawId, appointmentId } = req.body;
@@ -77,7 +77,7 @@ const appointmentComplete = async (req, res) => {
   }
 };
 
-//API to cancel appointment for lawyer panel
+// API to cancel appointment for lawyer panel
 const appointmentCancel = async (req, res) => {
   try {
     const { lawId, appointmentId, cancelReason } = req.body;
@@ -103,7 +103,7 @@ const appointmentCancel = async (req, res) => {
   }
 };
 
-//API to update fees for lawyer panel
+// API to update fees for lawyer panel
 const updateFees = async (req, res) => {
   try {
     const { lawId, appointmentId, fees, originalFees } = req.body;
@@ -135,7 +135,7 @@ const updateFees = async (req, res) => {
   }
 };
 
-//API to get lawyer profile for lawyer Panel
+// API to get lawyer profile for lawyer Panel
 const lawyerProfile = async (req, res) => {
   try {
     const { lawId } = req.body;
@@ -148,7 +148,7 @@ const lawyerProfile = async (req, res) => {
   }
 };
 
-//API to update lawyer profile data from lawyer panel
+// API to update lawyer profile data from lawyer panel
 const updateLawyerProfile = async (req, res) => {
   try {
     const {
@@ -201,7 +201,7 @@ const updateLawyerProfile = async (req, res) => {
   }
 };
 
-//API to add case from lawyer panel
+// API to add case from lawyer panel
 const addCase = async (req, res) => {
   try {
     const {
@@ -267,7 +267,7 @@ const addCase = async (req, res) => {
       // สร้าง URL แบบใหม่
       const { data: urlData } = await supabase.storage
         .from("document")
-        .createSignedUrl(fileName, 60 * 60 * 24 * 365); // URL หมดอายุใน 7 วัน
+        .createSignedUrl(fileName, 60 * 60 * 24 * 365);
 
       documentUrl = urlData.signedUrl;
     }
@@ -297,7 +297,7 @@ const addCase = async (req, res) => {
   }
 };
 
-//API to get lawyer cases from lawyer panel
+// API to get lawyer cases from lawyer panel
 const lawyerCases = async (req, res) => {
   try {
     const { lawId } = req.body;
@@ -311,7 +311,7 @@ const lawyerCases = async (req, res) => {
   }
 };
 
-//API to get cases courts
+// API to get cases courts
 const getCourts = async (req, res) => {
   try {
     const courts = await courtModel.find({});
@@ -322,7 +322,7 @@ const getCourts = async (req, res) => {
   }
 };
 
-//API to get case form user panel
+// API to get case form user panel
 const getLawyerCases = async (req, res) => {
   try {
     const { lawId } = req.query; // รับ parameter จาก URL query

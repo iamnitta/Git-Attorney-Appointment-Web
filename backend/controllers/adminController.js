@@ -104,7 +104,7 @@ const addLawyer = async (req, res) => {
       });
     }
 
-    //validating email format
+    // validating email format
     if (!validator.isEmail(email)) {
       return res.json({ success: false, message: "กรุณากรอกอีเมลที่ถูกต้อง" });
     }
@@ -118,7 +118,7 @@ const addLawyer = async (req, res) => {
       });
     }
 
-    //validating lawyer password
+    // validating lawyer password
     if (password.length < 8) {
       return res.json({
         success: false,
@@ -134,7 +134,7 @@ const addLawyer = async (req, res) => {
       });
     }
 
-    // ตรวจสอบเลขใบอนุญาติว่าความว่าซ้ำไหม
+    // ตรวจสอบเลขใบอนุญาตว่าความว่าซ้ำไหม
     const license_numberId = await lawyerModel.findOne({ license_number });
     if (license_numberId) {
       return res.json({
@@ -162,11 +162,11 @@ const addLawyer = async (req, res) => {
       });
     }
 
-    //hashing lawyer password
+    // hashing lawyer password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    //upload image to cloudinary
+    // upload image to cloudinary
     const imageUpload = await clodinary.uploader.upload(imageFile.path, {
       resource_type: "image",
     });
@@ -235,7 +235,7 @@ const allLawyers = async (req, res) => {
   }
 };
 
-//API to get all appointment list
+// API to get all appointment list
 const apppointmentsAdmin = async (req, res) => {
   try {
     const appointments = await appointmentModel.find({});
@@ -246,7 +246,7 @@ const apppointmentsAdmin = async (req, res) => {
   }
 };
 
-//API to get all Review
+// API to get all Review
 const allReviews = async (req, res) => {
   try {
     const reviews = await reviewModel.find({});
@@ -257,7 +257,7 @@ const allReviews = async (req, res) => {
   }
 };
 
-//API to confirm review
+// API to confirm review
 const confirmReview = async (req, res) => {
   try {
     const { reviewId } = req.body;
@@ -277,7 +277,7 @@ const confirmReview = async (req, res) => {
   }
 };
 
-//API to cancel review
+// API to cancel review
 const cancelReview = async (req, res) => {
   try {
     const { reviewId } = req.body;

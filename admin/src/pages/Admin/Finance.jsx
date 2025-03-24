@@ -514,29 +514,6 @@ const Finance = () => {
               </div>
             </div>
 
-            {/* <div className="flex flex-row gap-2 justify-between mt-4"> */}
-            {/* ลูกค้าทั้งหมด */}
-            {/* <div className="bg-white w-full h-full rounded-lg p-4 shadow-sm">
-              <div className="flex flex-row justify-between mb-8">
-                <div className="flex flex-col">
-                  <p className="text-dark-brown text-lg text-left mt-1 font-medium">
-                    ลูกค้าทั้งหมด
-                  </p>
-                </div>
-
-                <img
-                  src={assets.Customer_Icon}
-                  alt=""
-                  className="w-10 h-10 object-cover"
-                />
-              </div>
-              <div className="mt-4">
-                <p className="text-dark-brown text-2xl text-left font-medium">
-                  {getTotalCustomers().toLocaleString()}
-                </p>
-              </div>
-            </div> */}
-
             {/* การนัดหมายทั้งหมด */}
             <div className="bg-white w-full h-full rounded-lg p-4 shadow-sm">
               <div className="flex flex-row justify-between mb-8">
@@ -561,13 +538,6 @@ const Finance = () => {
             {/* </div> */}
           </div>
         </div>
-
-        {/* Graph */}
-        {/* <div className="w-1/2">
-          <div className="bg-white p-4 rounded-lg shadow mb-6">
-            <AppointmentStatusChart />
-          </div>
-        </div> */}
       </div>
 
       {/* Middle */}
@@ -595,13 +565,10 @@ const Finance = () => {
               <tr>
                 <th className="p-3 font-medium text-left"></th>
                 <th className="p-3 font-medium text-left"></th>
-                {/* รูปทนายความ */}
                 <th className="p-3 font-medium text-left">ทนายความ</th>
-                {/* <th className="p-4 font-medium text-center">ยอดทั้งหมด</th> */}
                 <th className="p-3 font-medium text-center">
                   รายได้ทนายความ
                 </th>
-                {/* <th className="p-4 font-medium text-center">ลูกค้า</th> */}
                 <th className="p-3 font-medium text-center">รอปรึกษา</th>
                 <th className="p-3 font-medium text-center">ปรึกษาเสร็จสิ้น</th>
                 <th className="p-3 font-medium text-center">ยกเลิก</th>
@@ -627,15 +594,9 @@ const Finance = () => {
                     <td className="p-3 text-left border-b border-[#DADADA]">
                       {lawyer.firstName} {lawyer.lastName}
                     </td>
-                    {/* <td className="p-4 text-center border-b border-[#DADADA]">
-                      {calculateLawyerIncome(lawyer._id) * 1.1}
-                    </td> */}
                     <td className="p-3 text-center border-b border-[#DADADA]">
                       {calculateLawyerIncome(lawyer._id).toLocaleString()}
                     </td>
-                    {/* <td className="p-4 text-center border-b border-[#DADADA]">
-                      {countCustomer(lawyer._id)}
-                    </td> */}
                     <td className="p-3 text-center border-b border-[#DADADA]">
                       {countLawyersAppointments(lawyer._id)}
                     </td>

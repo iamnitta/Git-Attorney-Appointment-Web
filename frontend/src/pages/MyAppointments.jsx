@@ -4,7 +4,7 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AiFillStar } from "react-icons/ai";
-import { Document, Page, pdfjs } from "react-pdf"; // เพิ่มการนำเข้า
+import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { useNavigate } from "react-router-dom";
@@ -98,7 +98,7 @@ const MyAppointments = () => {
     }
   };
 
-  //ฟังก์ชันให้คะแนน
+  // ฟังก์ชันให้คะแนน
   const handleRating = (rate) => {
     setRating(rate);
   };
@@ -108,7 +108,7 @@ const MyAppointments = () => {
     setNumPages(numPages);
   };
 
-  //จัดรูปแบบวัน
+  // จัดรูปแบบวัน
   const slotDateFormat = (slotDate) => {
     const dateArray = slotDate.split("_");
     return (
@@ -116,7 +116,7 @@ const MyAppointments = () => {
     );
   };
 
-  //จัดรูปแบบเวลา
+  // จัดรูปแบบเวลา
   const slotTimeFormat = (slotTime) => {
     const [startTime] = slotTime.split(" ");
     const hour = parseInt(startTime);
@@ -240,12 +240,6 @@ const MyAppointments = () => {
                     : "ปรึกษาเสร็จสิ้น"}
                 </div>
 
-                {/* เพิ่มส่วนแสดงเหตุผลการยกเลิก */}
-                {/* {status === "cancel" && item.cancelReason && (
-                  <div className="text-base font-medium text-[#757575]">
-                    ขออภัยเนื่องจากทนาย {item.cancelReason} กรุณานัดหมายใหม่
-                  </div>
-                )} */}
               </div>
 
               {/* รูป, ข้อมูล */}

@@ -155,21 +155,24 @@ const CommentApproval = () => {
 
       {/* ข้อมูลความคิดเห็น */}
       <div className="bg-[#F7F7F7] w-full max-w-7xl min-h-[600px] mx-auto p-6 mb-6 rounded">
-      {currentReviews && currentReviews.length > 0 ? (
-        currentReviews.map((review, index) => (
+        {currentReviews && currentReviews.length > 0 ? (
+          currentReviews.map((review, index) => (
             <div key={index} className="flex flex-col gap-4 mb-4">
               <div>
                 {/* ข้อมูลรีวิว */}
                 <div className="flex gap-2 border border-[#DADADA] rounded p-4 justify-between">
+                  <div className="flex gap-2 justify-between lg:w-1/2 w-full">
                   <div className="flex flex-row gap-2">
-                    <img
-                      className="w-8 h-8 mr-4 rounded-full object-cover object-center"
-                      src={review.userData.image}
-                      alt=""
-                    />
+                    <div className="flex flex-row gap-2">
+                      <img
+                        className="w-8 h-8 mr-4 rounded-full object-cover object-center"
+                        src={review.userData.image}
+                        alt=""
+                      />
+                    </div>
 
                     <div>
-                      <div className="flex gap-40">
+                      <div className="flex">
                         <div>
                           <p className="text-dark-brown font-medium gap-10">
                             {review.userData.firstName}{" "}
@@ -184,19 +187,20 @@ const CommentApproval = () => {
                             {review.comment}
                           </p>
                         </div>
-
-                        <div className="flex gap-1">
-                          {[...Array(5).keys()].map((_, index) => (
-                            <AiFillStar
-                              key={index}
-                              color={
-                                index < review.rating ? "#A3806C" : "#D9D9D9"
-                              }
-                            />
-                          ))}
-                        </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      {[...Array(5).keys()].map((_, index) => (
+                        <AiFillStar
+                          key={index}
+                          color={index < review.rating ? "#A3806C" : "#D9D9D9"}
+                        />
+                      ))}
+                    </div>
+                  </div>
                   </div>
 
                   <div className="flex items-end">
@@ -272,44 +276,44 @@ const CommentApproval = () => {
       </div>
 
       {/* Pagination */}
-    <div className="flex justify-end mt-2">
-      <button
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
-          currentPage === 1
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-gray-200 hover:bg-gray-300"
-        }`}
-      >
-        {"<"}
-      </button>
-
-      {Array.from({ length: totalPages }, (_, index) => (
+      <div className="flex justify-end mt-2">
         <button
-          key={index}
-          onClick={() => handlePageChange(index + 1)}
-          className={`px-4 py-1 mx-1 rounded-full ${
-            currentPage === index + 1
-              ? "bg-[#D4C7BD] text-dark-brown"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 mx-1 rounded text-dark-brown text-sm ${
+            currentPage === 1
+              ? "bg-gray-300 cursor-not-allowed"
               : "bg-gray-200 hover:bg-gray-300"
           }`}
         >
-          {index + 1}
+          {"<"}
         </button>
-      ))}
 
-      <button
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className={`px-3 py-1 mx-1 rounded text-dark-brown text-sm ${
-          currentPage === totalPages
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-gray-200 hover:bg-gray-300"
-        }`}
-      >
-        {">"}
-      </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-4 py-1 mx-1 rounded-full ${
+              currentPage === index + 1
+                ? "bg-[#D4C7BD] text-dark-brown"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-3 py-1 mx-1 rounded text-dark-brown text-sm ${
+            currentPage === totalPages
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-gray-200 hover:bg-gray-300"
+          }`}
+        >
+          {">"}
+        </button>
       </div>
 
       {/* Popup ยืนยันอนุมัติความคิดเห็น */}

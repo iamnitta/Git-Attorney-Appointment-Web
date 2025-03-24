@@ -6,7 +6,7 @@ const authUser = async (req,res,next) => {
     try {
         const {token} = req.headers
         if (!token) {
-            return res.json({success:false,message:'ไม่มีสิทธิ์ในการเข้าถึง กรุณาล็อคอินใหม่อีกครั้ง'})
+            return res.json({success:false,message:'ไม่มีสิทธิ์ในการเข้าถึง กรุณาเข้าสู่ระบบใหม่อีกครั้ง'})
         }
 
         const token_decode = jwt.verify(token,process.env.JWT_SECRET)

@@ -693,26 +693,6 @@ const Appointment = () => {
                 </div>
               </div>
 
-              {/* <div>
-                <p className="text-dark-brown font-medium mt-6">
-                  เลือกจำนวนชั่วโมง
-                </p>
-                <div className="mt-4 flex items-center gap-4">
-                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
-                    30 นาที
-                  </button>
-                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
-                    1 ชั่วโมง
-                  </button>
-                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
-                    2 ชั่วโมง
-                  </button>
-                  <button className="px-8 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white">
-                    3 ชั่วโมง
-                  </button>
-                </div>
-              </div> */}
-
               <div className="flex flex-row mt-6">
                 <p className="font-medium text-sm bg-gradient-to-r from-dark-brown to-primary text-white px-4 py-1 rounded-l w-2/4 lg:w-1/4 flex items-center justify-center">
                   สรุปการนัดหมาย
