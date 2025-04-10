@@ -51,7 +51,7 @@ const Case = () => {
 
   useEffect(() => {
     if (lawInfo) {
-      getCases(lawInfo._id);
+      getCases(lawId);
     }
   }, [lawInfo]);
 
