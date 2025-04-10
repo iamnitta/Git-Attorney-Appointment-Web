@@ -107,12 +107,12 @@ const Case = () => {
     lawInfo && (
       <div className="p-4 animate-fadeIn">
         <div className="mb-8 lg:w-[95%] mx-auto flex flex-row gap-2">
-          <button
+{/*           <button
             className="text-lg font-medium text-dark-brown text-opacity-70 hover:text-dark-brown"
             onClick={() => navigate(`/appointment/${lawId}`)}
           >
             ประวัติของทนายความ
-          </button>
+          </button> */}
           <p className="text-lg font-medium text-dark-brown text-opacity-70">
             {" "}
             {">"}
